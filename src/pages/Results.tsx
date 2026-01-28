@@ -1,0 +1,378 @@
+import { useEffect, useMemo, useState } from 'react';
+import { useNavigate } from 'react-router-dom';
+import { Button } from '@/components/ui/button';
+import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
+import { Progress } from '@/components/ui/progress';
+import { getDepartmentById } from '@/data/departments';
+import { mobileCompetencies, mobileRequirements } from '@/data/competencies/mobile';
+import { 
+  SelfAssessment, 
+  AssessmentResult,
+  categoryConfig,
+  competencyLevelConfig,
+  seniorityLevelConfig,
+  SeniorityLevel
+} from '@/types/competency';
+import { branding } from '@/config/branding';
+import { ArrowLeft, Download, Home, TrendingUp, TrendingDown, Minus, Sparkles } from 'lucide-react';
+import { cn } from '@/lib/utils';
+import {
+  RadarChart,
+  PolarGrid,
+  PolarAngleAxis,
+  PolarRadiusAxis,
+  Radar,
+  Legend,
+  ResponsiveContainer,
+} from 'recharts';
+
+const Results = () => {
+  const navigate = useNavigate();
+  const [assessment, setAssessment] = useState<SelfAssessment | null>(null);
+
+  useEffect(() => {
+    const stored = sessionStorage.getItem('assessment');
+    if (stored) {
+      setAssessment(JSON.parse(stored));
+    } else {
+      navigate('/');
+    }
+  }, [navigate]);
+
+  const results = useMemo(() => {
+    if (!assessment) return null;
+
+    const competencies = mobileCompetencies;
+    const requirements = mobileRequirements.filter(
+      r => r.positionId === assessment.positionId && r.seniorityLevel === assessment.seniorityLevel
+    );
+
+    const assessmentResults: AssessmentResult[] = assessment.assessments.map(a => {
+      const comp = competencies.find(c => c.id === a.competencyId);
+      const req = requirements.find(r => r.competencyId === a.competencyId);
+      const requiredLevel = req?.requiredLevel || 0;
+      
+      return {
+        competencyId: a.competencyId,
+        competencyName: comp?.name || '',
+        category: comp?.category || 'hard',
+        selfRating: a.selfRating,
+        requiredLevel,
+        gap: a.selfRating - requiredLevel,
+      };
+    });
+
+    // Calculate overall match percentage
+    const totalRequired = assessmentResults.reduce((sum, r) => sum + r.requiredLevel, 0);
+    const totalSelf = assessmentResults.reduce((sum, r) => sum + Math.min(r.selfRating, r.requiredLevel), 0);
+    const matchPercentage = totalRequired > 0 ? Math.round((totalSelf / totalRequired) * 100) : 0;
+
+    // Find strengths and development areas
+    const strengths = assessmentResults
+      .filter(r => r.gap > 0)
+      .sort((a, b) => b.gap - a.gap)
+      .slice(0, 3);
+
+    const developmentAreas = assessmentResults
+      .filter(r => r.gap < 0)
+      .sort((a, b) => a.gap - b.gap)
+      .slice(0, 3);
+
+    return {
+      results: assessmentResults,
+      matchPercentage,
+      strengths,
+      developmentAreas,
+      overallScore: Math.round(assessmentResults.reduce((sum, r) => sum + r.selfRating, 0) / assessmentResults.length * 20),
+    };
+  }, [assessment]);
+
+  const department = assessment?.departmentId ? getDepartmentById(assessment.departmentId) : null;
+  const position = department?.positions.find(p => p.id === assessment?.positionId);
+
+  // Prepare chart data
+  const chartData = useMemo(() => {
+    if (!results) return [];
+    return results.results.map(r => ({
+      competency: r.competencyName.length > 15 
+        ? r.competencyName.substring(0, 15) + '...' 
+        : r.competencyName,
+      'Twoja ocena': r.selfRating,
+      'Wymagane': r.requiredLevel,
+      fullMark: 5,
+    }));
+  }, [results]);
+
+  if (!assessment || !results || !position) {
+    return null;
+  }
+
+  const getGapIcon = (gap: number) => {
+    if (gap > 0) return <TrendingUp className="w-4 h-4 text-green-500" />;
+    if (gap < 0) return <TrendingDown className="w-4 h-4 text-red-500" />;
+    return <Minus className="w-4 h-4 text-muted-foreground" />;
+  };
+
+  const handleDownloadPDF = () => {
+    // TODO: Implement PDF generation
+    alert('Generowanie PDF będzie dostępne wkrótce!');
+  };
+
+  return (
+    <div className="min-h-screen bg-background">
+      {/* Header */}
+      <header className="border-b bg-card/50 backdrop-blur-sm sticky top-0 z-50">
+        <div className="container mx-auto px-4 py-4 flex items-center justify-between">
+          <div className="flex items-center gap-2">
+            <div className="w-10 h-10 rounded-lg bg-primary flex items-center justify-center">
+              <Sparkles className="w-6 h-6 text-primary-foreground" />
+            </div>
+            <div>
+              <h1 className="font-bold text-lg text-foreground">{branding.companyName}</h1>
+              <p className="text-xs text-muted-foreground">{branding.appName}</p>
+            </div>
+          </div>
+          
+          <div className="flex gap-2">
+            <Button variant="outline" size="sm" onClick={() => navigate('/')}>
+              <Home className="w-4 h-4 mr-2" />
+              Start
+            </Button>
+            <Button size="sm" onClick={handleDownloadPDF}>
+              <Download className="w-4 h-4 mr-2" />
+              Pobierz PDF
+            </Button>
+          </div>
+        </div>
+      </header>
+
+      <main className="container mx-auto px-4 py-8">
+        <div className="max-w-6xl mx-auto">
+          {/* Summary Header */}
+          <div className="text-center mb-8">
+            <h1 className="text-3xl font-bold mb-2">Wyniki Twojej samooceny</h1>
+            <p className="text-muted-foreground">
+              {position.name} • {seniorityLevelConfig[assessment.seniorityLevel as SeniorityLevel].name}
+            </p>
+          </div>
+
+          {/* Score Cards */}
+          <div className="grid md:grid-cols-3 gap-6 mb-8">
+            <Card>
+              <CardContent className="pt-6 text-center">
+                <div className="text-4xl font-bold text-primary mb-2">
+                  {results.matchPercentage}%
+                </div>
+                <p className="text-sm text-muted-foreground">
+                  Dopasowanie do stanowiska
+                </p>
+                <Progress value={results.matchPercentage} className="mt-4 h-2" />
+              </CardContent>
+            </Card>
+            
+            <Card>
+              <CardContent className="pt-6 text-center">
+                <div className="text-4xl font-bold text-green-500 mb-2">
+                  {results.strengths.length}
+                </div>
+                <p className="text-sm text-muted-foreground">
+                  Mocne strony
+                </p>
+                <p className="text-xs text-muted-foreground mt-2">
+                  Kompetencje powyżej wymagań
+                </p>
+              </CardContent>
+            </Card>
+            
+            <Card>
+              <CardContent className="pt-6 text-center">
+                <div className="text-4xl font-bold text-orange-500 mb-2">
+                  {results.developmentAreas.length}
+                </div>
+                <p className="text-sm text-muted-foreground">
+                  Obszary do rozwoju
+                </p>
+                <p className="text-xs text-muted-foreground mt-2">
+                  Kompetencje poniżej wymagań
+                </p>
+              </CardContent>
+            </Card>
+          </div>
+
+          {/* Radar Chart */}
+          <Card className="mb-8">
+            <CardHeader>
+              <CardTitle>Profil kompetencji</CardTitle>
+            </CardHeader>
+            <CardContent>
+              <div className="h-[400px]">
+                <ResponsiveContainer width="100%" height="100%">
+                  <RadarChart data={chartData}>
+                    <PolarGrid />
+                    <PolarAngleAxis 
+                      dataKey="competency" 
+                      tick={{ fontSize: 11 }}
+                    />
+                    <PolarRadiusAxis 
+                      angle={90} 
+                      domain={[0, 5]} 
+                      tick={{ fontSize: 10 }}
+                    />
+                    <Radar
+                      name="Twoja ocena"
+                      dataKey="Twoja ocena"
+                      stroke="hsl(var(--primary))"
+                      fill="hsl(var(--primary))"
+                      fillOpacity={0.3}
+                      strokeWidth={2}
+                    />
+                    <Radar
+                      name="Wymagane"
+                      dataKey="Wymagane"
+                      stroke="hsl(var(--muted-foreground))"
+                      fill="hsl(var(--muted-foreground))"
+                      fillOpacity={0.1}
+                      strokeWidth={2}
+                      strokeDasharray="5 5"
+                    />
+                    <Legend />
+                  </RadarChart>
+                </ResponsiveContainer>
+              </div>
+            </CardContent>
+          </Card>
+
+          {/* Detailed Results */}
+          <div className="grid md:grid-cols-2 gap-8">
+            {/* Strengths */}
+            <Card>
+              <CardHeader>
+                <CardTitle className="flex items-center gap-2 text-green-600">
+                  <TrendingUp className="w-5 h-5" />
+                  Mocne strony
+                </CardTitle>
+              </CardHeader>
+              <CardContent>
+                {results.strengths.length > 0 ? (
+                  <ul className="space-y-3">
+                    {results.strengths.map((r) => (
+                      <li key={r.competencyId} className="flex items-center justify-between p-3 bg-green-50 dark:bg-green-950/20 rounded-lg">
+                        <span className="font-medium">{r.competencyName}</span>
+                        <span className="text-sm text-green-600">
+                          +{r.gap} powyżej wymagań
+                        </span>
+                      </li>
+                    ))}
+                  </ul>
+                ) : (
+                  <p className="text-muted-foreground text-center py-4">
+                    Brak kompetencji znacząco powyżej wymagań
+                  </p>
+                )}
+              </CardContent>
+            </Card>
+
+            {/* Development Areas */}
+            <Card>
+              <CardHeader>
+                <CardTitle className="flex items-center gap-2 text-orange-600">
+                  <TrendingDown className="w-5 h-5" />
+                  Obszary do rozwoju
+                </CardTitle>
+              </CardHeader>
+              <CardContent>
+                {results.developmentAreas.length > 0 ? (
+                  <ul className="space-y-3">
+                    {results.developmentAreas.map((r) => (
+                      <li key={r.competencyId} className="flex items-center justify-between p-3 bg-orange-50 dark:bg-orange-950/20 rounded-lg">
+                        <span className="font-medium">{r.competencyName}</span>
+                        <span className="text-sm text-orange-600">
+                          {r.gap} poniżej wymagań
+                        </span>
+                      </li>
+                    ))}
+                  </ul>
+                ) : (
+                  <p className="text-muted-foreground text-center py-4">
+                    Gratulacje! Spełniasz wszystkie wymagania
+                  </p>
+                )}
+              </CardContent>
+            </Card>
+          </div>
+
+          {/* All Results Table */}
+          <Card className="mt-8">
+            <CardHeader>
+              <CardTitle>Szczegółowe wyniki</CardTitle>
+            </CardHeader>
+            <CardContent>
+              <div className="overflow-x-auto">
+                <table className="w-full">
+                  <thead>
+                    <tr className="border-b">
+                      <th className="text-left py-3 px-2">Kompetencja</th>
+                      <th className="text-center py-3 px-2">Kategoria</th>
+                      <th className="text-center py-3 px-2">Twoja ocena</th>
+                      <th className="text-center py-3 px-2">Wymagane</th>
+                      <th className="text-center py-3 px-2">Różnica</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    {results.results.map((r) => (
+                      <tr key={r.competencyId} className="border-b last:border-0">
+                        <td className="py-3 px-2 font-medium">{r.competencyName}</td>
+                        <td className="py-3 px-2 text-center">
+                          <span className="text-xs bg-secondary px-2 py-1 rounded">
+                            {categoryConfig[r.category].name}
+                          </span>
+                        </td>
+                        <td className="py-3 px-2 text-center">
+                          <span className={cn(
+                            'inline-block w-8 h-8 rounded-full flex items-center justify-center text-white font-bold',
+                            competencyLevelConfig[r.selfRating]?.color
+                          )}>
+                            {r.selfRating}
+                          </span>
+                        </td>
+                        <td className="py-3 px-2 text-center">
+                          <span className="font-medium">{r.requiredLevel}</span>
+                        </td>
+                        <td className="py-3 px-2">
+                          <div className="flex items-center justify-center gap-1">
+                            {getGapIcon(r.gap)}
+                            <span className={cn(
+                              'font-medium',
+                              r.gap > 0 && 'text-green-500',
+                              r.gap < 0 && 'text-red-500'
+                            )}>
+                              {r.gap > 0 ? '+' : ''}{r.gap}
+                            </span>
+                          </div>
+                        </td>
+                      </tr>
+                    ))}
+                  </tbody>
+                </table>
+              </div>
+            </CardContent>
+          </Card>
+
+          {/* Actions */}
+          <div className="mt-8 flex flex-col sm:flex-row gap-4 justify-center">
+            <Button size="lg" onClick={handleDownloadPDF}>
+              <Download className="w-4 h-4 mr-2" />
+              Pobierz pełny raport PDF
+            </Button>
+            <Button size="lg" variant="outline" onClick={() => navigate('/')}>
+              <Home className="w-4 h-4 mr-2" />
+              Wróć do strony głównej
+            </Button>
+          </div>
+        </div>
+      </main>
+    </div>
+  );
+};
+
+export default Results;

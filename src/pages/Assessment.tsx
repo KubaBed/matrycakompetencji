@@ -1,0 +1,253 @@
+import { useState, useMemo } from 'react';
+import { useParams, useNavigate } from 'react-router-dom';
+import { Button } from '@/components/ui/button';
+import { Card, CardContent, CardHeader, CardTitle, CardDescription } from '@/components/ui/card';
+import { Progress } from '@/components/ui/progress';
+import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
+import { getDepartmentById } from '@/data/departments';
+import { mobileCompetencies, mobileRequirements } from '@/data/competencies/mobile';
+import { 
+  SeniorityLevel, 
+  Competency, 
+  CompetencyAssessment,
+  categoryConfig,
+  competencyLevelConfig,
+  seniorityLevelConfig
+} from '@/types/competency';
+import { branding } from '@/config/branding';
+import { ArrowLeft, ArrowRight, Sparkles, Info } from 'lucide-react';
+import { cn } from '@/lib/utils';
+import { Tooltip, TooltipContent, TooltipTrigger } from '@/components/ui/tooltip';
+
+const Assessment = () => {
+  const { departmentId, positionId, level } = useParams<{ 
+    departmentId: string; 
+    positionId: string; 
+    level: string;
+  }>();
+  const navigate = useNavigate();
+  
+  const [assessments, setAssessments] = useState<Record<string, number>>({});
+  const [activeCategory, setActiveCategory] = useState<string>('hard');
+  
+  const department = departmentId ? getDepartmentById(departmentId) : null;
+  const position = department?.positions.find(p => p.id === positionId);
+  const seniorityLevel = level as SeniorityLevel;
+
+  // Get competencies based on department (for now using mobile as example)
+  const competencies = mobileCompetencies;
+  const requirements = mobileRequirements.filter(
+    r => r.positionId === positionId && r.seniorityLevel === seniorityLevel
+  );
+
+  // Group competencies by category
+  const competenciesByCategory = useMemo(() => {
+    return competencies.reduce((acc, comp) => {
+      if (!acc[comp.category]) acc[comp.category] = [];
+      acc[comp.category].push(comp);
+      return acc;
+    }, {} as Record<string, Competency[]>);
+  }, [competencies]);
+
+  // Calculate progress
+  const totalCompetencies = competencies.length;
+  const assessedCount = Object.keys(assessments).length;
+  const progressPercent = (assessedCount / totalCompetencies) * 100;
+
+  const handleRating = (competencyId: string, rating: number) => {
+    setAssessments(prev => ({
+      ...prev,
+      [competencyId]: rating
+    }));
+  };
+
+  const getRequiredLevel = (competencyId: string): number => {
+    const req = requirements.find(r => r.competencyId === competencyId);
+    return req?.requiredLevel || 0;
+  };
+
+  const handleSubmit = () => {
+    const assessmentData: CompetencyAssessment[] = Object.entries(assessments).map(
+      ([competencyId, selfRating]) => ({ competencyId, selfRating })
+    );
+    
+    // Store in session storage for results page
+    sessionStorage.setItem('assessment', JSON.stringify({
+      departmentId,
+      positionId,
+      seniorityLevel,
+      assessments: assessmentData,
+      createdAt: new Date().toISOString()
+    }));
+    
+    navigate('/results');
+  };
+
+  if (!department || !position) {
+    return null;
+  }
+
+  return (
+    <div className="min-h-screen bg-background">
+      {/* Header */}
+      <header className="border-b bg-card/50 backdrop-blur-sm sticky top-0 z-50">
+        <div className="container mx-auto px-4 py-4">
+          <div className="flex items-center justify-between mb-4">
+            <div className="flex items-center gap-2">
+              <div className="w-10 h-10 rounded-lg bg-primary flex items-center justify-center">
+                <Sparkles className="w-6 h-6 text-primary-foreground" />
+              </div>
+              <div>
+                <h1 className="font-bold text-lg text-foreground">{branding.companyName}</h1>
+                <p className="text-xs text-muted-foreground">{branding.appName}</p>
+              </div>
+            </div>
+            
+            <Button variant="ghost" size="sm" onClick={() => navigate(-1)}>
+              <ArrowLeft className="w-4 h-4 mr-2" />
+              Powrót
+            </Button>
+          </div>
+          
+          {/* Progress bar */}
+          <div className="space-y-2">
+            <div className="flex justify-between text-sm">
+              <span className="text-muted-foreground">
+                {position.name} • {seniorityLevelConfig[seniorityLevel].name}
+              </span>
+              <span className="font-medium">
+                {assessedCount} / {totalCompetencies} kompetencji
+              </span>
+            </div>
+            <Progress value={progressPercent} className="h-2" />
+          </div>
+        </div>
+      </header>
+
+      <main className="container mx-auto px-4 py-8">
+        <div className="max-w-4xl mx-auto">
+          <h1 className="text-2xl font-bold mb-2">Samoocena kompetencji</h1>
+          <p className="text-muted-foreground mb-8">
+            Oceń swoje umiejętności w skali 1-5 dla każdej kompetencji. 
+            Kolumna "Wymagane" pokazuje oczekiwany poziom na Twoim stanowisku.
+          </p>
+
+          {/* Category Tabs */}
+          <Tabs value={activeCategory} onValueChange={setActiveCategory}>
+            <TabsList className="grid w-full grid-cols-3 mb-8">
+              {Object.entries(categoryConfig).map(([key, config]) => (
+                <TabsTrigger key={key} value={key} className="text-sm">
+                  {config.name}
+                </TabsTrigger>
+              ))}
+            </TabsList>
+
+            {Object.entries(categoryConfig).map(([categoryKey, categoryInfo]) => (
+              <TabsContent key={categoryKey} value={categoryKey} className="space-y-4">
+                <p className="text-sm text-muted-foreground mb-4">
+                  {categoryInfo.description}
+                </p>
+                
+                {competenciesByCategory[categoryKey]?.map((competency) => {
+                  const requiredLevel = getRequiredLevel(competency.id);
+                  const currentRating = assessments[competency.id];
+                  
+                  return (
+                    <Card key={competency.id} className="overflow-hidden">
+                      <CardHeader className="pb-2">
+                        <div className="flex items-start justify-between">
+                          <div className="flex-1">
+                            <CardTitle className="text-lg flex items-center gap-2">
+                              {competency.name}
+                              <Tooltip>
+                                <TooltipTrigger asChild>
+                                  <Info className="w-4 h-4 text-muted-foreground cursor-help" />
+                                </TooltipTrigger>
+                                <TooltipContent side="right" className="max-w-xs bg-popover text-popover-foreground">
+                                  <p>{competency.description}</p>
+                                </TooltipContent>
+                              </Tooltip>
+                            </CardTitle>
+                            <CardDescription>{competency.description}</CardDescription>
+                          </div>
+                          {requiredLevel > 0 && (
+                            <div className="text-right">
+                              <span className="text-xs text-muted-foreground">Wymagane</span>
+                              <div className={cn(
+                                'px-2 py-1 rounded text-xs font-medium',
+                                competencyLevelConfig[requiredLevel]?.color,
+                                'text-white'
+                              )}>
+                                {requiredLevel}
+                              </div>
+                            </div>
+                          )}
+                        </div>
+                      </CardHeader>
+                      <CardContent>
+                        {/* Rating buttons */}
+                        <div className="flex gap-2">
+                          {[1, 2, 3, 4, 5].map((rating) => {
+                            const levelConfig = competencyLevelConfig[rating];
+                            const isSelected = currentRating === rating;
+                            const levelInfo = competency.levels.find(l => l.level === rating);
+                            
+                            return (
+                              <Tooltip key={rating}>
+                                <TooltipTrigger asChild>
+                                  <button
+                                    onClick={() => handleRating(competency.id, rating)}
+                                    className={cn(
+                                      'flex-1 py-3 px-2 rounded-lg transition-all duration-200',
+                                      'border-2 font-medium',
+                                      isSelected
+                                        ? `${levelConfig.color} text-white border-transparent shadow-md scale-105`
+                                        : 'bg-secondary border-transparent hover:border-primary/30 text-secondary-foreground'
+                                    )}
+                                  >
+                                    <div className="text-lg font-bold">{rating}</div>
+                                    <div className="text-xs opacity-80 hidden sm:block">
+                                      {levelConfig.name}
+                                    </div>
+                                  </button>
+                                </TooltipTrigger>
+                                <TooltipContent className="max-w-xs bg-popover text-popover-foreground">
+                                  <p className="font-semibold">{levelConfig.name}</p>
+                                  <p className="text-sm">{levelInfo?.description}</p>
+                                </TooltipContent>
+                              </Tooltip>
+                            );
+                          })}
+                        </div>
+                      </CardContent>
+                    </Card>
+                  );
+                })}
+              </TabsContent>
+            ))}
+          </Tabs>
+
+          {/* Submit Button */}
+          <div className="mt-12 flex flex-col items-center gap-4">
+            <Button
+              size="lg"
+              disabled={assessedCount < totalCompetencies}
+              onClick={handleSubmit}
+              className="min-w-[200px]"
+            >
+              Zobacz wyniki
+              <ArrowRight className="w-4 h-4 ml-2" />
+            </Button>
+            {assessedCount < totalCompetencies && (
+              <p className="text-sm text-muted-foreground">
+                Oceń wszystkie {totalCompetencies} kompetencji, żeby zobaczyć wyniki
+              </p>
+            )}
+          </div>
+        </div>
+      </main>
+    </div>
+  );
+};
+
+export default Assessment;
