@@ -1,14 +1,27 @@
-import { useState } from 'react';
+import { useState, useRef, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { Button } from '@/components/ui/button';
 import { DepartmentCard } from '@/components/DepartmentCard';
 import { departments } from '@/data/departments';
 import { branding } from '@/config/branding';
-import { UserCircle, ArrowRight, Sparkles } from 'lucide-react';
+import { UserCircle, ArrowRight } from 'lucide-react';
 
 const Index = () => {
   const navigate = useNavigate();
   const [selectedDepartment, setSelectedDepartment] = useState<string | null>(null);
+  const actionButtonsRef = useRef<HTMLDivElement>(null);
+
+  // Scroll to action buttons when department is selected
+  useEffect(() => {
+    if (selectedDepartment && actionButtonsRef.current) {
+      setTimeout(() => {
+        actionButtonsRef.current?.scrollIntoView({ 
+          behavior: 'smooth', 
+          block: 'center' 
+        });
+      }, 150);
+    }
+  }, [selectedDepartment]);
 
   const handleContinue = (mode: 'anonymous' | 'login') => {
     if (selectedDepartment) {
@@ -21,9 +34,19 @@ const Index = () => {
   };
 
   return (
-    <div className="min-h-screen bg-background">
+    <div className="min-h-screen bg-background relative overflow-hidden">
+      {/* Decorative Background Elements */}
+      <div className="absolute inset-0 overflow-hidden pointer-events-none">
+        {/* Gradient orbs */}
+        <div className="absolute -top-40 -right-40 w-96 h-96 bg-primary/10 rounded-full blur-3xl animate-pulse" />
+        <div className="absolute top-1/3 -left-32 w-80 h-80 bg-primary/5 rounded-full blur-3xl" />
+        <div className="absolute bottom-20 right-1/4 w-64 h-64 bg-accent/30 rounded-full blur-3xl" />
+        {/* Grid pattern */}
+        <div className="absolute inset-0 bg-[linear-gradient(to_right,hsl(var(--border))_1px,transparent_1px),linear-gradient(to_bottom,hsl(var(--border))_1px,transparent_1px)] bg-[size:4rem_4rem] opacity-30" />
+      </div>
+
       {/* Header */}
-      <header className="border-b bg-card/50 backdrop-blur-sm sticky top-0 z-50">
+      <header className="border-b bg-card/80 backdrop-blur-md sticky top-0 z-50 relative">
         <div className="container mx-auto px-4 py-4 flex items-center justify-between">
           <div className="flex items-center gap-2">
             <h1 className="font-bold text-lg text-foreground">{branding.appName}</h1>
@@ -37,12 +60,12 @@ const Index = () => {
       </header>
 
       {/* Hero Section */}
-      <section className="py-16 px-4">
+      <section className="py-16 px-4 relative">
         <div className="container mx-auto text-center max-w-3xl">
           <h1 className="text-4xl md:text-5xl font-bold text-foreground mb-4 animate-fade-in">
             {branding.tagline}
           </h1>
-          <p className="text-lg text-muted-foreground mb-8 animate-fade-in">
+          <p className="text-lg text-muted-foreground mb-8 animate-fade-in" style={{ animationDelay: '0.1s' }}>
             Sprawdź swoje kompetencje, zidentyfikuj obszary do rozwoju 
             i zaplanuj kolejne kroki w karierze.
           </p>
@@ -70,7 +93,10 @@ const Index = () => {
 
           {/* Action Buttons */}
           {selectedDepartment && (
-            <div className="mt-12 flex flex-col sm:flex-row gap-4 justify-center items-center animate-fade-in">
+            <div 
+              ref={actionButtonsRef}
+              className="mt-12 flex flex-col sm:flex-row gap-4 justify-center items-center animate-fade-in"
+            >
               <Button
                 size="lg"
                 onClick={() => handleContinue('anonymous')}

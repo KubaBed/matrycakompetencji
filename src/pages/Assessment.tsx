@@ -167,11 +167,17 @@ const Assessment = () => {
                   return (
                     <Card key={competency.id} className={cn(
                       "overflow-hidden transition-all duration-200",
-                      currentRating && "border-primary/30"
+                      currentRating && "border-primary/30",
+                      !isExpanded && "hover:shadow-md hover:border-primary/50"
                     )}>
                       {/* Competency Header - Clickable to expand */}
                       <CardHeader 
-                        className="cursor-pointer hover:bg-muted/50 transition-colors"
+                        className={cn(
+                          "cursor-pointer transition-all duration-200",
+                          isExpanded 
+                            ? "bg-primary/5" 
+                            : "hover:bg-accent group"
+                        )}
                         onClick={() => toggleExpanded(competency.id)}
                       >
                         <div className="flex items-start justify-between">
@@ -183,6 +189,13 @@ const Assessment = () => {
                               )}
                             </CardTitle>
                             <CardDescription className="mt-1">{competency.description}</CardDescription>
+                            {/* Expand hint */}
+                            {!isExpanded && (
+                              <div className="mt-2 flex items-center gap-1.5 text-xs text-primary font-medium opacity-70 group-hover:opacity-100 transition-opacity">
+                                <ChevronDown className="w-3.5 h-3.5 animate-bounce" />
+                                <span>Kliknij, żeby zobaczyć szczegóły i wybrać poziom</span>
+                              </div>
+                            )}
                           </div>
                           <div className="flex items-center gap-3">
                             {requiredLevel > 0 && (
@@ -209,11 +222,16 @@ const Assessment = () => {
                                 </div>
                               </div>
                             )}
-                            {isExpanded ? (
-                              <ChevronUp className="w-5 h-5 text-muted-foreground" />
-                            ) : (
-                              <ChevronDown className="w-5 h-5 text-muted-foreground" />
-                            )}
+                            <div className={cn(
+                              "w-8 h-8 rounded-full flex items-center justify-center transition-colors",
+                              isExpanded ? "bg-primary text-primary-foreground" : "bg-secondary group-hover:bg-primary/20"
+                            )}>
+                              {isExpanded ? (
+                                <ChevronUp className="w-5 h-5" />
+                              ) : (
+                                <ChevronDown className="w-5 h-5 text-muted-foreground group-hover:text-primary" />
+                              )}
+                            </div>
                           </div>
                         </div>
                       </CardHeader>
@@ -301,9 +319,6 @@ const Assessment = () => {
                               );
                             })}
                           </div>
-                          <p className="text-xs text-muted-foreground text-center mt-2">
-                            Kliknij kartę powyżej, żeby zobaczyć szczegółowe opisy poziomów
-                          </p>
                         </CardContent>
                       )}
                     </Card>
