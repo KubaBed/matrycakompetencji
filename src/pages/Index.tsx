@@ -26,13 +26,7 @@ const Index = () => {
       <header className="border-b bg-card/50 backdrop-blur-sm sticky top-0 z-50">
         <div className="container mx-auto px-4 py-4 flex items-center justify-between">
           <div className="flex items-center gap-2">
-            <div className="w-10 h-10 rounded-lg bg-primary flex items-center justify-center">
-              <Sparkles className="w-6 h-6 text-primary-foreground" />
-            </div>
-            <div>
-              <h1 className="font-bold text-lg text-foreground">{branding.companyName}</h1>
-              <p className="text-xs text-muted-foreground">{branding.appName}</p>
-            </div>
+            <h1 className="font-bold text-lg text-foreground">{branding.appName}</h1>
           </div>
           
           <Button variant="outline" size="sm" onClick={() => navigate('/login')}>
@@ -138,7 +132,7 @@ const Index = () => {
       {/* Footer */}
       <footer className="py-8 px-4 border-t">
         <div className="container mx-auto text-center text-sm text-muted-foreground">
-          <p>© {new Date().getFullYear()} {branding.companyName}. Wszystkie prawa zastrzeżone.</p>
+          <p>© {new Date().getFullYear()} {branding.appName}. Wszystkie prawa zastrzeżone.</p>
         </div>
       </footer>
     </div>

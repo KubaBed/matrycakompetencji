@@ -108,13 +108,7 @@ const DashboardMockup = () => {
         {/* Sidebar */}
         <aside className="w-64 min-h-screen bg-card border-r p-4 hidden lg:block">
           <div className="flex items-center gap-2 mb-8">
-            <div className="w-10 h-10 rounded-lg bg-primary flex items-center justify-center">
-              <Sparkles className="w-6 h-6 text-primary-foreground" />
-            </div>
-            <div>
-              <h1 className="font-bold text-foreground">{branding.companyName}</h1>
-              <p className="text-xs text-muted-foreground">HR Dashboard</p>
-            </div>
+            <h1 className="font-bold text-foreground">{branding.appName} - HR Dashboard</h1>
           </div>
 
           <nav className="space-y-2">

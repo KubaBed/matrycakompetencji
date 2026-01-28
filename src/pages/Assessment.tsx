@@ -104,13 +104,7 @@ const Assessment = () => {
         <div className="container mx-auto px-4 py-4">
           <div className="flex items-center justify-between mb-4">
             <div className="flex items-center gap-2">
-              <div className="w-10 h-10 rounded-lg bg-primary flex items-center justify-center">
-                <Sparkles className="w-6 h-6 text-primary-foreground" />
-              </div>
-              <div>
-                <h1 className="font-bold text-lg text-foreground">{branding.companyName}</h1>
-                <p className="text-xs text-muted-foreground">{branding.appName}</p>
-              </div>
+              <h1 className="font-bold text-lg text-foreground">{branding.appName}</h1>
             </div>
             
             <Button variant="ghost" size="sm" onClick={() => navigate(-1)}>

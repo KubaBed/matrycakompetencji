@@ -3,16 +3,17 @@
 
 export const branding = {
   // Company info
-  companyName: 'Appchance',
+  companyName: '',
   appName: 'Competency Matrix',
   tagline: 'Odkryj swoją ścieżkę rozwoju',
   
   // Logo (can be replaced with company logo)
   logoUrl: null, // Use null for text-based logo, or provide URL/import
+  showLogo: false, // Set to true to show logo icon
   
   // Contact
-  supportEmail: 'hr@appchance.com',
-  websiteUrl: 'https://appchance.com',
+  supportEmail: '',
+  websiteUrl: '',
   
   // Colors are defined in index.css - this is for reference
   colors: {
