@@ -313,24 +313,59 @@ const Assessment = () => {
             ))}
           </Tabs>
 
-          {/* Submit Button */}
-          <div className="mt-12 flex flex-col items-center gap-4">
-            <Button
-              size="lg"
-              disabled={assessedCount < totalCompetencies}
-              onClick={handleSubmit}
-              className="min-w-[200px]"
-            >
-              Zobacz wyniki
-              <ArrowRight className="w-4 h-4 ml-2" />
-            </Button>
-            {assessedCount < totalCompetencies && (
-              <p className="text-sm text-muted-foreground">
-                Oceń wszystkie {totalCompetencies} kompetencji, żeby zobaczyć wyniki 
-                ({totalCompetencies - assessedCount} pozostało)
-              </p>
-            )}
-          </div>
+          {/* Navigation Button */}
+          {(() => {
+            const categoryKeys = Object.keys(categoryConfig);
+            const currentIndex = categoryKeys.indexOf(activeCategory);
+            const isLastCategory = currentIndex === categoryKeys.length - 1;
+            const currentCategoryCompetencies = competenciesByCategory[activeCategory] || [];
+            const currentCategoryAssessed = currentCategoryCompetencies.filter(c => assessments[c.id]).length;
+            const isCurrentCategoryComplete = currentCategoryAssessed === currentCategoryCompetencies.length && currentCategoryCompetencies.length > 0;
+            const nextCategoryKey = categoryKeys[currentIndex + 1];
+            const nextCategoryName = nextCategoryKey ? categoryConfig[nextCategoryKey as keyof typeof categoryConfig]?.name : '';
+
+            return (
+              <div className="mt-12 flex flex-col items-center gap-4">
+                {!isLastCategory ? (
+                  <>
+                    <Button
+                      size="lg"
+                      disabled={!isCurrentCategoryComplete}
+                      onClick={() => setActiveCategory(nextCategoryKey)}
+                      className="min-w-[200px]"
+                    >
+                      Przejdź do: {nextCategoryName}
+                      <ArrowRight className="w-4 h-4 ml-2" />
+                    </Button>
+                    {!isCurrentCategoryComplete && (
+                      <p className="text-sm text-muted-foreground">
+                        Oceń wszystkie kompetencje w tej kategorii, żeby przejść dalej
+                        ({currentCategoryCompetencies.length - currentCategoryAssessed} pozostało)
+                      </p>
+                    )}
+                  </>
+                ) : (
+                  <>
+                    <Button
+                      size="lg"
+                      disabled={assessedCount < totalCompetencies}
+                      onClick={handleSubmit}
+                      className="min-w-[200px]"
+                    >
+                      Zobacz wyniki
+                      <ArrowRight className="w-4 h-4 ml-2" />
+                    </Button>
+                    {assessedCount < totalCompetencies && (
+                      <p className="text-sm text-muted-foreground">
+                        Oceń wszystkie {totalCompetencies} kompetencji, żeby zobaczyć wyniki 
+                        ({totalCompetencies - assessedCount} pozostało)
+                      </p>
+                    )}
+                  </>
+                )}
+              </div>
+            );
+          })()}
         </div>
       </main>
     </div>
