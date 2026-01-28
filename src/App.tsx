@@ -7,6 +7,7 @@ import Index from "./pages/Index";
 import PositionSelect from "./pages/PositionSelect";
 import Assessment from "./pages/Assessment";
 import Results from "./pages/Results";
+import DashboardMockup from "./pages/DashboardMockup";
 import NotFound from "./pages/NotFound";
 
 const queryClient = new QueryClient();
@@ -19,6 +20,7 @@ const App = () => (
       <BrowserRouter>
         <Routes>
           <Route path="/" element={<Index />} />
+          <Route path="/dashboard-mockup" element={<DashboardMockup />} />
           <Route path="/assessment/:departmentId" element={<PositionSelect />} />
           <Route path="/assessment/:departmentId/:positionId/:level" element={<Assessment />} />
           <Route path="/results" element={<Results />} />
