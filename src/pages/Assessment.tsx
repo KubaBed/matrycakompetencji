@@ -5,19 +5,19 @@ import { Card, CardContent, CardHeader, CardTitle, CardDescription } from '@/com
 import { Progress } from '@/components/ui/progress';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import { getDepartmentById } from '@/data/departments';
-import { mobileCompetencies, mobileRequirements } from '@/data/competencies/mobile';
+import { getCompetenciesForDepartment, getRequirementsForPosition } from '@/data/competencies';
 import { 
   SeniorityLevel, 
   Competency, 
   CompetencyAssessment,
+  DepartmentId,
   categoryConfig,
   competencyLevelConfig,
   seniorityLevelConfig
 } from '@/types/competency';
 import { branding } from '@/config/branding';
-import { ArrowLeft, ArrowRight, Sparkles, Info } from 'lucide-react';
+import { ArrowLeft, ArrowRight, Sparkles, ChevronDown, ChevronUp, CheckCircle2 } from 'lucide-react';
 import { cn } from '@/lib/utils';
-import { Tooltip, TooltipContent, TooltipTrigger } from '@/components/ui/tooltip';
 
 const Assessment = () => {
   const { departmentId, positionId, level } = useParams<{ 
@@ -29,16 +29,22 @@ const Assessment = () => {
   
   const [assessments, setAssessments] = useState<Record<string, number>>({});
   const [activeCategory, setActiveCategory] = useState<string>('hard');
+  const [expandedCompetency, setExpandedCompetency] = useState<string | null>(null);
   
   const department = departmentId ? getDepartmentById(departmentId) : null;
   const position = department?.positions.find(p => p.id === positionId);
   const seniorityLevel = level as SeniorityLevel;
 
-  // Get competencies based on department (for now using mobile as example)
-  const competencies = mobileCompetencies;
-  const requirements = mobileRequirements.filter(
-    r => r.positionId === positionId && r.seniorityLevel === seniorityLevel
-  );
+  // Get competencies based on department
+  const competencies = useMemo(() => {
+    if (!departmentId) return [];
+    return getCompetenciesForDepartment(departmentId as DepartmentId);
+  }, [departmentId]);
+
+  const requirements = useMemo(() => {
+    if (!departmentId || !positionId || !level) return [];
+    return getRequirementsForPosition(departmentId as DepartmentId, positionId, level);
+  }, [departmentId, positionId, level]);
 
   // Group competencies by category
   const competenciesByCategory = useMemo(() => {
@@ -64,6 +70,10 @@ const Assessment = () => {
   const getRequiredLevel = (competencyId: string): number => {
     const req = requirements.find(r => r.competencyId === competencyId);
     return req?.requiredLevel || 0;
+  };
+
+  const toggleExpanded = (competencyId: string) => {
+    setExpandedCompetency(prev => prev === competencyId ? null : competencyId);
   };
 
   const handleSubmit = () => {
@@ -128,18 +138,25 @@ const Assessment = () => {
         <div className="max-w-4xl mx-auto">
           <h1 className="text-2xl font-bold mb-2">Samoocena kompetencji</h1>
           <p className="text-muted-foreground mb-8">
-            Oceń swoje umiejętności w skali 1-5 dla każdej kompetencji. 
-            Kolumna "Wymagane" pokazuje oczekiwany poziom na Twoim stanowisku.
+            Kliknij na kompetencję, żeby zobaczyć szczegółowe opisy każdego poziomu. 
+            Wybierz poziom, który najlepiej opisuje Twoje umiejętności.
           </p>
 
           {/* Category Tabs */}
           <Tabs value={activeCategory} onValueChange={setActiveCategory}>
             <TabsList className="grid w-full grid-cols-3 mb-8">
-              {Object.entries(categoryConfig).map(([key, config]) => (
-                <TabsTrigger key={key} value={key} className="text-sm">
-                  {config.name}
-                </TabsTrigger>
-              ))}
+              {Object.entries(categoryConfig).map(([key, config]) => {
+                const categoryCompetencies = competenciesByCategory[key] || [];
+                const assessed = categoryCompetencies.filter(c => assessments[c.id]).length;
+                return (
+                  <TabsTrigger key={key} value={key} className="text-sm relative">
+                    {config.name}
+                    {assessed === categoryCompetencies.length && categoryCompetencies.length > 0 && (
+                      <CheckCircle2 className="w-4 h-4 text-green-500 ml-1" />
+                    )}
+                  </TabsTrigger>
+                );
+              })}
             </TabsList>
 
             {Object.entries(categoryConfig).map(([categoryKey, categoryInfo]) => (
@@ -151,75 +168,150 @@ const Assessment = () => {
                 {competenciesByCategory[categoryKey]?.map((competency) => {
                   const requiredLevel = getRequiredLevel(competency.id);
                   const currentRating = assessments[competency.id];
+                  const isExpanded = expandedCompetency === competency.id;
                   
                   return (
-                    <Card key={competency.id} className="overflow-hidden">
-                      <CardHeader className="pb-2">
+                    <Card key={competency.id} className={cn(
+                      "overflow-hidden transition-all duration-200",
+                      currentRating && "border-primary/30"
+                    )}>
+                      {/* Competency Header - Clickable to expand */}
+                      <CardHeader 
+                        className="cursor-pointer hover:bg-muted/50 transition-colors"
+                        onClick={() => toggleExpanded(competency.id)}
+                      >
                         <div className="flex items-start justify-between">
                           <div className="flex-1">
                             <CardTitle className="text-lg flex items-center gap-2">
                               {competency.name}
-                              <Tooltip>
-                                <TooltipTrigger asChild>
-                                  <Info className="w-4 h-4 text-muted-foreground cursor-help" />
-                                </TooltipTrigger>
-                                <TooltipContent side="right" className="max-w-xs bg-popover text-popover-foreground">
-                                  <p>{competency.description}</p>
-                                </TooltipContent>
-                              </Tooltip>
+                              {currentRating && (
+                                <CheckCircle2 className="w-5 h-5 text-green-500" />
+                              )}
                             </CardTitle>
-                            <CardDescription>{competency.description}</CardDescription>
+                            <CardDescription className="mt-1">{competency.description}</CardDescription>
                           </div>
-                          {requiredLevel > 0 && (
-                            <div className="text-right">
-                              <span className="text-xs text-muted-foreground">Wymagane</span>
-                              <div className={cn(
-                                'px-2 py-1 rounded text-xs font-medium',
-                                competencyLevelConfig[requiredLevel]?.color,
-                                'text-white'
-                              )}>
-                                {requiredLevel}
+                          <div className="flex items-center gap-3">
+                            {requiredLevel > 0 && (
+                              <div className="text-right">
+                                <span className="text-xs text-muted-foreground block mb-1">Wymagane</span>
+                                <div className={cn(
+                                  'px-3 py-1 rounded text-sm font-bold',
+                                  competencyLevelConfig[requiredLevel]?.color,
+                                  'text-white'
+                                )}>
+                                  {requiredLevel}
+                                </div>
                               </div>
-                            </div>
-                          )}
+                            )}
+                            {currentRating && (
+                              <div className="text-right">
+                                <span className="text-xs text-muted-foreground block mb-1">Twoja ocena</span>
+                                <div className={cn(
+                                  'px-3 py-1 rounded text-sm font-bold',
+                                  competencyLevelConfig[currentRating]?.color,
+                                  'text-white'
+                                )}>
+                                  {currentRating}
+                                </div>
+                              </div>
+                            )}
+                            {isExpanded ? (
+                              <ChevronUp className="w-5 h-5 text-muted-foreground" />
+                            ) : (
+                              <ChevronDown className="w-5 h-5 text-muted-foreground" />
+                            )}
+                          </div>
                         </div>
                       </CardHeader>
-                      <CardContent>
-                        {/* Rating buttons */}
-                        <div className="flex gap-2">
-                          {[1, 2, 3, 4, 5].map((rating) => {
-                            const levelConfig = competencyLevelConfig[rating];
-                            const isSelected = currentRating === rating;
-                            const levelInfo = competency.levels.find(l => l.level === rating);
-                            
-                            return (
-                              <Tooltip key={rating}>
-                                <TooltipTrigger asChild>
-                                  <button
-                                    onClick={() => handleRating(competency.id, rating)}
-                                    className={cn(
-                                      'flex-1 py-3 px-2 rounded-lg transition-all duration-200',
-                                      'border-2 font-medium',
-                                      isSelected
-                                        ? `${levelConfig.color} text-white border-transparent shadow-md scale-105`
-                                        : 'bg-secondary border-transparent hover:border-primary/30 text-secondary-foreground'
-                                    )}
-                                  >
-                                    <div className="text-lg font-bold">{rating}</div>
-                                    <div className="text-xs opacity-80 hidden sm:block">
-                                      {levelConfig.name}
+
+                      {/* Expanded Level Details */}
+                      {isExpanded && (
+                        <CardContent className="pt-0 border-t">
+                          <div className="space-y-3 mt-4">
+                            {competency.levels.map((levelInfo) => {
+                              const isSelected = currentRating === levelInfo.level;
+                              const levelConfig = competencyLevelConfig[levelInfo.level];
+                              
+                              return (
+                                <div
+                                  key={levelInfo.level}
+                                  onClick={() => handleRating(competency.id, levelInfo.level)}
+                                  className={cn(
+                                    'p-4 rounded-lg cursor-pointer transition-all duration-200',
+                                    'border-2 hover:border-primary/50',
+                                    isSelected
+                                      ? 'border-primary bg-accent shadow-md'
+                                      : 'border-transparent bg-secondary/50 hover:bg-secondary'
+                                  )}
+                                >
+                                  <div className="flex items-start gap-4">
+                                    {/* Level Badge */}
+                                    <div className={cn(
+                                      'w-12 h-12 rounded-lg flex items-center justify-center flex-shrink-0',
+                                      'font-bold text-lg text-white',
+                                      levelConfig.color
+                                    )}>
+                                      {levelInfo.level}
                                     </div>
-                                  </button>
-                                </TooltipTrigger>
-                                <TooltipContent className="max-w-xs bg-popover text-popover-foreground">
-                                  <p className="font-semibold">{levelConfig.name}</p>
-                                  <p className="text-sm">{levelInfo?.description}</p>
-                                </TooltipContent>
-                              </Tooltip>
-                            );
-                          })}
-                        </div>
-                      </CardContent>
+                                    
+                                    {/* Level Description */}
+                                    <div className="flex-1">
+                                      <div className="flex items-center gap-2 mb-1">
+                                        <h4 className="font-semibold text-foreground">
+                                          {levelInfo.name}
+                                        </h4>
+                                        {isSelected && (
+                                          <CheckCircle2 className="w-4 h-4 text-primary" />
+                                        )}
+                                      </div>
+                                      <p className="text-sm text-muted-foreground leading-relaxed">
+                                        {levelInfo.description}
+                                      </p>
+                                    </div>
+                                  </div>
+                                </div>
+                              );
+                            })}
+                          </div>
+                        </CardContent>
+                      )}
+
+                      {/* Quick Rating Buttons (when collapsed) */}
+                      {!isExpanded && (
+                        <CardContent className="pt-0">
+                          <div className="flex gap-2">
+                            {[1, 2, 3, 4, 5].map((rating) => {
+                              const levelConfig = competencyLevelConfig[rating];
+                              const isSelected = currentRating === rating;
+                              
+                              return (
+                                <button
+                                  key={rating}
+                                  onClick={(e) => {
+                                    e.stopPropagation();
+                                    handleRating(competency.id, rating);
+                                  }}
+                                  className={cn(
+                                    'flex-1 py-3 px-2 rounded-lg transition-all duration-200',
+                                    'border-2 font-medium',
+                                    isSelected
+                                      ? `${levelConfig.color} text-white border-transparent shadow-md scale-105`
+                                      : 'bg-secondary border-transparent hover:border-primary/30 text-secondary-foreground'
+                                  )}
+                                >
+                                  <div className="text-lg font-bold">{rating}</div>
+                                  <div className="text-xs opacity-80 hidden sm:block">
+                                    {levelConfig.name}
+                                  </div>
+                                </button>
+                              );
+                            })}
+                          </div>
+                          <p className="text-xs text-muted-foreground text-center mt-2">
+                            Kliknij kartę powyżej, żeby zobaczyć szczegółowe opisy poziomów
+                          </p>
+                        </CardContent>
+                      )}
                     </Card>
                   );
                 })}
@@ -240,7 +332,8 @@ const Assessment = () => {
             </Button>
             {assessedCount < totalCompetencies && (
               <p className="text-sm text-muted-foreground">
-                Oceń wszystkie {totalCompetencies} kompetencji, żeby zobaczyć wyniki
+                Oceń wszystkie {totalCompetencies} kompetencji, żeby zobaczyć wyniki 
+                ({totalCompetencies - assessedCount} pozostało)
               </p>
             )}
           </div>
