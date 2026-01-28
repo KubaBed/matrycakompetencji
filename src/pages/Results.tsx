@@ -4,16 +4,18 @@ import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Progress } from '@/components/ui/progress';
 import { getDepartmentById } from '@/data/departments';
-import { mobileCompetencies, mobileRequirements } from '@/data/competencies/mobile';
+import { getCompetenciesForDepartment, getRequirementsForPosition } from '@/data/competencies';
 import { 
   SelfAssessment, 
   AssessmentResult,
+  DepartmentId,
   categoryConfig,
   competencyLevelConfig,
   seniorityLevelConfig,
   SeniorityLevel
 } from '@/types/competency';
 import { branding } from '@/config/branding';
+import { generatePDFReport } from '@/utils/pdfGenerator';
 import { ArrowLeft, Download, Home, TrendingUp, TrendingDown, Minus, Sparkles } from 'lucide-react';
 import { cn } from '@/lib/utils';
 import {
@@ -39,13 +41,26 @@ const Results = () => {
     }
   }, [navigate]);
 
-  const results = useMemo(() => {
-    if (!assessment) return null;
+  const department = assessment?.departmentId ? getDepartmentById(assessment.departmentId) : null;
+  const position = department?.positions.find(p => p.id === assessment?.positionId);
 
-    const competencies = mobileCompetencies;
-    const requirements = mobileRequirements.filter(
-      r => r.positionId === assessment.positionId && r.seniorityLevel === assessment.seniorityLevel
+  // Get competencies for the department
+  const competencies = useMemo(() => {
+    if (!assessment?.departmentId) return [];
+    return getCompetenciesForDepartment(assessment.departmentId as DepartmentId);
+  }, [assessment?.departmentId]);
+
+  const requirements = useMemo(() => {
+    if (!assessment?.departmentId || !assessment?.positionId || !assessment?.seniorityLevel) return [];
+    return getRequirementsForPosition(
+      assessment.departmentId as DepartmentId, 
+      assessment.positionId, 
+      assessment.seniorityLevel
     );
+  }, [assessment]);
+
+  const results = useMemo(() => {
+    if (!assessment || competencies.length === 0) return null;
 
     const assessmentResults: AssessmentResult[] = assessment.assessments.map(a => {
       const comp = competencies.find(c => c.id === a.competencyId);
@@ -63,13 +78,14 @@ const Results = () => {
     });
 
     // Calculate overall match percentage
-    const totalRequired = assessmentResults.reduce((sum, r) => sum + r.requiredLevel, 0);
-    const totalSelf = assessmentResults.reduce((sum, r) => sum + Math.min(r.selfRating, r.requiredLevel), 0);
+    const resultsWithRequirements = assessmentResults.filter(r => r.requiredLevel > 0);
+    const totalRequired = resultsWithRequirements.reduce((sum, r) => sum + r.requiredLevel, 0);
+    const totalSelf = resultsWithRequirements.reduce((sum, r) => sum + Math.min(r.selfRating, r.requiredLevel), 0);
     const matchPercentage = totalRequired > 0 ? Math.round((totalSelf / totalRequired) * 100) : 0;
 
     // Find strengths and development areas
     const strengths = assessmentResults
-      .filter(r => r.gap > 0)
+      .filter(r => r.gap > 0 && r.requiredLevel > 0)
       .sort((a, b) => b.gap - a.gap)
       .slice(0, 3);
 
@@ -85,10 +101,7 @@ const Results = () => {
       developmentAreas,
       overallScore: Math.round(assessmentResults.reduce((sum, r) => sum + r.selfRating, 0) / assessmentResults.length * 20),
     };
-  }, [assessment]);
-
-  const department = assessment?.departmentId ? getDepartmentById(assessment.departmentId) : null;
-  const position = department?.positions.find(p => p.id === assessment?.positionId);
+  }, [assessment, competencies, requirements]);
 
   // Prepare chart data
   const chartData = useMemo(() => {
@@ -103,7 +116,7 @@ const Results = () => {
     }));
   }, [results]);
 
-  if (!assessment || !results || !position) {
+  if (!assessment || !results || !position || !department) {
     return null;
   }
 
@@ -114,8 +127,18 @@ const Results = () => {
   };
 
   const handleDownloadPDF = () => {
-    // TODO: Implement PDF generation
-    alert('Generowanie PDF będzie dostępne wkrótce!');
+    generatePDFReport({
+      positionName: position.name,
+      seniorityLevel: assessment.seniorityLevel as SeniorityLevel,
+      departmentName: department.name,
+      date: new Date().toLocaleDateString('pl-PL'),
+      results: results.results,
+      competencies,
+      matchPercentage: results.matchPercentage,
+      overallScore: results.overallScore,
+      strengths: results.strengths,
+      developmentAreas: results.developmentAreas,
+    });
   };
 
   return (
@@ -283,14 +306,25 @@ const Results = () => {
               <CardContent>
                 {results.developmentAreas.length > 0 ? (
                   <ul className="space-y-3">
-                    {results.developmentAreas.map((r) => (
-                      <li key={r.competencyId} className="flex items-center justify-between p-3 bg-orange-50 dark:bg-orange-950/20 rounded-lg">
-                        <span className="font-medium">{r.competencyName}</span>
-                        <span className="text-sm text-orange-600">
-                          {r.gap} poniżej wymagań
-                        </span>
-                      </li>
-                    ))}
+                    {results.developmentAreas.map((r) => {
+                      const comp = competencies.find(c => c.id === r.competencyId);
+                      const targetLevel = comp?.levels.find(l => l.level === r.requiredLevel);
+                      return (
+                        <li key={r.competencyId} className="p-3 bg-orange-50 dark:bg-orange-950/20 rounded-lg">
+                          <div className="flex items-center justify-between mb-1">
+                            <span className="font-medium">{r.competencyName}</span>
+                            <span className="text-sm text-orange-600">
+                              {r.gap} poniżej wymagań
+                            </span>
+                          </div>
+                          {targetLevel && (
+                            <p className="text-xs text-muted-foreground">
+                              Cel: {targetLevel.description}
+                            </p>
+                          )}
+                        </li>
+                      );
+                    })}
                   </ul>
                 ) : (
                   <p className="text-muted-foreground text-center py-4">
@@ -329,14 +363,14 @@ const Results = () => {
                         </td>
                         <td className="py-3 px-2 text-center">
                           <span className={cn(
-                            'inline-block w-8 h-8 rounded-full flex items-center justify-center text-white font-bold',
+                            'inline-flex items-center justify-center w-8 h-8 rounded-full text-white font-bold',
                             competencyLevelConfig[r.selfRating]?.color
                           )}>
                             {r.selfRating}
                           </span>
                         </td>
                         <td className="py-3 px-2 text-center">
-                          <span className="font-medium">{r.requiredLevel}</span>
+                          <span className="font-medium">{r.requiredLevel || '-'}</span>
                         </td>
                         <td className="py-3 px-2">
                           <div className="flex items-center justify-center gap-1">
