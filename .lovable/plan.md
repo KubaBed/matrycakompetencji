@@ -1,158 +1,118 @@
 
+# Plan: Wdrożenie feedbacku UX - eliminacja bias i ulepszone wyniki
 
-# 🎯 Competency Matrix Pro - Plan Aplikacji dla Appchance
+## Podsumowanie zmian
 
-## Cel aplikacji
-Interaktywna aplikacja webowa, która zamienia skomplikowane macierze kompetencji Excel w przystępne, wizualne narzędzie do:
-- Przeglądania wymagań kompetencyjnych dla każdego działu i poziomu
-- Przeprowadzania samooceny przez pracowników
-- Generowania spersonalizowanych raportów PDF ze ścieżką rozwoju
-- Przeglądania wyników zespołu przez HR i managerów
-
----
-
-## 🎨 Design i branding
-
-**Kolorystyka Appchance:**
-- Główny kolor: Czerwony/Magenta (#E31E4A)
-- Tło: Jasne, białe z subtelnymi szarościami
-- Akcenty: Ciemny granat dla tekstu
-- Styl: Nowoczesny, profesjonalny, przyjazny
-
-**Ilustracje działów (Pixel Art):**
-- Sales → Postać handlowca z telefonem/laptopem
-- PM (Project Manager) → Postać z tablicą kanban
-- Mobile Developer → Postać przy smartfonie z kodem
-- Web Developer → Postać przy ekranie z przeglądarką
-- QA → Postać z lupą i checklistą
+Wdrażamy 4 zmiany zgłoszone w feedbacku:
+- **2a**: Ukrycie wymaganych poziomów podczas samooceny
+- **2b**: Zmiana kolorów z zielono-czerwonych na neutralne
+- **4**: Dodanie drugiego wykresu radarowego (porównanie z kolejnym poziomem)
+- **5**: Link do szczegółowej macierzy na Google Drive
 
 ---
 
-## 📱 Struktura aplikacji
+## Zmiana 2a: Ukrycie wskaźnika "Wymagane"
 
-### Ekran 1: Strona powitalna
-- Logo Appchance + nazwa "Competency Matrix"
-- Hasło powitalne: "Odkryj swoją ścieżkę rozwoju"
-- Dwie opcje:
-  - **"Rozpocznij anonimowo"** → Pełna funkcjonalność, bez zapisu wyników
-  - **"Zaloguj się"** → Email/hasło, wyniki zapisywane w systemie
+### Problem
+Podczas samooceny użytkownik widzi wymagany poziom przy każdej kompetencji. To może wpływać na jego ocenę - świadomie lub nieświadomie dostosowuje odpowiedzi do oczekiwań.
 
-### Ekran 2: Wybór działu
-- Karty z pixel-artowymi ilustracjami dla każdego działu:
-  - Sales
-  - Project Management
-  - Mobile Development
-  - Web Development
-  - Quality Assurance
-- Po najechaniu: krótki opis zespołu
+### Rozwiązanie
+Usunięcie bloku "Wymagane: X" z widoku karty kompetencji w formularzu samooceny. Użytkownik zobaczy wymagane poziomy dopiero na stronie wyników.
 
-### Ekran 3: Wybór stanowiska i poziomu
-- Lista stanowisk w wybranym dziale (np. dla Mobile: iOS Developer, Android Developer, Flutter Developer)
-- Poziomy seniority: Junior → Mid → Senior → Lead/Expert
-- Wizualizacja ścieżki kariery jako "drabina"
-
-### Ekran 4: Przeglądanie kompetencji
-- Zakładki z kategoriami kompetencji (Twarde, Miękkie, Specjalistyczne)
-- Dla każdej kompetencji:
-  - Nazwa i opis
-  - Wymagany poziom dla aktualnego stanowiska
-  - Co trzeba rozwinąć na następny poziom (wizualne porównanie)
-
-### Ekran 5: Samoocena
-- Interaktywny formularz dla każdej kompetencji
-- Skala oceny: 1-5 (z opisem co oznacza każdy poziom)
-- Pasek postępu pokazujący ile kompetencji oceniono
-- Możliwość zapisania częściowego postępu (dla zalogowanych)
-
-### Ekran 6: Wyniki i raport
-- Wizualne podsumowanie wyników (wykres radarowy/pajęczyna)
-- Porównanie: Twoja ocena vs wymagania na stanowisko
-- Luki kompetencyjne podświetlone
-- Rekomendacje rozwojowe z priorytetyzacją
-- Przycisk: **"Pobierz PDF"**
+### Zakres zmian
+- **Plik**: `src/pages/Assessment.tsx`
+- Usunięcie sekcji wyświetlającej "Wymagane" (linie 201-212)
 
 ---
 
-## 📊 Dashboard HR/Manager
+## Zmiana 2b: Neutralna kolorystyka poziomów
 
-### Dostęp według roli:
-- **HR** → widzi wszystkich pracowników i wszystkie działy
-- **Manager** → widzi tylko swój dział/zespół
+### Problem
+Obecna kolorystyka (pomarańczowy → żółty → zielony → niebieski → fioletowy) sugeruje, że niższe poziomy są "gorsze", a wyższe "lepsze". To może wpływać na uczciwe odpowiedzi użytkowników.
 
-### Funkcjonalności:
-- Lista pracowników z ostatnią datą samooceny
-- Filtrowanie po dziale, stanowisku, poziomie
-- Widok zbiorczy kompetencji zespołu (heatmapa)
-- Eksport raportów do PDF/Excel
-- Porównanie wyników pracownika w czasie
+### Rozwiązanie
+Zmiana na neutralną paletę kolorów (odcienie niebieskiego i szarości), która nie wartościuje poziomów.
 
----
+### Nowa paleta kolorów
+| Poziom | Obecnie | Po zmianie |
+|--------|---------|------------|
+| 1 | pomarańczowy | szary |
+| 2 | żółty | slate (ciemny szary) |
+| 3 | zielony | niebieski |
+| 4 | niebieski | indygo |
+| 5 | fioletowy | fioletowy (neutralny) |
 
-## 📄 Raport PDF (pełny)
-
-Zawartość raportu:
-1. **Strona tytułowa** - imię, stanowisko, data, logo Appchance
-2. **Podsumowanie** - ocena ogólna, poziom dopasowania do stanowiska
-3. **Wyniki szczegółowe** - każda kompetencja z oceną i wymaganiem
-4. **Wykres radarowy** - wizualizacja profilu kompetencji
-5. **Analiza luk** - gdzie są największe różnice
-6. **Ścieżka rozwoju** - konkretne rekomendacje co rozwijać
-7. **Porównanie z następnym poziomem** - co trzeba osiągnąć żeby awansować
+### Zakres zmian
+- **Plik**: `src/types/competency.ts`
+- Aktualizacja `competencyLevelConfig` z nowymi neutralnymi kolorami
 
 ---
 
-## 🗂️ Dane kompetencji (statyczne)
+## Zmiana 4: Drugi wykres radarowy - porównanie z kolejnym poziomem
 
-Wszystkie macierze z Exceli zostaną przekonwertowane na strukturę TypeScript:
-- Łatwe do edycji bezpośrednio w kodzie
-- Organizacja: `/src/data/competencies/sales.ts`, `pm.ts`, `mobile.ts`, `web.ts`, `qa.ts`
-- Typy TypeScript zapewniające spójność danych
+### Problem
+Obecnie na stronie wyników jest tylko jeden wykres radarowy porównujący samoocenę z wymaganiami obecnej roli. Brakuje perspektywy rozwojowej - co potrzebuję, żeby awansować?
 
----
+### Rozwiązanie
+Dodanie drugiego wykresu radarowego pokazującego:
+- Samoocenę użytkownika
+- Wymagania następnego poziomu seniorności (jeśli istnieje)
 
-## 🔐 System użytkowników
+### Logika "następnego poziomu"
+```text
+junior → mid → senior → lead → expert
+```
 
-### Role:
-- **Pracownik** - może robić samoocenę, przeglądać swoje wyniki
-- **Manager** - widzi wyniki swojego zespołu
-- **HR Admin** - widzi wszystko, może zarządzać użytkownikami
+System sprawdzi, czy dla danego stanowiska istnieje następny poziom seniorności:
+- Jeśli tak: wyświetli drugi wykres z porównaniem
+- Jeśli nie (np. użytkownik jest już na poziomie "lead" lub "expert" dla danej roli): wyświetli komunikat informacyjny
 
-### Funkcje logowania:
-- Email + hasło
-- Opcja "Zapamiętaj mnie"
-- Reset hasła przez email
-
----
-
-## 🚀 Technologia (Lovable Cloud)
-
-- **Frontend**: React + TypeScript + Tailwind CSS
-- **Backend**: Lovable Cloud (Supabase)
-- **Baza danych**: PostgreSQL z tabelami users, profiles, user_roles, assessments
-- **Autentykacja**: Supabase Auth
-- **PDF**: Generowanie po stronie klienta (react-pdf lub jspdf)
-- **Ilustracje**: Wygenerowane przez AI w stylu Pixel Art
+### Zakres zmian
+- **Plik**: `src/pages/Results.tsx`
+- Dodanie logiki pobierania wymagań dla następnego poziomu
+- Dodanie drugiego komponentu RadarChart
+- Sekcja "Ścieżka rozwoju" z wykresem i opisem
 
 ---
 
-## 📋 Etapy implementacji
+## Zmiana 5: Link do szczegółowej macierzy Google Drive
 
-1. **Konfiguracja projektu i design system** - kolory Appchance, komponenty bazowe
-2. **Struktura danych** - konwersja Exceli do TypeScript, typy
-3. **Strona powitalna i wybór działu** - z ilustracjami pixel art
-4. **Przeglądanie kompetencji** - szczegółowy widok macierzy
-5. **Moduł samooceny** - interaktywny formularz
-6. **Wyniki i generowanie PDF** - wizualizacje, eksport
-7. **System logowania** - Lovable Cloud, role użytkowników
-8. **Dashboard HR/Manager** - widok zbiorczy, filtry
-9. **Testy i polish** - responsywność, UX
+### Problem
+Użytkownicy mogą potrzebować bardziej szczegółowych opisów kompetencji, żeby podjąć decyzję o swoim poziomie.
+
+### Rozwiązanie
+Dodanie widocznego linku/przycisku na początku formularza samooceny, który kieruje do dokumentu Google Drive z pełną macierzą kompetencji.
+
+### Zakres zmian
+- **Plik**: `src/pages/Assessment.tsx`
+- Dodanie komponentu Alert lub Card z linkiem
+- Link: `https://drive.google.com/drive/folders/13Yq3cDAP0AR2lyrjOTKE2MPL_pd6KQ4_`
 
 ---
 
-## 🎯 Przygotowanie do White-Label
+## Szczegóły techniczne
 
-Struktura aplikacji będzie przygotowana pod przyszłe dostosowanie:
-- Kolory i logo w jednym pliku konfiguracyjnym
-- Dane kompetencji jako osobne moduły
-- Łatwa zmiana brandingu bez przebudowy całej aplikacji
+### Nowe zależności
+Brak - wykorzystujemy istniejące komponenty (Alert, Card, lucide-react icons).
+
+### Zmiany w plikach
+
+**1. `src/types/competency.ts`**
+- Zmiana wartości `color` w `competencyLevelConfig`
+
+**2. `src/pages/Assessment.tsx`**
+- Usunięcie bloku wyświetlającego "Wymagane: X"
+- Dodanie sekcji z linkiem do Google Drive (przed zakładkami kategorii)
+
+**3. `src/pages/Results.tsx`**
+- Nowy hook `useMemo` do obliczenia następnego poziomu seniorności
+- Nowy hook `useMemo` do pobrania wymagań następnego poziomu
+- Dodanie drugiego `RadarChart` w nowej sekcji "Ścieżka rozwoju"
+- Warunkowe renderowanie (tylko gdy następny poziom istnieje)
+
+### Kolejność implementacji
+1. Zmiana kolorów (2b) - najprostsza zmiana
+2. Usunięcie wskaźnika wymagań (2a)
+3. Dodanie linku do macierzy (5)
+4. Dodanie drugiego wykresu radarowego (4) - najbardziej złożona zmiana
 
