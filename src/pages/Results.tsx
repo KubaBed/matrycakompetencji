@@ -59,6 +59,31 @@ const Results = () => {
     );
   }, [assessment]);
 
+  // Calculate next seniority level
+  const nextLevel = useMemo((): SeniorityLevel | null => {
+    if (!assessment?.seniorityLevel || !position) return null;
+    const levelOrder: SeniorityLevel[] = ['junior', 'mid', 'senior', 'lead', 'expert'];
+    const currentIndex = levelOrder.indexOf(assessment.seniorityLevel);
+    if (currentIndex === -1 || currentIndex >= levelOrder.length - 1) return null;
+    
+    const potentialNext = levelOrder[currentIndex + 1];
+    // Check if the position supports this next level
+    if (position.levels.includes(potentialNext)) {
+      return potentialNext;
+    }
+    return null;
+  }, [assessment?.seniorityLevel, position]);
+
+  // Get requirements for next level
+  const nextLevelRequirements = useMemo(() => {
+    if (!nextLevel || !assessment?.departmentId || !assessment?.positionId) return [];
+    return getRequirementsForPosition(
+      assessment.departmentId as DepartmentId, 
+      assessment.positionId, 
+      nextLevel
+    );
+  }, [nextLevel, assessment?.departmentId, assessment?.positionId]);
+
   const results = useMemo(() => {
     if (!assessment || competencies.length === 0) return null;
 
@@ -103,7 +128,7 @@ const Results = () => {
     };
   }, [assessment, competencies, requirements]);
 
-  // Prepare chart data
+  // Prepare chart data for current level
   const chartData = useMemo(() => {
     if (!results) return [];
     return results.results.map(r => ({
@@ -115,6 +140,22 @@ const Results = () => {
       fullMark: 5,
     }));
   }, [results]);
+
+  // Prepare chart data for next level comparison
+  const nextLevelChartData = useMemo(() => {
+    if (!results || !nextLevelRequirements.length) return [];
+    return results.results.map(r => {
+      const nextReq = nextLevelRequirements.find(req => req.competencyId === r.competencyId);
+      return {
+        competency: r.competencyName.length > 15 
+          ? r.competencyName.substring(0, 15) + '...' 
+          : r.competencyName,
+        'Twoja ocena': r.selfRating,
+        'Wymagane (następny poziom)': nextReq?.requiredLevel || 0,
+        fullMark: 5,
+      };
+    });
+  }, [results, nextLevelRequirements]);
 
   if (!assessment || !results || !position || !department) {
     return null;
@@ -258,6 +299,74 @@ const Results = () => {
               </div>
             </CardContent>
           </Card>
+
+          {/* Second Radar Chart - Next Level Comparison */}
+          {nextLevel && nextLevelChartData.length > 0 && (
+            <Card className="mb-8">
+              <CardHeader>
+                <CardTitle className="flex items-center gap-2">
+                  <Sparkles className="w-5 h-5 text-primary" />
+                  Ścieżka rozwoju - {seniorityLevelConfig[nextLevel].name}
+                </CardTitle>
+                <p className="text-sm text-muted-foreground mt-1">
+                  Porównanie Twoich kompetencji z wymaganiami na poziomie {seniorityLevelConfig[nextLevel].name}
+                </p>
+              </CardHeader>
+              <CardContent>
+                <div className="h-[400px]">
+                  <ResponsiveContainer width="100%" height="100%">
+                    <RadarChart data={nextLevelChartData}>
+                      <PolarGrid />
+                      <PolarAngleAxis 
+                        dataKey="competency" 
+                        tick={{ fontSize: 11 }}
+                      />
+                      <PolarRadiusAxis 
+                        angle={90} 
+                        domain={[0, 5]} 
+                        tick={{ fontSize: 10 }}
+                      />
+                      <Radar
+                        name="Twoja ocena"
+                        dataKey="Twoja ocena"
+                        stroke="hsl(var(--primary))"
+                        fill="hsl(var(--primary))"
+                        fillOpacity={0.3}
+                        strokeWidth={2}
+                      />
+                      <Radar
+                        name="Wymagane (następny poziom)"
+                        dataKey="Wymagane (następny poziom)"
+                        stroke="hsl(221 83% 53%)"
+                        fill="hsl(221 83% 53%)"
+                        fillOpacity={0.1}
+                        strokeWidth={2}
+                        strokeDasharray="5 5"
+                      />
+                      <Legend />
+                    </RadarChart>
+                  </ResponsiveContainer>
+                </div>
+              </CardContent>
+            </Card>
+          )}
+
+          {/* Message when at highest level */}
+          {!nextLevel && assessment?.seniorityLevel && (
+            <Card className="mb-8 border-primary/20 bg-primary/5">
+              <CardContent className="pt-6">
+                <div className="flex items-center gap-3">
+                  <Sparkles className="w-6 h-6 text-primary" />
+                  <div>
+                    <p className="font-medium">Jesteś na najwyższym poziomie dla tej roli!</p>
+                    <p className="text-sm text-muted-foreground">
+                      Poziom {seniorityLevelConfig[assessment.seniorityLevel as SeniorityLevel].name} to najwyższy dostępny poziom dla stanowiska {position?.name}.
+                    </p>
+                  </div>
+                </div>
+              </CardContent>
+            </Card>
+          )}
 
           {/* Detailed Results */}
           <div className="grid md:grid-cols-2 gap-8">

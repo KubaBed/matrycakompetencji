@@ -4,6 +4,7 @@ import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardHeader, CardTitle, CardDescription } from '@/components/ui/card';
 import { Progress } from '@/components/ui/progress';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
+import { Alert, AlertDescription } from '@/components/ui/alert';
 import { getDepartmentById } from '@/data/departments';
 import { getCompetenciesForDepartment, getRequirementsForPosition } from '@/data/competencies';
 import { 
@@ -16,7 +17,7 @@ import {
   seniorityLevelConfig
 } from '@/types/competency';
 import { branding } from '@/config/branding';
-import { ArrowLeft, ArrowRight, Sparkles, ChevronDown, ChevronUp, CheckCircle2 } from 'lucide-react';
+import { ArrowLeft, ArrowRight, ChevronDown, ChevronUp, CheckCircle2, FileText, ExternalLink } from 'lucide-react';
 import { cn } from '@/lib/utils';
 
 const Assessment = () => {
@@ -131,10 +132,29 @@ const Assessment = () => {
       <main className="container mx-auto px-4 py-8">
         <div className="max-w-4xl mx-auto">
           <h1 className="text-2xl font-bold mb-2">Samoocena kompetencji</h1>
-          <p className="text-muted-foreground mb-8">
+          <p className="text-muted-foreground mb-4">
             Kliknij na kompetencję, żeby zobaczyć szczegółowe opisy każdego poziomu. 
             Wybierz poziom, który najlepiej opisuje Twoje umiejętności.
           </p>
+
+          {/* Link to detailed competency matrix */}
+          <Alert className="mb-8 border-primary/20 bg-primary/5">
+            <FileText className="h-4 w-4 text-primary" />
+            <AlertDescription className="flex items-center justify-between flex-wrap gap-2">
+              <span>
+                Potrzebujesz szczegółowych opisów kompetencji? Sprawdź pełną macierz.
+              </span>
+              <a 
+                href="https://drive.google.com/drive/folders/13Yq3cDAP0AR2lyrjOTKE2MPL_pd6KQ4_" 
+                target="_blank" 
+                rel="noopener noreferrer"
+                className="inline-flex items-center gap-1 text-primary font-medium hover:underline"
+              >
+                Otwórz macierz kompetencji
+                <ExternalLink className="w-3.5 h-3.5" />
+              </a>
+            </AlertDescription>
+          </Alert>
 
           {/* Category Tabs */}
           <Tabs value={activeCategory} onValueChange={setActiveCategory}>
@@ -198,18 +218,6 @@ const Assessment = () => {
                             )}
                           </div>
                           <div className="flex items-center gap-3">
-                            {requiredLevel > 0 && (
-                              <div className="text-right">
-                                <span className="text-xs text-muted-foreground block mb-1">Wymagane</span>
-                                <div className={cn(
-                                  'px-3 py-1 rounded text-sm font-bold',
-                                  competencyLevelConfig[requiredLevel]?.color,
-                                  'text-white'
-                                )}>
-                                  {requiredLevel}
-                                </div>
-                              </div>
-                            )}
                             {currentRating && (
                               <div className="text-right">
                                 <span className="text-xs text-muted-foreground block mb-1">Twoja ocena</span>
