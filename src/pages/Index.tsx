@@ -4,7 +4,7 @@ import { Button } from '@/components/ui/button';
 import { DepartmentCard } from '@/components/DepartmentCard';
 import { departments } from '@/data/departments';
 import { branding } from '@/config/branding';
-import { UserCircle, ArrowRight } from 'lucide-react';
+import { ArrowRight } from 'lucide-react';
 
 const Index = () => {
   const navigate = useNavigate();
@@ -23,13 +23,9 @@ const Index = () => {
     }
   }, [selectedDepartment]);
 
-  const handleContinue = (mode: 'anonymous' | 'login') => {
+  const handleContinue = () => {
     if (selectedDepartment) {
-      if (mode === 'login') {
-        navigate('/login', { state: { departmentId: selectedDepartment } });
-      } else {
-        navigate(`/assessment/${selectedDepartment}`);
-      }
+      navigate(`/assessment/${selectedDepartment}`);
     }
   };
 
@@ -52,10 +48,7 @@ const Index = () => {
             <h1 className="font-bold text-lg text-foreground">{branding.appName}</h1>
           </div>
           
-          <Button variant="outline" size="sm" onClick={() => navigate('/login')}>
-            <UserCircle className="w-4 h-4 mr-2" />
-            Zaloguj się
-          </Button>
+{/* Logowanie tymczasowo wyłączone */}
         </div>
       </header>
 
@@ -99,21 +92,11 @@ const Index = () => {
             >
               <Button
                 size="lg"
-                onClick={() => handleContinue('anonymous')}
+                onClick={() => handleContinue()}
                 className="w-full sm:w-auto"
               >
-                Rozpocznij anonimowo
+                Rozpocznij
                 <ArrowRight className="w-4 h-4 ml-2" />
-              </Button>
-              <span className="text-muted-foreground">lub</span>
-              <Button
-                size="lg"
-                variant="outline"
-                onClick={() => handleContinue('login')}
-                className="w-full sm:w-auto"
-              >
-                <UserCircle className="w-4 h-4 mr-2" />
-                Zaloguj się, żeby zapisać wyniki
               </Button>
             </div>
           )}
