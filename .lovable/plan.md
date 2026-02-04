@@ -1,118 +1,94 @@
 
-# Plan: Wdrożenie feedbacku UX - eliminacja bias i ulepszone wyniki
+# Plan: Wyłączenie logowania + Poprawa PDF z logo
 
 ## Podsumowanie zmian
 
-Wdrażamy 4 zmiany zgłoszone w feedbacku:
-- **2a**: Ukrycie wymaganych poziomów podczas samooceny
-- **2b**: Zmiana kolorów z zielono-czerwonych na neutralne
-- **4**: Dodanie drugiego wykresu radarowego (porównanie z kolejnym poziomem)
-- **5**: Link do szczegółowej macierzy na Google Drive
+Wdrażamy 2 poprawki:
+1. **Tymczasowe wyłączenie logowania** - ukrycie lub wyszarzenie przycisków logowania
+2. **Poprawa PDF** - naprawienie formatowania czcionek i dodanie logo Appchance
 
 ---
 
-## Zmiana 2a: Ukrycie wskaźnika "Wymagane"
+## Zmiana 1: Wyłączenie funkcji logowania
 
 ### Problem
-Podczas samooceny użytkownik widzi wymagany poziom przy każdej kompetencji. To może wpływać na jego ocenę - świadomie lub nieświadomie dostosowuje odpowiedzi do oczekiwań.
+Aplikacja ma przyciski "Zaloguj się", które kierują do strony `/login`, która nie istnieje. Bez bazy danych ta funkcja nie działa.
 
 ### Rozwiązanie
-Usunięcie bloku "Wymagane: X" z widoku karty kompetencji w formularzu samooceny. Użytkownik zobaczy wymagane poziomy dopiero na stronie wyników.
+Całkowite usunięcie opcji logowania z MVP. Zostawiam tylko tryb anonimowy.
 
 ### Zakres zmian
-- **Plik**: `src/pages/Assessment.tsx`
-- Usunięcie sekcji wyświetlającej "Wymagane" (linie 201-212)
+**Plik: `src/pages/Index.tsx`**
+
+1. Usunięcie przycisku "Zaloguj się" z headera (linie 55-58)
+2. Usunięcie sekcji "lub Zaloguj się, żeby zapisać wyniki" z przycisków akcji (linie 107-117)
+3. Uproszczenie handleContinue - usunięcie logiki dla trybu 'login'
+
+### Rezultat
+Użytkownik widzi tylko przycisk "Rozpocznij anonimowo" bez rozpraszających opcji logowania.
 
 ---
 
-## Zmiana 2b: Neutralna kolorystyka poziomów
+## Zmiana 2: Poprawa PDF - formatowanie i logo
 
-### Problem
-Obecna kolorystyka (pomarańczowy → żółty → zielony → niebieski → fioletowy) sugeruje, że niższe poziomy są "gorsze", a wyższe "lepsze". To może wpływać na uczciwe odpowiedzi użytkowników.
-
-### Rozwiązanie
-Zmiana na neutralną paletę kolorów (odcienie niebieskiego i szarości), która nie wartościuje poziomów.
-
-### Nowa paleta kolorów
-| Poziom | Obecnie | Po zmianie |
-|--------|---------|------------|
-| 1 | pomarańczowy | szary |
-| 2 | żółty | slate (ciemny szary) |
-| 3 | zielony | niebieski |
-| 4 | niebieski | indygo |
-| 5 | fioletowy | fioletowy (neutralny) |
-
-### Zakres zmian
-- **Plik**: `src/types/competency.ts`
-- Aktualizacja `competencyLevelConfig` z nowymi neutralnymi kolorami
-
----
-
-## Zmiana 4: Drugi wykres radarowy - porównanie z kolejnym poziomem
-
-### Problem
-Obecnie na stronie wyników jest tylko jeden wykres radarowy porównujący samoocenę z wymaganiami obecnej roli. Brakuje perspektywy rozwojowej - co potrzebuję, żeby awansować?
+### Problemy z obecnym PDF
+1. **Emoji** (💪, 📈) - mogą nie renderować się poprawnie w PDF
+2. **Brak logo** - header zawiera tylko tekst, brakuje brandingu wizualnego
+3. **Rozjeżdżające się czcionki** - potencjalnie związane z używaniem polskich znaków
 
 ### Rozwiązanie
-Dodanie drugiego wykresu radarowego pokazującego:
-- Samoocenę użytkownika
-- Wymagania następnego poziomu seniorności (jeśli istnieje)
 
-### Logika "następnego poziomu"
-```text
-junior → mid → senior → lead → expert
-```
+#### 2a: Usunięcie emoji
+Zamiana emoji na czytelne tekstowe nagłówki:
+- `💪 Mocne strony` → `Mocne strony`
+- `📈 Obszary do rozwoju` → `Obszary do rozwoju`
 
-System sprawdzi, czy dla danego stanowiska istnieje następny poziom seniorności:
-- Jeśli tak: wyświetli drugi wykres z porównaniem
-- Jeśli nie (np. użytkownik jest już na poziomie "lead" lub "expert" dla danej roli): wyświetli komunikat informacyjny
+#### 2b: Dodanie logo Appchance
+- Skopiowanie pliku SVG do `src/assets/appchance-logo.svg`
+- Konwersja SVG na format Base64 dla jsPDF
+- Dodanie logo obok tekstu "Appchance" w headerze PDF
+- Logo będzie wyświetlane:
+  - Na stronie tytułowej (duże, wycentrowane)
+  - W nagłówkach kolejnych stron (małe, w lewym rogu)
 
-### Zakres zmian
-- **Plik**: `src/pages/Results.tsx`
-- Dodanie logiki pobierania wymagań dla następnego poziomu
-- Dodanie drugiego komponentu RadarChart
-- Sekcja "Ścieżka rozwoju" z wykresem i opisem
-
----
-
-## Zmiana 5: Link do szczegółowej macierzy Google Drive
-
-### Problem
-Użytkownicy mogą potrzebować bardziej szczegółowych opisów kompetencji, żeby podjąć decyzję o swoim poziomie.
-
-### Rozwiązanie
-Dodanie widocznego linku/przycisku na początku formularza samooceny, który kieruje do dokumentu Google Drive z pełną macierzą kompetencji.
+#### 2c: Poprawa czytelności
+- Zwiększenie odstępów między sekcjami
+- Lepsze wyrównanie tekstu
+- Upewnienie się, że wszystkie elementy mieszczą się w obszarze drukowania
 
 ### Zakres zmian
-- **Plik**: `src/pages/Assessment.tsx`
-- Dodanie komponentu Alert lub Card z linkiem
-- Link: `https://drive.google.com/drive/folders/13Yq3cDAP0AR2lyrjOTKE2MPL_pd6KQ4_`
+
+**Nowy plik: `src/assets/appchance-logo.svg`**
+- Kopia logo z user-uploads
+
+**Plik: `src/utils/pdfGenerator.ts`**
+
+1. Import logo jako Base64 (lub osadzenie inline)
+2. Dodanie funkcji do renderowania logo SVG w PDF
+3. Modyfikacja strony tytułowej - logo nad nazwą firmy
+4. Modyfikacja nagłówków stron - małe logo w rogu
+5. Usunięcie emoji z nagłówków sekcji
+6. Optymalizacja układu dla lepszej czytelności
 
 ---
 
 ## Szczegóły techniczne
 
-### Nowe zależności
-Brak - wykorzystujemy istniejące komponenty (Alert, Card, lucide-react icons).
+### jsPDF i obrazy SVG
 
-### Zmiany w plikach
+jsPDF nie obsługuje bezpośrednio SVG. Mamy dwie opcje:
+1. **Konwersja SVG → PNG** (preferowane) - lepsza jakość i kompatybilność
+2. **SVG jako ścieżki** - ręczne rysowanie kształtów
 
-**1. `src/types/competency.ts`**
-- Zmiana wartości `color` w `competencyLevelConfig`
+Użyjemy podejścia z osadzeniem logo jako Base64 PNG lub narysowaniem kształtu logo bezpośrednio używając jsPDF.
 
-**2. `src/pages/Assessment.tsx`**
-- Usunięcie bloku wyświetlającego "Wymagane: X"
-- Dodanie sekcji z linkiem do Google Drive (przed zakładkami kategorii)
+Ponieważ logo Appchance to prosty kształt, możemy narysować go bezpośrednio:
+- Zewnętrzny wielokąt w kolorze #E41844
+- Wewnętrzne koło z literą "a"
 
-**3. `src/pages/Results.tsx`**
-- Nowy hook `useMemo` do obliczenia następnego poziomu seniorności
-- Nowy hook `useMemo` do pobrania wymagań następnego poziomu
-- Dodanie drugiego `RadarChart` w nowej sekcji "Ścieżka rozwoju"
-- Warunkowe renderowanie (tylko gdy następny poziom istnieje)
+Alternatywnie: osadzenie logo jako data URI.
 
 ### Kolejność implementacji
-1. Zmiana kolorów (2b) - najprostsza zmiana
-2. Usunięcie wskaźnika wymagań (2a)
-3. Dodanie linku do macierzy (5)
-4. Dodanie drugiego wykresu radarowego (4) - najbardziej złożona zmiana
-
+1. Usunięcie przycisków logowania z Index.tsx
+2. Skopiowanie logo do assets
+3. Modyfikacja pdfGenerator.ts z logo i poprawkami formatowania
