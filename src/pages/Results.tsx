@@ -167,8 +167,8 @@ const Results = () => {
     return <Minus className="w-4 h-4 text-muted-foreground" />;
   };
 
-  const handleDownloadPDF = () => {
-    generatePDFReport({
+  const handleDownloadPDF = async () => {
+    await generatePDFReport({
       positionName: position.name,
       seniorityLevel: assessment.seniorityLevel as SeniorityLevel,
       departmentName: department.name,
