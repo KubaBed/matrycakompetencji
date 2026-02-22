@@ -41,44 +41,96 @@ export const qaCompetencies: Competency[] = [
       { level: 5, name: 'Ekspert', description: 'API test strategy. Integration test architecture. Service virtualization.' },
     ],
   },
-  {
-    id: 'qa-tools',
-    name: 'Narzędzia QA',
-    description: 'Znajomość narzędzi do testowania i zarządzania jakością',
-    category: 'hard',
-    levels: [
-      { level: 1, name: 'Początkujący', description: 'Jira - raportowanie bugów. TestRail/Zephyr basics. DevTools podstawy.' },
-      { level: 2, name: 'Rozwijający się', description: 'Test management tools. Browser DevTools. Performance tools basics.' },
-      { level: 3, name: 'Kompetentny', description: 'Zaawansowane DevTools. Charles/Fiddler. JMeter/k6. Accessibility tools.' },
-      { level: 4, name: 'Zaawansowany', description: 'Tool selection i wdrożenie. Custom reporting. Tool integration.' },
-      { level: 5, name: 'Ekspert', description: 'Tool stack design. Vendor evaluation. Tool development/customization.' },
-    ],
-  },
   // Kompetencje miękkie
   {
-    id: 'qa-communication',
-    name: 'Komunikacja i współpraca',
-    description: 'Efektywna współpraca z developerami i stakeholderami',
+    id: 'qa-ai',
+    name: 'Wykorzystanie sztucznej inteligencji (AI) w codziennej pracy',
+    description: 'Umiejętność efektywnego korzystania z narzędzi AI w procesie QA',
     category: 'soft',
     levels: [
-      { level: 1, name: 'Początkujący', description: 'Jasne bug reporty. Komunikuje status testów. Pyta gdy czegoś nie rozumie.' },
-      { level: 2, name: 'Rozwijający się', description: 'Konstruktywna współpraca z dev. Uczestniczy w refinement. Dzieli się wiedzą.' },
-      { level: 3, name: 'Kompetentny', description: 'Quality advocate. Prezentacje statusowe. Negocjowanie release quality.' },
-      { level: 4, name: 'Zaawansowany', description: 'Cross-team collaboration. Stakeholder management. Quality metrics prezentacje.' },
-      { level: 5, name: 'Ekspert', description: 'Quality culture champion. Executive reporting. External representation.' },
+      { level: 1, name: 'Początkujący', description: 'Zna podstawowe narzędzia AI. Używa ich do prostych zadań testowych.' },
+      { level: 2, name: 'Rozwijający się', description: 'Korzysta z AI do generowania test case\'ów i analizy logów.' },
+      { level: 3, name: 'Kompetentny', description: 'Efektywnie promptuje AI. Integruje AI w workflow testowy.' },
+      { level: 4, name: 'Zaawansowany', description: 'Buduje narzędzia AI do automatyzacji QA. Optymalizuje procesy.' },
+      { level: 5, name: 'Ekspert', description: 'Definiuje strategię AI w QA. Thought leadership.' },
     ],
   },
   {
-    id: 'qa-analytical',
-    name: 'Myślenie analityczne',
-    description: 'Analiza wymagań, ryzyka i root cause analysis',
+    id: 'qa-communication-soft',
+    name: 'Komunikacja z innymi',
+    description: 'Efektywna komunikacja z developerami i stakeholderami',
     category: 'soft',
     levels: [
-      { level: 1, name: 'Początkujący', description: 'Czyta i rozumie wymagania. Identyfikuje oczywiste przypadki brzegowe.' },
-      { level: 2, name: 'Rozwijający się', description: 'Analiza wymagań pod kątem testowalności. Identyfikuje luki w specyfikacji.' },
-      { level: 3, name: 'Kompetentny', description: 'Risk assessment. Root cause analysis. Test estimation. Impact analysis.' },
-      { level: 4, name: 'Zaawansowany', description: 'Quality metrics analysis. Trend analysis. Predictive quality assessment.' },
-      { level: 5, name: 'Ekspert', description: 'Strategic risk management. Quality forecasting. Data-driven decisions.' },
+      { level: 1, name: 'Początkujący', description: 'Jasne bug reporty. Komunikuje status testów.' },
+      { level: 2, name: 'Rozwijający się', description: 'Konstruktywna współpraca z dev. Dzieli się wiedzą.' },
+      { level: 3, name: 'Kompetentny', description: 'Quality advocate. Prezentacje statusowe. Negocjowanie release quality.' },
+      { level: 4, name: 'Zaawansowany', description: 'Cross-team collaboration. Stakeholder management.' },
+      { level: 5, name: 'Ekspert', description: 'Quality culture champion. Executive reporting.' },
+    ],
+  },
+  {
+    id: 'qa-teamwork',
+    name: 'Praca zespołowa',
+    description: 'Współpraca z innymi członkami zespołu',
+    category: 'soft',
+    levels: [
+      { level: 1, name: 'Początkujący', description: 'Efektywna praca z pomocą mentora.' },
+      { level: 2, name: 'Rozwijający się', description: 'Samodzielna praca w zespole. Współpraca z devami.' },
+      { level: 3, name: 'Kompetentny', description: 'Pair testing. Dzielenie się wiedzą o jakości.' },
+      { level: 4, name: 'Zaawansowany', description: 'Koordynacja pracy QA w zespole.' },
+      { level: 5, name: 'Ekspert', description: 'Budowanie kultury jakości w organizacji.' },
+    ],
+  },
+  {
+    id: 'qa-independence',
+    name: 'Samodzielność',
+    description: 'Zdolność do samodzielnego podejmowania decyzji i realizacji zadań',
+    category: 'soft',
+    levels: [
+      { level: 1, name: 'Początkujący', description: 'Realizuje zadania z pomocą mentora.' },
+      { level: 2, name: 'Rozwijający się', description: 'Samodzielnie realizuje proste testy.' },
+      { level: 3, name: 'Kompetentny', description: 'Samodzielnie planuje i realizuje złożone testy.' },
+      { level: 4, name: 'Zaawansowany', description: 'Samodzielnie definiuje strategię testów.' },
+      { level: 5, name: 'Ekspert', description: 'Pełna autonomia. Definiuje kierunki jakości.' },
+    ],
+  },
+  {
+    id: 'qa-work-organization',
+    name: 'Organizacja pracy własnej',
+    description: 'Planowanie, priorytetyzacja i efektywne zarządzanie czasem',
+    category: 'soft',
+    levels: [
+      { level: 1, name: 'Początkujący', description: 'Realizuje przydzielone testy w czasie.' },
+      { level: 2, name: 'Rozwijający się', description: 'Priorytetyzacja testów. Dotrzymuje terminów.' },
+      { level: 3, name: 'Kompetentny', description: 'Efektywne zarządzanie wieloma projektami testowymi.' },
+      { level: 4, name: 'Zaawansowany', description: 'Optymalizacja procesów QA.' },
+      { level: 5, name: 'Ekspert', description: 'Definiowanie procesów QA organizacji.' },
+    ],
+  },
+  {
+    id: 'qa-experience',
+    name: 'Doświadczenie / dojrzałość',
+    description: 'Dojrzałość zawodowa i umiejętność podejmowania decyzji',
+    category: 'soft',
+    levels: [
+      { level: 1, name: 'Początkujący', description: 'Zaczyna karierę w QA. Chętnie się uczy.' },
+      { level: 2, name: 'Rozwijający się', description: 'Doświadczenie z kilkoma projektami.' },
+      { level: 3, name: 'Kompetentny', description: 'Uczy się na błędach. Świadome decyzje testowe.' },
+      { level: 4, name: 'Zaawansowany', description: 'Bogate doświadczenie. Mentor QA.' },
+      { level: 5, name: 'Ekspert', description: 'Ekspert QA. Strategiczne myślenie o jakości.' },
+    ],
+  },
+  {
+    id: 'qa-flexibility',
+    name: 'Elastyczność / adaptacyjność',
+    description: 'Zdolność do adaptacji w dynamicznym środowisku',
+    category: 'soft',
+    levels: [
+      { level: 1, name: 'Początkujący', description: 'Akceptuje zmiany. Uczy się nowych narzędzi.' },
+      { level: 2, name: 'Rozwijający się', description: 'Adaptuje się do zmian priorytetów testowych.' },
+      { level: 3, name: 'Kompetentny', description: 'Szybko adaptuje się do nowych technologii i narzędzi QA.' },
+      { level: 4, name: 'Zaawansowany', description: 'Prowadzi zespół QA przez zmiany.' },
+      { level: 5, name: 'Ekspert', description: 'Change agent w obszarze jakości.' },
     ],
   },
   // Kompetencje specjalistyczne
@@ -110,54 +162,19 @@ export const qaCompetencies: Competency[] = [
   },
 ];
 
+const qaCompetencyIds = qaCompetencies.map(c => c.id);
+
+function genReqs(positionId: string, seniorityLevel: 'junior' | 'mid' | 'senior', level: number): PositionRequirement[] {
+  return qaCompetencyIds.map(competencyId => ({
+    positionId,
+    seniorityLevel,
+    competencyId,
+    requiredLevel: level,
+  }));
+}
+
 export const qaRequirements: PositionRequirement[] = [
-  // QA Engineer - Junior
-  { positionId: 'qa-engineer', seniorityLevel: 'junior', competencyId: 'qa-manual-testing', requiredLevel: 2 },
-  { positionId: 'qa-engineer', seniorityLevel: 'junior', competencyId: 'qa-automation', requiredLevel: 1 },
-  { positionId: 'qa-engineer', seniorityLevel: 'junior', competencyId: 'qa-api-testing', requiredLevel: 1 },
-  { positionId: 'qa-engineer', seniorityLevel: 'junior', competencyId: 'qa-tools', requiredLevel: 2 },
-  { positionId: 'qa-engineer', seniorityLevel: 'junior', competencyId: 'qa-communication', requiredLevel: 2 },
-  { positionId: 'qa-engineer', seniorityLevel: 'junior', competencyId: 'qa-analytical', requiredLevel: 1 },
-  { positionId: 'qa-engineer', seniorityLevel: 'junior', competencyId: 'qa-domain', requiredLevel: 1 },
-  { positionId: 'qa-engineer', seniorityLevel: 'junior', competencyId: 'qa-security', requiredLevel: 1 },
-
-  // QA Engineer - Mid
-  { positionId: 'qa-engineer', seniorityLevel: 'mid', competencyId: 'qa-manual-testing', requiredLevel: 3 },
-  { positionId: 'qa-engineer', seniorityLevel: 'mid', competencyId: 'qa-automation', requiredLevel: 2 },
-  { positionId: 'qa-engineer', seniorityLevel: 'mid', competencyId: 'qa-api-testing', requiredLevel: 3 },
-  { positionId: 'qa-engineer', seniorityLevel: 'mid', competencyId: 'qa-tools', requiredLevel: 3 },
-  { positionId: 'qa-engineer', seniorityLevel: 'mid', competencyId: 'qa-communication', requiredLevel: 3 },
-  { positionId: 'qa-engineer', seniorityLevel: 'mid', competencyId: 'qa-analytical', requiredLevel: 3 },
-  { positionId: 'qa-engineer', seniorityLevel: 'mid', competencyId: 'qa-domain', requiredLevel: 2 },
-  { positionId: 'qa-engineer', seniorityLevel: 'mid', competencyId: 'qa-security', requiredLevel: 2 },
-
-  // QA Automation Engineer - Mid
-  { positionId: 'qa-automation', seniorityLevel: 'mid', competencyId: 'qa-manual-testing', requiredLevel: 2 },
-  { positionId: 'qa-automation', seniorityLevel: 'mid', competencyId: 'qa-automation', requiredLevel: 3 },
-  { positionId: 'qa-automation', seniorityLevel: 'mid', competencyId: 'qa-api-testing', requiredLevel: 3 },
-  { positionId: 'qa-automation', seniorityLevel: 'mid', competencyId: 'qa-tools', requiredLevel: 3 },
-  { positionId: 'qa-automation', seniorityLevel: 'mid', competencyId: 'qa-communication', requiredLevel: 3 },
-  { positionId: 'qa-automation', seniorityLevel: 'mid', competencyId: 'qa-analytical', requiredLevel: 3 },
-  { positionId: 'qa-automation', seniorityLevel: 'mid', competencyId: 'qa-domain', requiredLevel: 3 },
-  { positionId: 'qa-automation', seniorityLevel: 'mid', competencyId: 'qa-security', requiredLevel: 2 },
-
-  // QA Automation Engineer - Senior
-  { positionId: 'qa-automation', seniorityLevel: 'senior', competencyId: 'qa-manual-testing', requiredLevel: 3 },
-  { positionId: 'qa-automation', seniorityLevel: 'senior', competencyId: 'qa-automation', requiredLevel: 4 },
-  { positionId: 'qa-automation', seniorityLevel: 'senior', competencyId: 'qa-api-testing', requiredLevel: 4 },
-  { positionId: 'qa-automation', seniorityLevel: 'senior', competencyId: 'qa-tools', requiredLevel: 4 },
-  { positionId: 'qa-automation', seniorityLevel: 'senior', competencyId: 'qa-communication', requiredLevel: 4 },
-  { positionId: 'qa-automation', seniorityLevel: 'senior', competencyId: 'qa-analytical', requiredLevel: 4 },
-  { positionId: 'qa-automation', seniorityLevel: 'senior', competencyId: 'qa-domain', requiredLevel: 4 },
-  { positionId: 'qa-automation', seniorityLevel: 'senior', competencyId: 'qa-security', requiredLevel: 3 },
-
-  // QA Lead - Lead
-  { positionId: 'qa-lead', seniorityLevel: 'lead', competencyId: 'qa-manual-testing', requiredLevel: 5 },
-  { positionId: 'qa-lead', seniorityLevel: 'lead', competencyId: 'qa-automation', requiredLevel: 4 },
-  { positionId: 'qa-lead', seniorityLevel: 'lead', competencyId: 'qa-api-testing', requiredLevel: 4 },
-  { positionId: 'qa-lead', seniorityLevel: 'lead', competencyId: 'qa-tools', requiredLevel: 5 },
-  { positionId: 'qa-lead', seniorityLevel: 'lead', competencyId: 'qa-communication', requiredLevel: 5 },
-  { positionId: 'qa-lead', seniorityLevel: 'lead', competencyId: 'qa-analytical', requiredLevel: 5 },
-  { positionId: 'qa-lead', seniorityLevel: 'lead', competencyId: 'qa-domain', requiredLevel: 4 },
-  { positionId: 'qa-lead', seniorityLevel: 'lead', competencyId: 'qa-security', requiredLevel: 4 },
+  ...genReqs('qa-specialist', 'junior', 1),
+  ...genReqs('qa-specialist', 'mid', 2),
+  ...genReqs('qa-specialist', 'senior', 3),
 ];

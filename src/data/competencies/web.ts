@@ -56,19 +56,6 @@ export const webCompetencies: Competency[] = [
   },
   // Kompetencje miękkie
   {
-    id: 'web-communication',
-    name: 'Komunikacja techniczna',
-    description: 'Dokumentacja, code review i współpraca z zespołem',
-    category: 'soft',
-    levels: [
-      { level: 1, name: 'Początkujący', description: 'Jasne komentarze w kodzie. Zadaje pytania gdy czegoś nie rozumie.' },
-      { level: 2, name: 'Rozwijający się', description: 'Konstruktywne code review. Dokumentuje swój kod. Dzieli się wiedzą.' },
-      { level: 3, name: 'Kompetentny', description: 'Prowadzi dyskusje techniczne. RFC/ADR. Tech talks dla zespołu.' },
-      { level: 4, name: 'Zaawansowany', description: 'Prezentacje dla stakeholderów. Mentoring. Komunikacja cross-team.' },
-      { level: 5, name: 'Ekspert', description: 'Thought leadership. Konferencje. Open source contributions. Tech blogging.' },
-    ],
-  },
-  {
     id: 'web-problemsolving',
     name: 'Rozwiązywanie problemów',
     description: 'Debugging, analiza i rozwiązywanie złożonych problemów',
@@ -79,6 +66,97 @@ export const webCompetencies: Competency[] = [
       { level: 3, name: 'Kompetentny', description: 'Root cause analysis. Profiling. Rozwiązuje złożone problemy samodzielnie.' },
       { level: 4, name: 'Zaawansowany', description: 'Performance debugging. Production troubleshooting. Incident response.' },
       { level: 5, name: 'Ekspert', description: 'System-wide debugging. Postmortems. Preventive measures design.' },
+    ],
+  },
+  {
+    id: 'web-ai',
+    name: 'Wykorzystanie sztucznej inteligencji (AI) w codziennej pracy',
+    description: 'Umiejętność efektywnego korzystania z narzędzi AI w procesie developmentu',
+    category: 'soft',
+    levels: [
+      { level: 1, name: 'Początkujący', description: 'Zna podstawowe narzędzia AI (ChatGPT, Copilot). Używa ich do prostych zadań.' },
+      { level: 2, name: 'Rozwijający się', description: 'Regularnie korzysta z AI do code review, generowania kodu i dokumentacji.' },
+      { level: 3, name: 'Kompetentny', description: 'Efektywnie promptuje AI. Integruje narzędzia AI w codziennym workflow. Weryfikuje wyniki.' },
+      { level: 4, name: 'Zaawansowany', description: 'Buduje własne narzędzia z AI. Optymalizuje procesy zespołu z użyciem AI. Mentoring w zakresie AI.' },
+      { level: 5, name: 'Ekspert', description: 'Definiuje strategię AI dla zespołu. Ewaluuje nowe narzędzia. Thought leadership w obszarze AI.' },
+    ],
+  },
+  {
+    id: 'web-communication-soft',
+    name: 'Komunikacja z innymi',
+    description: 'Efektywna komunikacja z zespołem, klientem i interesariuszami',
+    category: 'soft',
+    levels: [
+      { level: 1, name: 'Początkujący', description: 'Jasne raportowanie statusu pracy. Zadaje pytania gdy czegoś nie rozumie.' },
+      { level: 2, name: 'Rozwijający się', description: 'Konstruktywne code review. Aktywny udział w dyskusjach technicznych.' },
+      { level: 3, name: 'Kompetentny', description: 'Prowadzi dyskusje techniczne. Prezentacje dla zespołu. Dokumentacja.' },
+      { level: 4, name: 'Zaawansowany', description: 'Prezentacje dla stakeholderów. Komunikacja cross-team. Mentoring.' },
+      { level: 5, name: 'Ekspert', description: 'Thought leadership. Konferencje. Reprezentowanie firmy na zewnątrz.' },
+    ],
+  },
+  {
+    id: 'web-teamwork',
+    name: 'Praca zespołowa',
+    description: 'Współpraca z innymi członkami zespołu i organizacji',
+    category: 'soft',
+    levels: [
+      { level: 1, name: 'Początkujący', description: 'Efektywna praca z pomocą mentora. Szanuje różne perspektywy.' },
+      { level: 2, name: 'Rozwijający się', description: 'Samodzielna praca w zespole. Aktywny udział w code review.' },
+      { level: 3, name: 'Kompetentny', description: 'Pair programming. Dzielenie się wiedzą. Wsparcie kolegów z zespołu.' },
+      { level: 4, name: 'Zaawansowany', description: 'Koordynacja pracy zespołu. Budowanie zaangażowania. Facylitacja.' },
+      { level: 5, name: 'Ekspert', description: 'Budowanie kultury zespołowej. Mentoring wielu osób. Cross-team collaboration.' },
+    ],
+  },
+  {
+    id: 'web-independence',
+    name: 'Samodzielność',
+    description: 'Zdolność do samodzielnego podejmowania decyzji i realizacji zadań',
+    category: 'soft',
+    levels: [
+      { level: 1, name: 'Początkujący', description: 'Realizuje zadania z pomocą mentora. Prosi o wsparcie gdy potrzebuje.' },
+      { level: 2, name: 'Rozwijający się', description: 'Samodzielnie realizuje proste zadania. Wie kiedy prosić o pomoc.' },
+      { level: 3, name: 'Kompetentny', description: 'Samodzielnie realizuje złożone zadania. Podejmuje decyzje techniczne.' },
+      { level: 4, name: 'Zaawansowany', description: 'Samodzielnie prowadzi projekty. Podejmuje decyzje architektoniczne.' },
+      { level: 5, name: 'Ekspert', description: 'Pełna autonomia. Definiuje kierunki technologiczne. Strategiczne decyzje.' },
+    ],
+  },
+  {
+    id: 'web-work-organization',
+    name: 'Organizacja pracy własnej',
+    description: 'Planowanie, priorytetyzacja i efektywne zarządzanie czasem',
+    category: 'soft',
+    levels: [
+      { level: 1, name: 'Początkujący', description: 'Realizuje przydzielone zadania w określonym czasie. Podstawowe planowanie dnia.' },
+      { level: 2, name: 'Rozwijający się', description: 'Samodzielna priorytetyzacja zadań. Dotrzymuje terminów. Estymacje czasu.' },
+      { level: 3, name: 'Kompetentny', description: 'Efektywne zarządzanie wieloma zadaniami. Proaktywne planowanie. Eliminacja blokerów.' },
+      { level: 4, name: 'Zaawansowany', description: 'Optymalizacja procesów pracy. Zarządzanie czasem zespołu. Delegowanie.' },
+      { level: 5, name: 'Ekspert', description: 'Definiowanie procesów organizacyjnych. Coaching produktywności. Strategiczne planowanie.' },
+    ],
+  },
+  {
+    id: 'web-experience',
+    name: 'Doświadczenie / dojrzałość',
+    description: 'Dojrzałość zawodowa, umiejętność podejmowania decyzji w oparciu o doświadczenie',
+    category: 'soft',
+    levels: [
+      { level: 1, name: 'Początkujący', description: 'Zaczyna karierę. Chętnie się uczy. Przyjmuje feedback.' },
+      { level: 2, name: 'Rozwijający się', description: 'Ma doświadczenie z kilkoma projektami. Rozpoznaje powtarzalne wzorce.' },
+      { level: 3, name: 'Kompetentny', description: 'Uczy się na błędach. Podejmuje świadome decyzje. Dzieli się doświadczeniem.' },
+      { level: 4, name: 'Zaawansowany', description: 'Bogate doświadczenie projektowe. Mentor dla innych. Rozwiązuje trudne sytuacje.' },
+      { level: 5, name: 'Ekspert', description: 'Ekspert branżowy. Strategiczne myślenie. Budowanie kultury organizacyjnej.' },
+    ],
+  },
+  {
+    id: 'web-flexibility',
+    name: 'Elastyczność / adaptacyjność',
+    description: 'Zdolność do adaptacji w dynamicznym środowisku i otwartość na zmiany',
+    category: 'soft',
+    levels: [
+      { level: 1, name: 'Początkujący', description: 'Akceptuje zmiany w projekcie. Uczy się nowych technologii z pomocą.' },
+      { level: 2, name: 'Rozwijający się', description: 'Adaptuje się do zmian priorytetów. Samodzielnie uczy się nowych narzędzi.' },
+      { level: 3, name: 'Kompetentny', description: 'Szybko adaptuje się do nowych technologii. Elastyczny w podejściu do rozwiązań.' },
+      { level: 4, name: 'Zaawansowany', description: 'Prowadzi zespół przez zmiany. Proaktywnie identyfikuje potrzebę zmian.' },
+      { level: 5, name: 'Ekspert', description: 'Change agent. Napędza innowacje. Buduje kulturę ciągłego doskonalenia.' },
     ],
   },
   // Kompetencje specjalistyczne
@@ -110,64 +188,37 @@ export const webCompetencies: Competency[] = [
   },
 ];
 
+const webCompetencyIds = webCompetencies.map(c => c.id);
+
+// Helper to generate requirements for a position across all competencies
+function genReqs(positionId: string, seniorityLevel: 'junior' | 'mid' | 'senior' | 'lead', level: number): PositionRequirement[] {
+  return webCompetencyIds.map(competencyId => ({
+    positionId,
+    seniorityLevel,
+    competencyId,
+    requiredLevel: level,
+  }));
+}
+
 export const webRequirements: PositionRequirement[] = [
-  // Frontend Developer - Junior
-  { positionId: 'frontend-developer', seniorityLevel: 'junior', competencyId: 'web-frontend', requiredLevel: 2 },
-  { positionId: 'frontend-developer', seniorityLevel: 'junior', competencyId: 'web-backend', requiredLevel: 1 },
-  { positionId: 'frontend-developer', seniorityLevel: 'junior', competencyId: 'web-databases', requiredLevel: 1 },
-  { positionId: 'frontend-developer', seniorityLevel: 'junior', competencyId: 'web-testing', requiredLevel: 1 },
-  { positionId: 'frontend-developer', seniorityLevel: 'junior', competencyId: 'web-communication', requiredLevel: 2 },
-  { positionId: 'frontend-developer', seniorityLevel: 'junior', competencyId: 'web-problemsolving', requiredLevel: 1 },
-  { positionId: 'frontend-developer', seniorityLevel: 'junior', competencyId: 'web-cloud', requiredLevel: 1 },
-  { positionId: 'frontend-developer', seniorityLevel: 'junior', competencyId: 'web-security', requiredLevel: 1 },
+  // Front-End Developer
+  ...genReqs('frontend-developer', 'junior', 1),
+  ...genReqs('frontend-developer', 'mid', 2),
+  ...genReqs('frontend-developer', 'senior', 3),
 
-  // Frontend Developer - Mid
-  { positionId: 'frontend-developer', seniorityLevel: 'mid', competencyId: 'web-frontend', requiredLevel: 3 },
-  { positionId: 'frontend-developer', seniorityLevel: 'mid', competencyId: 'web-backend', requiredLevel: 2 },
-  { positionId: 'frontend-developer', seniorityLevel: 'mid', competencyId: 'web-databases', requiredLevel: 2 },
-  { positionId: 'frontend-developer', seniorityLevel: 'mid', competencyId: 'web-testing', requiredLevel: 3 },
-  { positionId: 'frontend-developer', seniorityLevel: 'mid', competencyId: 'web-communication', requiredLevel: 3 },
-  { positionId: 'frontend-developer', seniorityLevel: 'mid', competencyId: 'web-problemsolving', requiredLevel: 3 },
-  { positionId: 'frontend-developer', seniorityLevel: 'mid', competencyId: 'web-cloud', requiredLevel: 2 },
-  { positionId: 'frontend-developer', seniorityLevel: 'mid', competencyId: 'web-security', requiredLevel: 2 },
+  // Backend Developer
+  ...genReqs('backend-developer', 'junior', 1),
+  ...genReqs('backend-developer', 'mid', 2),
+  ...genReqs('backend-developer', 'senior', 3),
 
-  // Backend Developer - Junior
-  { positionId: 'backend-developer', seniorityLevel: 'junior', competencyId: 'web-frontend', requiredLevel: 1 },
-  { positionId: 'backend-developer', seniorityLevel: 'junior', competencyId: 'web-backend', requiredLevel: 2 },
-  { positionId: 'backend-developer', seniorityLevel: 'junior', competencyId: 'web-databases', requiredLevel: 2 },
-  { positionId: 'backend-developer', seniorityLevel: 'junior', competencyId: 'web-testing', requiredLevel: 1 },
-  { positionId: 'backend-developer', seniorityLevel: 'junior', competencyId: 'web-communication', requiredLevel: 2 },
-  { positionId: 'backend-developer', seniorityLevel: 'junior', competencyId: 'web-problemsolving', requiredLevel: 2 },
-  { positionId: 'backend-developer', seniorityLevel: 'junior', competencyId: 'web-cloud', requiredLevel: 1 },
-  { positionId: 'backend-developer', seniorityLevel: 'junior', competencyId: 'web-security', requiredLevel: 1 },
+  // Fullstack Developer
+  ...genReqs('fullstack-developer', 'junior', 1),
+  ...genReqs('fullstack-developer', 'mid', 2),
+  ...genReqs('fullstack-developer', 'senior', 3),
 
-  // Backend Developer - Mid
-  { positionId: 'backend-developer', seniorityLevel: 'mid', competencyId: 'web-frontend', requiredLevel: 2 },
-  { positionId: 'backend-developer', seniorityLevel: 'mid', competencyId: 'web-backend', requiredLevel: 3 },
-  { positionId: 'backend-developer', seniorityLevel: 'mid', competencyId: 'web-databases', requiredLevel: 3 },
-  { positionId: 'backend-developer', seniorityLevel: 'mid', competencyId: 'web-testing', requiredLevel: 3 },
-  { positionId: 'backend-developer', seniorityLevel: 'mid', competencyId: 'web-communication', requiredLevel: 3 },
-  { positionId: 'backend-developer', seniorityLevel: 'mid', competencyId: 'web-problemsolving', requiredLevel: 3 },
-  { positionId: 'backend-developer', seniorityLevel: 'mid', competencyId: 'web-cloud', requiredLevel: 2 },
-  { positionId: 'backend-developer', seniorityLevel: 'mid', competencyId: 'web-security', requiredLevel: 3 },
-
-  // Fullstack Developer - Mid
-  { positionId: 'fullstack-developer', seniorityLevel: 'mid', competencyId: 'web-frontend', requiredLevel: 3 },
-  { positionId: 'fullstack-developer', seniorityLevel: 'mid', competencyId: 'web-backend', requiredLevel: 3 },
-  { positionId: 'fullstack-developer', seniorityLevel: 'mid', competencyId: 'web-databases', requiredLevel: 3 },
-  { positionId: 'fullstack-developer', seniorityLevel: 'mid', competencyId: 'web-testing', requiredLevel: 3 },
-  { positionId: 'fullstack-developer', seniorityLevel: 'mid', competencyId: 'web-communication', requiredLevel: 3 },
-  { positionId: 'fullstack-developer', seniorityLevel: 'mid', competencyId: 'web-problemsolving', requiredLevel: 3 },
-  { positionId: 'fullstack-developer', seniorityLevel: 'mid', competencyId: 'web-cloud', requiredLevel: 2 },
-  { positionId: 'fullstack-developer', seniorityLevel: 'mid', competencyId: 'web-security', requiredLevel: 3 },
-
-  // Web Architect - Senior
-  { positionId: 'web-architect', seniorityLevel: 'senior', competencyId: 'web-frontend', requiredLevel: 4 },
-  { positionId: 'web-architect', seniorityLevel: 'senior', competencyId: 'web-backend', requiredLevel: 5 },
-  { positionId: 'web-architect', seniorityLevel: 'senior', competencyId: 'web-databases', requiredLevel: 4 },
-  { positionId: 'web-architect', seniorityLevel: 'senior', competencyId: 'web-testing', requiredLevel: 4 },
-  { positionId: 'web-architect', seniorityLevel: 'senior', competencyId: 'web-communication', requiredLevel: 5 },
-  { positionId: 'web-architect', seniorityLevel: 'senior', competencyId: 'web-problemsolving', requiredLevel: 5 },
-  { positionId: 'web-architect', seniorityLevel: 'senior', competencyId: 'web-cloud', requiredLevel: 4 },
-  { positionId: 'web-architect', seniorityLevel: 'senior', competencyId: 'web-security', requiredLevel: 4 },
+  // Python Developer
+  ...genReqs('python-developer', 'junior', 1),
+  ...genReqs('python-developer', 'mid', 2),
+  ...genReqs('python-developer', 'senior', 3),
+  ...genReqs('python-developer', 'lead', 4),
 ];

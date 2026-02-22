@@ -10,8 +10,8 @@ export const pmCompetencies: Competency[] = [
     levels: [
       { level: 1, name: 'Początkujący', description: 'Zna podstawy Scrum i Agile. Uczestniczy w ceremoniach jako obserwator.' },
       { level: 2, name: 'Rozwijający się', description: 'Prowadzi daily standupy. Wspiera w planowaniu sprintów. Rozumie różnice między metodykami.' },
-      { level: 3, name: 'Kompetentny', description: 'Samodzielnie prowadzi projekty w Scrum/Kanban. Facylituje wszystkie ceremonie. Dostosowuje procesy do potrzeb.' },
-      { level: 4, name: 'Zaawansowany', description: 'Wdraża i optymalizuje metodyki. Coaching zespołów. Hybrydy metodyk dla złożonych projektów.' },
+      { level: 3, name: 'Kompetentny', description: 'Samodzielnie prowadzi projekty w Scrum/Kanban. Facylituje wszystkie ceremonie.' },
+      { level: 4, name: 'Zaawansowany', description: 'Wdraża i optymalizuje metodyki. Coaching zespołów. Hybrydy metodyk.' },
       { level: 5, name: 'Ekspert', description: 'Definiuje standardy PM dla organizacji. Certyfikowany trener. Transformacje Agile.' },
     ],
   },
@@ -22,10 +22,10 @@ export const pmCompetencies: Competency[] = [
     category: 'hard',
     levels: [
       { level: 1, name: 'Początkujący', description: 'Asystuje przy tworzeniu planów. Rozumie podstawy estymacji.' },
-      { level: 2, name: 'Rozwijający się', description: 'Tworzy proste harmonogramy. Uczestniczy w sesjach estymacyjnych. Śledzi postęp.' },
-      { level: 3, name: 'Kompetentny', description: 'Kompleksowe planowanie projektów. Techniki estymacji (Planning Poker, T-shirt sizing). Zarządzanie buforem.' },
-      { level: 4, name: 'Zaawansowany', description: 'Planowanie programów wieloprojektowych. Zaawansowana analiza ryzyka. Optymalizacja zasobów.' },
-      { level: 5, name: 'Ekspert', description: 'Strategiczne planowanie portfela projektów. Modele predykcyjne. Benchmarking organizacyjny.' },
+      { level: 2, name: 'Rozwijający się', description: 'Tworzy proste harmonogramy. Uczestniczy w sesjach estymacyjnych.' },
+      { level: 3, name: 'Kompetentny', description: 'Kompleksowe planowanie projektów. Techniki estymacji. Zarządzanie buforem.' },
+      { level: 4, name: 'Zaawansowany', description: 'Planowanie programów wieloprojektowych. Zaawansowana analiza ryzyka.' },
+      { level: 5, name: 'Ekspert', description: 'Strategiczne planowanie portfela projektów. Modele predykcyjne.' },
     ],
   },
   {
@@ -36,9 +36,9 @@ export const pmCompetencies: Competency[] = [
     levels: [
       { level: 1, name: 'Początkujący', description: 'Podstawowa obsługa Jira - tworzenie tasków, aktualizacja statusów.' },
       { level: 2, name: 'Rozwijający się', description: 'Konfiguracja boardów. Tworzenie raportów. Praca z backlogiem.' },
-      { level: 3, name: 'Kompetentny', description: 'Zaawansowana konfiguracja workflow. Automatyzacje. Integracje między narzędziami.' },
-      { level: 4, name: 'Zaawansowany', description: 'Administracja narzędziami PM. Customowe dashboardy dla stakeholderów. Szkolenie zespołów.' },
-      { level: 5, name: 'Ekspert', description: 'Projektowanie ekosystemu narzędzi PM. Migracje i transformacje. Optymalizacja procesów.' },
+      { level: 3, name: 'Kompetentny', description: 'Zaawansowana konfiguracja workflow. Automatyzacje. Integracje.' },
+      { level: 4, name: 'Zaawansowany', description: 'Administracja narzędziami PM. Customowe dashboardy. Szkolenie zespołów.' },
+      { level: 5, name: 'Ekspert', description: 'Projektowanie ekosystemu narzędzi PM. Migracje i transformacje.' },
     ],
   },
   {
@@ -49,97 +49,119 @@ export const pmCompetencies: Competency[] = [
     levels: [
       { level: 1, name: 'Początkujący', description: 'Rozumie strukturę budżetu projektu. Raportuje zużycie czasu.' },
       { level: 2, name: 'Rozwijający się', description: 'Śledzi burn rate. Przygotowuje proste raporty finansowe.' },
-      { level: 3, name: 'Kompetentny', description: 'Tworzy i zarządza budżetem projektu. Prognozowanie. Zarządzanie change requestami.' },
+      { level: 3, name: 'Kompetentny', description: 'Tworzy i zarządza budżetem projektu. Prognozowanie. Change requesty.' },
       { level: 4, name: 'Zaawansowany', description: 'Budżetowanie programów. Negocjacje z klientem. Value-based pricing.' },
-      { level: 5, name: 'Ekspert', description: 'Strategia finansowa projektów. P&L odpowiedzialność. Business case development.' },
+      { level: 5, name: 'Ekspert', description: 'Strategia finansowa projektów. P&L odpowiedzialność. Business case.' },
     ],
   },
   // Kompetencje miękkie
   {
-    id: 'pm-communication',
-    name: 'Komunikacja i raportowanie',
+    id: 'pm-ai',
+    name: 'Wykorzystanie sztucznej inteligencji (AI) w codziennej pracy',
+    description: 'Umiejętność efektywnego korzystania z narzędzi AI w zarządzaniu projektami',
+    category: 'soft',
+    levels: [
+      { level: 1, name: 'Początkujący', description: 'Zna podstawowe narzędzia AI. Używa ich do prostych zadań PM.' },
+      { level: 2, name: 'Rozwijający się', description: 'Korzysta z AI do raportowania, notatek i analizy danych.' },
+      { level: 3, name: 'Kompetentny', description: 'Efektywnie promptuje AI. Integruje AI w workflow PM.' },
+      { level: 4, name: 'Zaawansowany', description: 'Buduje narzędzia AI do optymalizacji procesów PM.' },
+      { level: 5, name: 'Ekspert', description: 'Definiuje strategię AI w zarządzaniu projektami.' },
+    ],
+  },
+  {
+    id: 'pm-communication-soft',
+    name: 'Komunikacja z innymi',
     description: 'Efektywna komunikacja z zespołem, klientem i stakeholderami',
     category: 'soft',
     levels: [
-      { level: 1, name: 'Początkujący', description: 'Przygotowuje notatki ze spotkań. Komunikuje się jasno z zespołem.' },
-      { level: 2, name: 'Rozwijający się', description: 'Prowadzi spotkania zespołowe. Tworzy raporty statusowe. Eskaluje problemy.' },
-      { level: 3, name: 'Kompetentny', description: 'Zarządza komunikacją w projekcie. Prezentacje dla klienta. Difficult conversations.' },
-      { level: 4, name: 'Zaawansowany', description: 'Komunikacja strategiczna. Zarządzanie oczekiwaniami C-level. Crisis communication.' },
+      { level: 1, name: 'Początkujący', description: 'Przygotowuje notatki ze spotkań. Komunikuje się jasno.' },
+      { level: 2, name: 'Rozwijający się', description: 'Prowadzi spotkania zespołowe. Tworzy raporty statusowe.' },
+      { level: 3, name: 'Kompetentny', description: 'Zarządza komunikacją w projekcie. Prezentacje dla klienta.' },
+      { level: 4, name: 'Zaawansowany', description: 'Komunikacja strategiczna. Zarządzanie oczekiwaniami C-level.' },
       { level: 5, name: 'Ekspert', description: 'Executive presence. Reprezentowanie firmy. Thought leadership.' },
     ],
   },
   {
-    id: 'pm-leadership',
-    name: 'Przywództwo zespołu',
+    id: 'pm-teamwork',
+    name: 'Praca zespołowa',
     description: 'Budowanie i prowadzenie efektywnych zespołów projektowych',
     category: 'soft',
     levels: [
-      { level: 1, name: 'Początkujący', description: 'Współpracuje efektywnie z zespołem. Szanuje różne perspektywy.' },
-      { level: 2, name: 'Rozwijający się', description: 'Koordynuje pracę małego zespołu. Rozwiązuje proste konflikty.' },
-      { level: 3, name: 'Kompetentny', description: 'Buduje zaangażowanie zespołu. Delegowanie. Feedback i coaching.' },
-      { level: 4, name: 'Zaawansowany', description: 'Servant leadership. Rozwój członków zespołu. Zarządzanie zespołami rozproszonymi.' },
-      { level: 5, name: 'Ekspert', description: 'Budowanie kultury organizacyjnej. Mentoring PM-ów. Transformacyjne przywództwo.' },
+      { level: 1, name: 'Początkujący', description: 'Współpracuje efektywnie z zespołem.' },
+      { level: 2, name: 'Rozwijający się', description: 'Koordynuje pracę małego zespołu. Rozwiązuje konflikty.' },
+      { level: 3, name: 'Kompetentny', description: 'Buduje zaangażowanie zespołu. Delegowanie. Feedback.' },
+      { level: 4, name: 'Zaawansowany', description: 'Servant leadership. Rozwój członków zespołu.' },
+      { level: 5, name: 'Ekspert', description: 'Budowanie kultury organizacyjnej. Mentoring PM-ów.' },
     ],
   },
-  // Kompetencje specjalistyczne
   {
-    id: 'pm-it-domain',
-    name: 'Znajomość IT i software development',
-    description: 'Rozumienie procesów wytwarzania oprogramowania i technologii',
-    category: 'specialized',
+    id: 'pm-independence',
+    name: 'Samodzielność',
+    description: 'Zdolność do samodzielnego podejmowania decyzji i realizacji zadań',
+    category: 'soft',
     levels: [
-      { level: 1, name: 'Początkujący', description: 'Rozumie podstawowy cykl życia projektu IT. Zna główne role w zespole.' },
-      { level: 2, name: 'Rozwijający się', description: 'Rozumie proces CI/CD. Zna podstawy architektury systemów. Komunikuje się z developerami.' },
-      { level: 3, name: 'Kompetentny', description: 'Ocenia feasibility rozwiązań. Rozumie dług techniczny. Wspiera decyzje techniczne.' },
-      { level: 4, name: 'Zaawansowany', description: 'Partner techniczny dla zespołu. Rozumie trade-offy architektoniczne. Tech due diligence.' },
-      { level: 5, name: 'Ekspert', description: 'Strategiczne doradztwo technologiczne. Innowacje i R&D. Technology roadmapping.' },
+      { level: 1, name: 'Początkujący', description: 'Realizuje zadania z pomocą mentora.' },
+      { level: 2, name: 'Rozwijający się', description: 'Samodzielnie prowadzi proste projekty.' },
+      { level: 3, name: 'Kompetentny', description: 'Samodzielnie zarządza złożonymi projektami.' },
+      { level: 4, name: 'Zaawansowany', description: 'Samodzielnie prowadzi programy wieloprojektowe.' },
+      { level: 5, name: 'Ekspert', description: 'Pełna autonomia. Strategiczne decyzje.' },
+    ],
+  },
+  {
+    id: 'pm-work-organization',
+    name: 'Organizacja pracy własnej',
+    description: 'Planowanie, priorytetyzacja i efektywne zarządzanie czasem',
+    category: 'soft',
+    levels: [
+      { level: 1, name: 'Początkujący', description: 'Realizuje przydzielone zadania w czasie.' },
+      { level: 2, name: 'Rozwijający się', description: 'Samodzielna priorytetyzacja. Dotrzymuje terminów.' },
+      { level: 3, name: 'Kompetentny', description: 'Efektywne zarządzanie wieloma projektami jednocześnie.' },
+      { level: 4, name: 'Zaawansowany', description: 'Optymalizacja procesów pracy. Delegowanie.' },
+      { level: 5, name: 'Ekspert', description: 'Definiowanie procesów organizacyjnych.' },
+    ],
+  },
+  {
+    id: 'pm-experience',
+    name: 'Doświadczenie / dojrzałość',
+    description: 'Dojrzałość zawodowa i umiejętność podejmowania decyzji',
+    category: 'soft',
+    levels: [
+      { level: 1, name: 'Początkujący', description: 'Zaczyna karierę PM. Chętnie się uczy.' },
+      { level: 2, name: 'Rozwijający się', description: 'Doświadczenie z kilkoma projektami.' },
+      { level: 3, name: 'Kompetentny', description: 'Uczy się na błędach. Świadome decyzje projektowe.' },
+      { level: 4, name: 'Zaawansowany', description: 'Bogate doświadczenie. Mentor dla innych PM.' },
+      { level: 5, name: 'Ekspert', description: 'Ekspert PM. Strategiczne myślenie.' },
+    ],
+  },
+  {
+    id: 'pm-flexibility',
+    name: 'Elastyczność / adaptacyjność',
+    description: 'Zdolność do adaptacji w dynamicznym środowisku',
+    category: 'soft',
+    levels: [
+      { level: 1, name: 'Początkujący', description: 'Akceptuje zmiany w projekcie.' },
+      { level: 2, name: 'Rozwijający się', description: 'Adaptuje się do zmian priorytetów i scope.' },
+      { level: 3, name: 'Kompetentny', description: 'Szybko adaptuje się do nowych metodyk i narzędzi.' },
+      { level: 4, name: 'Zaawansowany', description: 'Prowadzi zespół przez zmiany organizacyjne.' },
+      { level: 5, name: 'Ekspert', description: 'Change agent. Napędza transformacje.' },
     ],
   },
 ];
 
+const pmCompetencyIds = pmCompetencies.map(c => c.id);
+
+function genReqs(positionId: string, seniorityLevel: 'junior' | 'mid' | 'senior' | 'lead', level: number): PositionRequirement[] {
+  return pmCompetencyIds.map(competencyId => ({
+    positionId,
+    seniorityLevel,
+    competencyId,
+    requiredLevel: level,
+  }));
+}
+
 export const pmRequirements: PositionRequirement[] = [
-  // Project Coordinator - Junior
-  { positionId: 'project-coordinator', seniorityLevel: 'junior', competencyId: 'pm-methodology', requiredLevel: 1 },
-  { positionId: 'project-coordinator', seniorityLevel: 'junior', competencyId: 'pm-planning', requiredLevel: 1 },
-  { positionId: 'project-coordinator', seniorityLevel: 'junior', competencyId: 'pm-tools', requiredLevel: 2 },
-  { positionId: 'project-coordinator', seniorityLevel: 'junior', competencyId: 'pm-budget', requiredLevel: 1 },
-  { positionId: 'project-coordinator', seniorityLevel: 'junior', competencyId: 'pm-communication', requiredLevel: 2 },
-  { positionId: 'project-coordinator', seniorityLevel: 'junior', competencyId: 'pm-leadership', requiredLevel: 1 },
-  { positionId: 'project-coordinator', seniorityLevel: 'junior', competencyId: 'pm-it-domain', requiredLevel: 1 },
-
-  // Project Coordinator - Mid
-  { positionId: 'project-coordinator', seniorityLevel: 'mid', competencyId: 'pm-methodology', requiredLevel: 2 },
-  { positionId: 'project-coordinator', seniorityLevel: 'mid', competencyId: 'pm-planning', requiredLevel: 2 },
-  { positionId: 'project-coordinator', seniorityLevel: 'mid', competencyId: 'pm-tools', requiredLevel: 3 },
-  { positionId: 'project-coordinator', seniorityLevel: 'mid', competencyId: 'pm-budget', requiredLevel: 2 },
-  { positionId: 'project-coordinator', seniorityLevel: 'mid', competencyId: 'pm-communication', requiredLevel: 3 },
-  { positionId: 'project-coordinator', seniorityLevel: 'mid', competencyId: 'pm-leadership', requiredLevel: 2 },
-  { positionId: 'project-coordinator', seniorityLevel: 'mid', competencyId: 'pm-it-domain', requiredLevel: 2 },
-
-  // Project Manager - Mid
-  { positionId: 'project-manager', seniorityLevel: 'mid', competencyId: 'pm-methodology', requiredLevel: 3 },
-  { positionId: 'project-manager', seniorityLevel: 'mid', competencyId: 'pm-planning', requiredLevel: 3 },
-  { positionId: 'project-manager', seniorityLevel: 'mid', competencyId: 'pm-tools', requiredLevel: 3 },
-  { positionId: 'project-manager', seniorityLevel: 'mid', competencyId: 'pm-budget', requiredLevel: 3 },
-  { positionId: 'project-manager', seniorityLevel: 'mid', competencyId: 'pm-communication', requiredLevel: 3 },
-  { positionId: 'project-manager', seniorityLevel: 'mid', competencyId: 'pm-leadership', requiredLevel: 3 },
-  { positionId: 'project-manager', seniorityLevel: 'mid', competencyId: 'pm-it-domain', requiredLevel: 3 },
-
-  // Project Manager - Senior
-  { positionId: 'project-manager', seniorityLevel: 'senior', competencyId: 'pm-methodology', requiredLevel: 4 },
-  { positionId: 'project-manager', seniorityLevel: 'senior', competencyId: 'pm-planning', requiredLevel: 4 },
-  { positionId: 'project-manager', seniorityLevel: 'senior', competencyId: 'pm-tools', requiredLevel: 4 },
-  { positionId: 'project-manager', seniorityLevel: 'senior', competencyId: 'pm-budget', requiredLevel: 4 },
-  { positionId: 'project-manager', seniorityLevel: 'senior', competencyId: 'pm-communication', requiredLevel: 4 },
-  { positionId: 'project-manager', seniorityLevel: 'senior', competencyId: 'pm-leadership', requiredLevel: 4 },
-  { positionId: 'project-manager', seniorityLevel: 'senior', competencyId: 'pm-it-domain', requiredLevel: 4 },
-
-  // Program Manager - Lead
-  { positionId: 'program-manager', seniorityLevel: 'lead', competencyId: 'pm-methodology', requiredLevel: 5 },
-  { positionId: 'program-manager', seniorityLevel: 'lead', competencyId: 'pm-planning', requiredLevel: 5 },
-  { positionId: 'program-manager', seniorityLevel: 'lead', competencyId: 'pm-tools', requiredLevel: 4 },
-  { positionId: 'program-manager', seniorityLevel: 'lead', competencyId: 'pm-budget', requiredLevel: 5 },
-  { positionId: 'program-manager', seniorityLevel: 'lead', competencyId: 'pm-communication', requiredLevel: 5 },
-  { positionId: 'program-manager', seniorityLevel: 'lead', competencyId: 'pm-leadership', requiredLevel: 5 },
-  { positionId: 'program-manager', seniorityLevel: 'lead', competencyId: 'pm-it-domain', requiredLevel: 4 },
+  ...genReqs('project-manager', 'junior', 1),
+  ...genReqs('project-manager', 'mid', 2),
+  ...genReqs('project-manager', 'senior', 3),
+  ...genReqs('project-manager', 'lead', 4),
 ];

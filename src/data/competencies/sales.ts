@@ -81,6 +81,97 @@ export const salesCompetencies: Competency[] = [
       { level: 5, name: 'Ekspert', description: 'Buduje kulturę odporności w zespole. Role model. Mentor dla innych.' },
     ],
   },
+  {
+    id: 'sales-ai',
+    name: 'Wykorzystanie sztucznej inteligencji (AI) w codziennej pracy',
+    description: 'Umiejętność efektywnego korzystania z narzędzi AI w procesie sprzedaży',
+    category: 'soft',
+    levels: [
+      { level: 1, name: 'Początkujący', description: 'Zna podstawowe narzędzia AI. Używa ich do prostych zadań sprzedażowych.' },
+      { level: 2, name: 'Rozwijający się', description: 'Korzysta z AI do przygotowywania ofert, maili i analiz.' },
+      { level: 3, name: 'Kompetentny', description: 'Efektywnie promptuje AI. Integruje AI w workflow sprzedażowy.' },
+      { level: 4, name: 'Zaawansowany', description: 'Buduje narzędzia AI do optymalizacji sprzedaży. Automatyzacja procesów.' },
+      { level: 5, name: 'Ekspert', description: 'Definiuje strategię AI w sprzedaży. Thought leadership.' },
+    ],
+  },
+  {
+    id: 'sales-communication-soft',
+    name: 'Komunikacja z innymi',
+    description: 'Efektywna komunikacja wewnętrzna z zespołem i organizacją',
+    category: 'soft',
+    levels: [
+      { level: 1, name: 'Początkujący', description: 'Jasne raportowanie statusu. Zadaje pytania.' },
+      { level: 2, name: 'Rozwijający się', description: 'Aktywny udział w spotkaniach zespołu. Dzieli się wiedzą.' },
+      { level: 3, name: 'Kompetentny', description: 'Prowadzi spotkania. Prezentacje wewnętrzne. Mentoring.' },
+      { level: 4, name: 'Zaawansowany', description: 'Komunikacja cross-team. Współpraca z innymi działami.' },
+      { level: 5, name: 'Ekspert', description: 'Reprezentowanie firmy. Executive communication.' },
+    ],
+  },
+  {
+    id: 'sales-teamwork',
+    name: 'Praca zespołowa',
+    description: 'Współpraca z innymi członkami zespołu sprzedażowego',
+    category: 'soft',
+    levels: [
+      { level: 1, name: 'Początkujący', description: 'Efektywna praca z pomocą mentora.' },
+      { level: 2, name: 'Rozwijający się', description: 'Samodzielna praca w zespole. Współpraca z innymi.' },
+      { level: 3, name: 'Kompetentny', description: 'Dzielenie się leadami i wiedzą. Wsparcie kolegów.' },
+      { level: 4, name: 'Zaawansowany', description: 'Koordynacja pracy zespołu sprzedażowego.' },
+      { level: 5, name: 'Ekspert', description: 'Budowanie kultury zespołowej. Mentoring.' },
+    ],
+  },
+  {
+    id: 'sales-independence',
+    name: 'Samodzielność',
+    description: 'Zdolność do samodzielnego podejmowania decyzji sprzedażowych',
+    category: 'soft',
+    levels: [
+      { level: 1, name: 'Początkujący', description: 'Realizuje zadania z pomocą mentora.' },
+      { level: 2, name: 'Rozwijający się', description: 'Samodzielnie prowadzi proste procesy sprzedażowe.' },
+      { level: 3, name: 'Kompetentny', description: 'Samodzielnie zarządza pipeline i klientami.' },
+      { level: 4, name: 'Zaawansowany', description: 'Samodzielnie prowadzi strategiczne konta.' },
+      { level: 5, name: 'Ekspert', description: 'Pełna autonomia. Strategiczne decyzje sprzedażowe.' },
+    ],
+  },
+  {
+    id: 'sales-work-organization',
+    name: 'Organizacja pracy własnej',
+    description: 'Planowanie, priorytetyzacja i efektywne zarządzanie czasem',
+    category: 'soft',
+    levels: [
+      { level: 1, name: 'Początkujący', description: 'Realizuje przydzielone zadania w czasie.' },
+      { level: 2, name: 'Rozwijający się', description: 'Samodzielna priorytetyzacja. Dotrzymuje terminów.' },
+      { level: 3, name: 'Kompetentny', description: 'Efektywne zarządzanie wieloma klientami i dealami.' },
+      { level: 4, name: 'Zaawansowany', description: 'Optymalizacja procesów sprzedażowych.' },
+      { level: 5, name: 'Ekspert', description: 'Definiowanie procesów organizacyjnych sprzedaży.' },
+    ],
+  },
+  {
+    id: 'sales-experience',
+    name: 'Doświadczenie / dojrzałość',
+    description: 'Dojrzałość zawodowa i umiejętność podejmowania decyzji',
+    category: 'soft',
+    levels: [
+      { level: 1, name: 'Początkujący', description: 'Zaczyna karierę w sprzedaży. Chętnie się uczy.' },
+      { level: 2, name: 'Rozwijający się', description: 'Doświadczenie z kilkoma klientami i dealami.' },
+      { level: 3, name: 'Kompetentny', description: 'Uczy się na błędach. Świadome decyzje sprzedażowe.' },
+      { level: 4, name: 'Zaawansowany', description: 'Bogate doświadczenie. Mentor dla innych.' },
+      { level: 5, name: 'Ekspert', description: 'Ekspert sprzedażowy. Strategiczne myślenie.' },
+    ],
+  },
+  {
+    id: 'sales-flexibility',
+    name: 'Elastyczność / adaptacyjność',
+    description: 'Zdolność do adaptacji w dynamicznym środowisku sprzedażowym',
+    category: 'soft',
+    levels: [
+      { level: 1, name: 'Początkujący', description: 'Akceptuje zmiany w strategii sprzedaży.' },
+      { level: 2, name: 'Rozwijający się', description: 'Adaptuje się do zmian rynkowych i priorytetów.' },
+      { level: 3, name: 'Kompetentny', description: 'Szybko adaptuje się do nowych produktów i rynków.' },
+      { level: 4, name: 'Zaawansowany', description: 'Prowadzi zespół przez zmiany strategii.' },
+      { level: 5, name: 'Ekspert', description: 'Change agent. Napędza innowacje w sprzedaży.' },
+    ],
+  },
   // Kompetencje specjalistyczne
   {
     id: 'sales-industry',
@@ -97,49 +188,30 @@ export const salesCompetencies: Competency[] = [
   },
 ];
 
+const salesCompetencyIds = salesCompetencies.map(c => c.id);
+
+function genReqs(positionId: string, seniorityLevel: 'junior' | 'mid' | 'senior' | 'lead' | 'expert', level: number): PositionRequirement[] {
+  return salesCompetencyIds.map(competencyId => ({
+    positionId,
+    seniorityLevel,
+    competencyId,
+    requiredLevel: level,
+  }));
+}
+
 export const salesRequirements: PositionRequirement[] = [
-  // Sales Representative - Junior
-  { positionId: 'sales-rep', seniorityLevel: 'junior', competencyId: 'sales-process', requiredLevel: 2 },
-  { positionId: 'sales-rep', seniorityLevel: 'junior', competencyId: 'sales-crm', requiredLevel: 2 },
-  { positionId: 'sales-rep', seniorityLevel: 'junior', competencyId: 'sales-presentation', requiredLevel: 1 },
-  { positionId: 'sales-rep', seniorityLevel: 'junior', competencyId: 'sales-negotiation', requiredLevel: 1 },
-  { positionId: 'sales-rep', seniorityLevel: 'junior', competencyId: 'sales-communication', requiredLevel: 2 },
-  { positionId: 'sales-rep', seniorityLevel: 'junior', competencyId: 'sales-resilience', requiredLevel: 2 },
-  { positionId: 'sales-rep', seniorityLevel: 'junior', competencyId: 'sales-industry', requiredLevel: 1 },
+  // Sales Representative
+  ...genReqs('sales-rep', 'junior', 1),
+  ...genReqs('sales-rep', 'mid', 2),
+  ...genReqs('sales-rep', 'senior', 3),
 
-  // Sales Representative - Mid
-  { positionId: 'sales-rep', seniorityLevel: 'mid', competencyId: 'sales-process', requiredLevel: 3 },
-  { positionId: 'sales-rep', seniorityLevel: 'mid', competencyId: 'sales-crm', requiredLevel: 3 },
-  { positionId: 'sales-rep', seniorityLevel: 'mid', competencyId: 'sales-presentation', requiredLevel: 3 },
-  { positionId: 'sales-rep', seniorityLevel: 'mid', competencyId: 'sales-negotiation', requiredLevel: 2 },
-  { positionId: 'sales-rep', seniorityLevel: 'mid', competencyId: 'sales-communication', requiredLevel: 3 },
-  { positionId: 'sales-rep', seniorityLevel: 'mid', competencyId: 'sales-resilience', requiredLevel: 3 },
-  { positionId: 'sales-rep', seniorityLevel: 'mid', competencyId: 'sales-industry', requiredLevel: 2 },
+  // Account Manager
+  ...genReqs('account-manager', 'mid', 2),
+  ...genReqs('account-manager', 'senior', 3),
+  ...genReqs('account-manager', 'lead', 4),
 
-  // Account Manager - Mid
-  { positionId: 'account-manager', seniorityLevel: 'mid', competencyId: 'sales-process', requiredLevel: 3 },
-  { positionId: 'account-manager', seniorityLevel: 'mid', competencyId: 'sales-crm', requiredLevel: 3 },
-  { positionId: 'account-manager', seniorityLevel: 'mid', competencyId: 'sales-presentation', requiredLevel: 3 },
-  { positionId: 'account-manager', seniorityLevel: 'mid', competencyId: 'sales-negotiation', requiredLevel: 3 },
-  { positionId: 'account-manager', seniorityLevel: 'mid', competencyId: 'sales-communication', requiredLevel: 4 },
-  { positionId: 'account-manager', seniorityLevel: 'mid', competencyId: 'sales-resilience', requiredLevel: 3 },
-  { positionId: 'account-manager', seniorityLevel: 'mid', competencyId: 'sales-industry', requiredLevel: 3 },
-
-  // Account Manager - Senior
-  { positionId: 'account-manager', seniorityLevel: 'senior', competencyId: 'sales-process', requiredLevel: 4 },
-  { positionId: 'account-manager', seniorityLevel: 'senior', competencyId: 'sales-crm', requiredLevel: 4 },
-  { positionId: 'account-manager', seniorityLevel: 'senior', competencyId: 'sales-presentation', requiredLevel: 4 },
-  { positionId: 'account-manager', seniorityLevel: 'senior', competencyId: 'sales-negotiation', requiredLevel: 4 },
-  { positionId: 'account-manager', seniorityLevel: 'senior', competencyId: 'sales-communication', requiredLevel: 4 },
-  { positionId: 'account-manager', seniorityLevel: 'senior', competencyId: 'sales-resilience', requiredLevel: 4 },
-  { positionId: 'account-manager', seniorityLevel: 'senior', competencyId: 'sales-industry', requiredLevel: 4 },
-
-  // Sales Director - Lead
-  { positionId: 'sales-director', seniorityLevel: 'lead', competencyId: 'sales-process', requiredLevel: 5 },
-  { positionId: 'sales-director', seniorityLevel: 'lead', competencyId: 'sales-crm', requiredLevel: 4 },
-  { positionId: 'sales-director', seniorityLevel: 'lead', competencyId: 'sales-presentation', requiredLevel: 5 },
-  { positionId: 'sales-director', seniorityLevel: 'lead', competencyId: 'sales-negotiation', requiredLevel: 5 },
-  { positionId: 'sales-director', seniorityLevel: 'lead', competencyId: 'sales-communication', requiredLevel: 5 },
-  { positionId: 'sales-director', seniorityLevel: 'lead', competencyId: 'sales-resilience', requiredLevel: 5 },
-  { positionId: 'sales-director', seniorityLevel: 'lead', competencyId: 'sales-industry', requiredLevel: 5 },
+  // Sales Director
+  ...genReqs('sales-director', 'senior', 3),
+  ...genReqs('sales-director', 'lead', 4),
+  ...genReqs('sales-director', 'expert', 5),
 ];
