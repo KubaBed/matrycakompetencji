@@ -24,9 +24,7 @@ export const departments: Department[] = [
     description: 'Zespół zarządzania projektami dbający o terminowe dostarczanie wartości dla klientów',
     icon: pmIcon,
     positions: [
-      { id: 'project-coordinator', name: 'Project Coordinator', departmentId: 'pm', levels: ['junior', 'mid'] },
-      { id: 'project-manager', name: 'Project Manager', departmentId: 'pm', levels: ['mid', 'senior', 'lead'] },
-      { id: 'program-manager', name: 'Program Manager', departmentId: 'pm', levels: ['senior', 'lead', 'expert'] },
+      { id: 'project-manager', name: 'Project Manager', departmentId: 'pm', levels: ['junior', 'mid', 'senior', 'lead'] },
     ],
   },
   {
@@ -35,10 +33,7 @@ export const departments: Department[] = [
     description: 'Zespół tworzący innowacyjne aplikacje mobilne na iOS, Android i platformy cross-platform',
     icon: mobileIcon,
     positions: [
-      { id: 'ios-developer', name: 'iOS Developer', departmentId: 'mobile', levels: ['junior', 'mid', 'senior', 'lead'] },
-      { id: 'android-developer', name: 'Android Developer', departmentId: 'mobile', levels: ['junior', 'mid', 'senior', 'lead'] },
-      { id: 'flutter-developer', name: 'Flutter Developer', departmentId: 'mobile', levels: ['junior', 'mid', 'senior', 'lead'] },
-      { id: 'mobile-architect', name: 'Mobile Architect', departmentId: 'mobile', levels: ['senior', 'lead', 'expert'] },
+      { id: 'flutter-developer', name: 'Flutter Developer', departmentId: 'mobile', levels: ['junior', 'mid', 'senior'] },
     ],
   },
   {
@@ -47,10 +42,10 @@ export const departments: Department[] = [
     description: 'Zespół budujący nowoczesne aplikacje webowe i systemy backendowe',
     icon: webIcon,
     positions: [
-      { id: 'frontend-developer', name: 'Frontend Developer', departmentId: 'web', levels: ['junior', 'mid', 'senior', 'lead'] },
-      { id: 'backend-developer', name: 'Backend Developer', departmentId: 'web', levels: ['junior', 'mid', 'senior', 'lead'] },
-      { id: 'fullstack-developer', name: 'Fullstack Developer', departmentId: 'web', levels: ['mid', 'senior', 'lead'] },
-      { id: 'web-architect', name: 'Web Architect', departmentId: 'web', levels: ['senior', 'lead', 'expert'] },
+      { id: 'frontend-developer', name: 'Front-End Developer', departmentId: 'web', levels: ['junior', 'mid', 'senior'] },
+      { id: 'backend-developer', name: 'Backend Developer', departmentId: 'web', levels: ['junior', 'mid', 'senior'] },
+      { id: 'fullstack-developer', name: 'Fullstack Developer', departmentId: 'web', levels: ['junior', 'mid', 'senior'] },
+      { id: 'python-developer', name: 'Python Developer', departmentId: 'web', levels: ['junior', 'mid', 'senior', 'lead'] },
     ],
   },
   {
@@ -59,9 +54,7 @@ export const departments: Department[] = [
     description: 'Zespół dbający o najwyższą jakość produktów poprzez testy i automatyzację',
     icon: qaIcon,
     positions: [
-      { id: 'qa-engineer', name: 'QA Engineer', departmentId: 'qa', levels: ['junior', 'mid', 'senior'] },
-      { id: 'qa-automation', name: 'QA Automation Engineer', departmentId: 'qa', levels: ['mid', 'senior', 'lead'] },
-      { id: 'qa-lead', name: 'QA Lead', departmentId: 'qa', levels: ['senior', 'lead', 'expert'] },
+      { id: 'qa-specialist', name: 'Quality Assurance Specialist', departmentId: 'qa', levels: ['junior', 'mid', 'senior'] },
     ],
   },
 ];
