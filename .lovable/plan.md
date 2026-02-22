@@ -1,94 +1,99 @@
 
-# Plan: Wyłączenie logowania + Poprawa PDF z logo
+# Plan: Aktualizacja danych Matrycy Kompetencji (ewaluacja 2026)
 
-## Podsumowanie zmian
+## Podsumowanie
 
-Wdrażamy 2 poprawki:
-1. **Tymczasowe wyłączenie logowania** - ukrycie lub wyszarzenie przycisków logowania
-2. **Poprawa PDF** - naprawienie formatowania czcionek i dodanie logo Appchance
+Aktualizacja TYLKO plików z danymi - bez zmian w UI. Zmiany obejmuja nowe stanowiska, usunięcie starych kompetencji, dodanie 7 nowych kompetencji miękkich i powiązanie ich z odpowiednimi stanowiskami.
 
 ---
 
-## Zmiana 1: Wyłączenie funkcji logowania
+## 1. Aktualizacja stanowisk (`src/data/departments.ts`)
 
-### Problem
-Aplikacja ma przyciski "Zaloguj się", które kierują do strony `/login`, która nie istnieje. Bez bazy danych ta funkcja nie działa.
+### WEB - zmiana listy pozycji
+| Stare | Nowe |
+|-------|------|
+| Frontend Developer (j/m/s/lead) | Front-End Developer (j/m/s) |
+| Backend Developer (j/m/s/lead) | Backend Developer (j/m/s) |
+| Fullstack Developer (m/s/lead) | Fullstack Developer (j/m/s) |
+| Web Architect (s/lead/expert) | Python Developer (j/m/s/lead) -- NOWE |
 
-### Rozwiązanie
-Całkowite usunięcie opcji logowania z MVP. Zostawiam tylko tryb anonimowy.
+### MOBILE - redukcja do jednego stanowiska
+| Stare | Nowe |
+|-------|------|
+| iOS Developer, Android Developer, Flutter Developer, Mobile Architect | Flutter Developer (j/m/s) |
 
-### Zakres zmian
-**Plik: `src/pages/Index.tsx`**
+### QA - redukcja do jednego stanowiska
+| Stare | Nowe |
+|-------|------|
+| QA Engineer, QA Automation Engineer, QA Lead | Quality Assurance Specialist (j/m/s) |
 
-1. Usunięcie przycisku "Zaloguj się" z headera (linie 55-58)
-2. Usunięcie sekcji "lub Zaloguj się, żeby zapisać wyniki" z przycisków akcji (linie 107-117)
-3. Uproszczenie handleContinue - usunięcie logiki dla trybu 'login'
+### PM - redukcja do jednego stanowiska
+| Stare | Nowe |
+|-------|------|
+| Project Coordinator, Project Manager, Program Manager | Project Manager (j/m/s/lead) |
 
-### Rezultat
-Użytkownik widzi tylko przycisk "Rozpocznij anonimowo" bez rozpraszających opcji logowania.
-
----
-
-## Zmiana 2: Poprawa PDF - formatowanie i logo
-
-### Problemy z obecnym PDF
-1. **Emoji** (💪, 📈) - mogą nie renderować się poprawnie w PDF
-2. **Brak logo** - header zawiera tylko tekst, brakuje brandingu wizualnego
-3. **Rozjeżdżające się czcionki** - potencjalnie związane z używaniem polskich znaków
-
-### Rozwiązanie
-
-#### 2a: Usunięcie emoji
-Zamiana emoji na czytelne tekstowe nagłówki:
-- `💪 Mocne strony` → `Mocne strony`
-- `📈 Obszary do rozwoju` → `Obszary do rozwoju`
-
-#### 2b: Dodanie logo Appchance
-- Skopiowanie pliku SVG do `src/assets/appchance-logo.svg`
-- Konwersja SVG na format Base64 dla jsPDF
-- Dodanie logo obok tekstu "Appchance" w headerze PDF
-- Logo będzie wyświetlane:
-  - Na stronie tytułowej (duże, wycentrowane)
-  - W nagłówkach kolejnych stron (małe, w lewym rogu)
-
-#### 2c: Poprawa czytelności
-- Zwiększenie odstępów między sekcjami
-- Lepsze wyrównanie tekstu
-- Upewnienie się, że wszystkie elementy mieszczą się w obszarze drukowania
-
-### Zakres zmian
-
-**Nowy plik: `src/assets/appchance-logo.svg`**
-- Kopia logo z user-uploads
-
-**Plik: `src/utils/pdfGenerator.ts`**
-
-1. Import logo jako Base64 (lub osadzenie inline)
-2. Dodanie funkcji do renderowania logo SVG w PDF
-3. Modyfikacja strony tytułowej - logo nad nazwą firmy
-4. Modyfikacja nagłówków stron - małe logo w rogu
-5. Usunięcie emoji z nagłówków sekcji
-6. Optymalizacja układu dla lepszej czytelności
+### SALES - bez zmian w stanowiskach
 
 ---
 
-## Szczegóły techniczne
+## 2. Usunięcie kompetencji
 
-### jsPDF i obrazy SVG
+| Dział | Kompetencja do usunięcia | ID |
+|-------|--------------------------|-----|
+| WEB | Komunikacja techniczna | `web-communication` |
+| QA | Narzędzia QA | `qa-tools` |
+| QA | Komunikacja i współpraca | `qa-communication` |
+| QA | Myślenie analityczne | `qa-analytical` |
+| PM | Komunikacja i raportowanie | `pm-communication` |
+| PM | Przywództwo zespołu | `pm-leadership` |
+| PM | Znajomość IT i software development | `pm-it-domain` |
 
-jsPDF nie obsługuje bezpośrednio SVG. Mamy dwie opcje:
-1. **Konwersja SVG → PNG** (preferowane) - lepsza jakość i kompatybilność
-2. **SVG jako ścieżki** - ręczne rysowanie kształtów
+Usunięte zostaną rowniez wszystkie `PositionRequirement` odwołujące się do tych ID.
 
-Użyjemy podejścia z osadzeniem logo jako Base64 PNG lub narysowaniem kształtu logo bezpośrednio używając jsPDF.
+---
 
-Ponieważ logo Appchance to prosty kształt, możemy narysować go bezpośrednio:
-- Zewnętrzny wielokąt w kolorze #E41844
-- Wewnętrzne koło z literą "a"
+## 3. Dodanie 7 nowych kompetencji (soft) do WSZYSTKICH działów
 
-Alternatywnie: osadzenie logo jako data URI.
+Każda kompetencja zostanie dodana do każdego z 5 działów z prefixem działu (np. `web-ai`, `qa-ai`, `pm-ai`, `mobile-ai`, `sales-ai`):
 
-### Kolejność implementacji
-1. Usunięcie przycisków logowania z Index.tsx
-2. Skopiowanie logo do assets
-3. Modyfikacja pdfGenerator.ts z logo i poprawkami formatowania
+| Kompetencja | Kategoria |
+|-------------|-----------|
+| Wykorzystanie sztucznej inteligencji (AI) w codziennej pracy | soft |
+| Komunikacja z innymi | soft |
+| Praca zespołowa | soft |
+| Samodzielność | soft |
+| Organizacja pracy własnej | soft |
+| Doświadczenie / dojrzałość | soft |
+| Elastyczność / adaptacyjność | soft |
+
+Każda kompetencja będzie miała 5 poziomów z opisami dopasowanymi do kontekstu danego działu.
+
+---
+
+## 4. Nowe wymagania (`PositionRequirement`)
+
+Domyślne mapowanie `requiredLevel` dla nowych kompetencji:
+
+| Seniority | requiredLevel |
+|-----------|---------------|
+| junior | 1 |
+| mid | 2 |
+| senior | 3 |
+| lead | 4 |
+
+Każde nowe stanowisko dostanie powiązania ze wszystkimi kompetencjami swojego działu (zarówno istniejące twarde/specjalistyczne, jak i nowe miękkie).
+
+---
+
+## 5. Pliki do edycji
+
+| Plik | Zakres zmian |
+|------|-------------|
+| `src/data/departments.ts` | Aktualizacja listy `positions` dla web, mobile, qa, pm |
+| `src/data/competencies/web.ts` | Usunięcie `web-communication`, dodanie 7 nowych soft, nowe requirements dla python-developer i zaktualizowane dla reszty |
+| `src/data/competencies/mobile.ts` | Usunięcie starych pozycji z requirements, dodanie 7 nowych soft, requirements tylko dla flutter-developer j/m/s |
+| `src/data/competencies/qa.ts` | Usunięcie `qa-tools`, `qa-communication`, `qa-analytical`, dodanie 7 nowych soft, requirements tylko dla qa-specialist j/m/s |
+| `src/data/competencies/pm.ts` | Usunięcie `pm-communication`, `pm-leadership`, `pm-it-domain`, dodanie 7 nowych soft, requirements tylko dla project-manager j/m/s/lead |
+| `src/data/competencies/sales.ts` | Dodanie 7 nowych soft, requirements zaktualizowane o nowe kompetencje |
+
+Typ `SeniorityLevel` w `src/types/competency.ts` nie wymaga zmian - `lead` jest już zdefiniowany.
