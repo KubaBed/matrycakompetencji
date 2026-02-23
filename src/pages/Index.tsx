@@ -48,7 +48,7 @@ const Index = () => {
             <h1 className="font-bold text-lg text-foreground">{branding.appName}</h1>
           </div>
           
-{/* Logowanie tymczasowo wyłączone */}
+
         </div>
       </header>
 

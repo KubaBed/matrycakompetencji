@@ -1,10 +1,20 @@
-import { useState, useMemo } from 'react';
+import { useState, useMemo, useEffect } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardHeader, CardTitle, CardDescription } from '@/components/ui/card';
 import { Progress } from '@/components/ui/progress';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import { Alert, AlertDescription } from '@/components/ui/alert';
+import {
+  AlertDialog,
+  AlertDialogAction,
+  AlertDialogCancel,
+  AlertDialogContent,
+  AlertDialogDescription,
+  AlertDialogFooter,
+  AlertDialogHeader,
+  AlertDialogTitle,
+} from '@/components/ui/alert-dialog';
 import { getDepartmentById } from '@/data/departments';
 import { getCompetenciesForDepartment, getRequirementsForPosition } from '@/data/competencies';
 import { 
@@ -19,6 +29,9 @@ import {
 import { branding } from '@/config/branding';
 import { ArrowLeft, ArrowRight, ChevronDown, ChevronUp, CheckCircle2, FileText, ExternalLink } from 'lucide-react';
 import { cn } from '@/lib/utils';
+import { toast } from 'sonner';
+
+const validLevels: SeniorityLevel[] = ['junior', 'mid', 'senior', 'lead', 'expert'];
 
 const Assessment = () => {
   const { departmentId, positionId, level } = useParams<{ 
@@ -28,13 +41,41 @@ const Assessment = () => {
   }>();
   const navigate = useNavigate();
   
-  const [assessments, setAssessments] = useState<Record<string, number>>({});
-  const [activeCategory, setActiveCategory] = useState<string>('hard');
-  const [expandedCompetency, setExpandedCompetency] = useState<string | null>(null);
-  
   const department = departmentId ? getDepartmentById(departmentId) : null;
   const position = department?.positions.find(p => p.id === positionId);
   const seniorityLevel = level as SeniorityLevel;
+
+  // Validate URL params
+  const isValidLevel = level && validLevels.includes(level as SeniorityLevel);
+
+  const draftKey = `assessment-draft-${departmentId}-${positionId}-${level}`;
+
+  const [assessments, setAssessments] = useState<Record<string, number>>(() => {
+    try {
+      const saved = sessionStorage.getItem(draftKey);
+      return saved ? JSON.parse(saved) : {};
+    } catch {
+      return {};
+    }
+  });
+  const [activeCategory, setActiveCategory] = useState<string>('hard');
+  const [expandedCompetency, setExpandedCompetency] = useState<string | null>(null);
+  const [showConfirmDialog, setShowConfirmDialog] = useState(false);
+
+  // Redirect on invalid params
+  useEffect(() => {
+    if (!isValidLevel || !department || !position) {
+      toast.error('Nieprawidłowy link. Spróbuj ponownie.');
+      navigate('/');
+    }
+  }, [isValidLevel, department, position, navigate]);
+
+  // Auto-save to sessionStorage
+  useEffect(() => {
+    if (Object.keys(assessments).length > 0) {
+      sessionStorage.setItem(draftKey, JSON.stringify(assessments));
+    }
+  }, [assessments, draftKey]);
 
   // Get competencies based on department
   const competencies = useMemo(() => {
@@ -82,7 +123,6 @@ const Assessment = () => {
       ([competencyId, selfRating]) => ({ competencyId, selfRating })
     );
     
-    // Store in session storage for results page
     sessionStorage.setItem('assessment', JSON.stringify({
       departmentId,
       positionId,
@@ -91,10 +131,13 @@ const Assessment = () => {
       createdAt: new Date().toISOString()
     }));
     
+    // Clear draft after successful submit
+    sessionStorage.removeItem(draftKey);
+    
     navigate('/results');
   };
 
-  if (!department || !position) {
+  if (!department || !position || !isValidLevel) {
     return null;
   }
 
@@ -108,7 +151,7 @@ const Assessment = () => {
               <h1 className="font-bold text-lg text-foreground">{branding.appName}</h1>
             </div>
             
-            <Button variant="ghost" size="sm" onClick={() => navigate(-1)}>
+            <Button variant="ghost" size="sm" onClick={() => navigate(`/assessment/${departmentId}`)}>
               <ArrowLeft className="w-4 h-4 mr-2" />
               Powrót
             </Button>
@@ -137,24 +180,26 @@ const Assessment = () => {
             Wybierz poziom, który najlepiej opisuje Twoje umiejętności.
           </p>
 
-          {/* Link to detailed competency matrix */}
-          <Alert className="mb-8 border-primary/20 bg-primary/5">
-            <FileText className="h-4 w-4 text-primary" />
-            <AlertDescription className="flex items-center justify-between flex-wrap gap-2">
-              <span>
-                Potrzebujesz szczegółowych opisów kompetencji? Sprawdź pełną macierz.
-              </span>
-              <a 
-                href="https://drive.google.com/drive/folders/13Yq3cDAP0AR2lyrjOTKE2MPL_pd6KQ4_" 
-                target="_blank" 
-                rel="noopener noreferrer"
-                className="inline-flex items-center gap-1 text-primary font-medium hover:underline"
-              >
-                Otwórz macierz kompetencji
-                <ExternalLink className="w-3.5 h-3.5" />
-              </a>
-            </AlertDescription>
-          </Alert>
+          {/* Link to detailed competency matrix - conditional */}
+          {branding.competencyMatrixUrl && (
+            <Alert className="mb-8 border-primary/20 bg-primary/5">
+              <FileText className="h-4 w-4 text-primary" />
+              <AlertDescription className="flex items-center justify-between flex-wrap gap-2">
+                <span>
+                  Potrzebujesz szczegółowych opisów kompetencji? Sprawdź pełną macierz.
+                </span>
+                <a 
+                  href={branding.competencyMatrixUrl}
+                  target="_blank" 
+                  rel="noopener noreferrer"
+                  className="inline-flex items-center gap-1 text-primary font-medium hover:underline"
+                >
+                  Otwórz macierz kompetencji
+                  <ExternalLink className="w-3.5 h-3.5" />
+                </a>
+              </AlertDescription>
+            </Alert>
+          )}
 
           {/* Category Tabs */}
           <Tabs value={activeCategory} onValueChange={setActiveCategory}>
@@ -372,7 +417,7 @@ const Assessment = () => {
                     <Button
                       size="lg"
                       disabled={assessedCount < totalCompetencies}
-                      onClick={handleSubmit}
+                      onClick={() => setShowConfirmDialog(true)}
                       className="min-w-[200px]"
                     >
                       Zobacz wyniki
@@ -391,6 +436,22 @@ const Assessment = () => {
           })()}
         </div>
       </main>
+
+      {/* Confirm Dialog */}
+      <AlertDialog open={showConfirmDialog} onOpenChange={setShowConfirmDialog}>
+        <AlertDialogContent>
+          <AlertDialogHeader>
+            <AlertDialogTitle>Potwierdzenie samooceny</AlertDialogTitle>
+            <AlertDialogDescription>
+              Czy na pewno chcesz zakończyć samoocenę? Oceniłeś/aś {assessedCount} kompetencji.
+            </AlertDialogDescription>
+          </AlertDialogHeader>
+          <AlertDialogFooter>
+            <AlertDialogCancel>Wróć do edycji</AlertDialogCancel>
+            <AlertDialogAction onClick={handleSubmit}>Zobacz wyniki</AlertDialogAction>
+          </AlertDialogFooter>
+        </AlertDialogContent>
+      </AlertDialog>
     </div>
   );
 };

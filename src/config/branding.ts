@@ -4,7 +4,7 @@
 export const branding = {
   // Company info
   companyName: '',
-  appName: 'Competency Matrix',
+  appName: 'Matryca Kompetencji',
   tagline: 'Odkryj swoją ścieżkę rozwoju',
   
   // Logo (can be replaced with company logo)
@@ -14,6 +14,9 @@ export const branding = {
   // Contact
   supportEmail: '',
   websiteUrl: '',
+  
+  // External resources
+  competencyMatrixUrl: 'https://drive.google.com/drive/folders/13Yq3cDAP0AR2lyrjOTKE2MPL_pd6KQ4_',
   
   // Colors are defined in index.css - this is for reference
   colors: {

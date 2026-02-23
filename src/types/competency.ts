@@ -110,8 +110,8 @@ export const seniorityLevelConfig: Record<SeniorityLevel, { name: string; order:
 // Competency level display config
 export const competencyLevelConfig: Record<number, { name: string; color: string }> = {
   1: { name: 'Początkujący', color: 'bg-gray-500' },
-  2: { name: 'Rozwijający się', color: 'bg-slate-600' },
-  3: { name: 'Kompetentny', color: 'bg-blue-500' },
+  2: { name: 'Rozwijający się', color: 'bg-amber-500' },
+  3: { name: 'Kompetentny', color: 'bg-emerald-500' },
   4: { name: 'Zaawansowany', color: 'bg-indigo-500' },
   5: { name: 'Ekspert', color: 'bg-violet-500' },
 };

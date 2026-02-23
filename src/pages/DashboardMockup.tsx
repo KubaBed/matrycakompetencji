@@ -32,14 +32,14 @@ import { cn } from '@/lib/utils';
 
 // Mock data for the dashboard
 const mockEmployees = [
-  { id: '1', name: 'Anna Kowalska', email: 'anna.k@appchance.com', department: 'mobile', position: 'iOS Developer', level: 'Senior', lastAssessment: '2025-01-15', matchScore: 92 },
-  { id: '2', name: 'Piotr Nowak', email: 'piotr.n@appchance.com', department: 'mobile', position: 'Android Developer', level: 'Mid', lastAssessment: '2025-01-10', matchScore: 78 },
-  { id: '3', name: 'Maria Wiśniewska', email: 'maria.w@appchance.com', department: 'web', position: 'Frontend Developer', level: 'Senior', lastAssessment: '2025-01-18', matchScore: 88 },
-  { id: '4', name: 'Jan Kowalczyk', email: 'jan.k@appchance.com', department: 'pm', position: 'Project Manager', level: 'Lead', lastAssessment: '2025-01-05', matchScore: 95 },
-  { id: '5', name: 'Katarzyna Zielińska', email: 'kasia.z@appchance.com', department: 'qa', position: 'QA Engineer', level: 'Mid', lastAssessment: null, matchScore: null },
-  { id: '6', name: 'Tomasz Lewandowski', email: 'tomek.l@appchance.com', department: 'sales', position: 'Account Manager', level: 'Senior', lastAssessment: '2025-01-20', matchScore: 85 },
-  { id: '7', name: 'Agnieszka Dąbrowska', email: 'aga.d@appchance.com', department: 'mobile', position: 'Flutter Developer', level: 'Junior', lastAssessment: '2025-01-12', matchScore: 65 },
-  { id: '8', name: 'Michał Wójcik', email: 'michal.w@appchance.com', department: 'web', position: 'Backend Developer', level: 'Mid', lastAssessment: null, matchScore: null },
+  { id: '1', name: 'Anna Kowalska', email: 'anna.k@example.com', department: 'mobile', position: 'iOS Developer', level: 'Senior', lastAssessment: '2025-01-15', matchScore: 92 },
+  { id: '2', name: 'Piotr Nowak', email: 'piotr.n@example.com', department: 'mobile', position: 'Android Developer', level: 'Mid', lastAssessment: '2025-01-10', matchScore: 78 },
+  { id: '3', name: 'Maria Wiśniewska', email: 'maria.w@example.com', department: 'web', position: 'Frontend Developer', level: 'Senior', lastAssessment: '2025-01-18', matchScore: 88 },
+  { id: '4', name: 'Jan Kowalczyk', email: 'jan.k@example.com', department: 'pm', position: 'Project Manager', level: 'Lead', lastAssessment: '2025-01-05', matchScore: 95 },
+  { id: '5', name: 'Katarzyna Zielińska', email: 'kasia.z@example.com', department: 'qa', position: 'QA Engineer', level: 'Mid', lastAssessment: null, matchScore: null },
+  { id: '6', name: 'Tomasz Lewandowski', email: 'tomek.l@example.com', department: 'sales', position: 'Account Manager', level: 'Senior', lastAssessment: '2025-01-20', matchScore: 85 },
+  { id: '7', name: 'Agnieszka Dąbrowska', email: 'aga.d@example.com', department: 'mobile', position: 'Flutter Developer', level: 'Junior', lastAssessment: '2025-01-12', matchScore: 65 },
+  { id: '8', name: 'Michał Wójcik', email: 'michal.w@example.com', department: 'web', position: 'Backend Developer', level: 'Mid', lastAssessment: null, matchScore: null },
 ];
 
 const mockTeamStats = {
@@ -148,7 +148,7 @@ const DashboardMockup = () => {
 
           <div className="mt-8 p-4 bg-accent rounded-lg">
             <p className="text-sm font-medium mb-1">Zalogowany jako:</p>
-            <p className="text-sm text-muted-foreground">hr@appchance.com</p>
+            <p className="text-sm text-muted-foreground">hr@example.com</p>
             <Badge className="mt-2 bg-primary">HR Admin</Badge>
           </div>
         </aside>
@@ -233,10 +233,10 @@ const DashboardMockup = () => {
                             <div className="flex justify-between mb-1">
                               <span className="font-medium">{dept.name}</span>
                               <span className="text-sm text-muted-foreground">
-                                {Math.floor(Math.random() * 20 + 70)}%
+                                {[82, 88, 75, 91, 79][departments.indexOf(dept)] || 80}%
                               </span>
                             </div>
-                            <Progress value={Math.floor(Math.random() * 30 + 65)} className="h-2" />
+                            <Progress value={[78, 85, 70, 88, 74][departments.indexOf(dept)] || 75} className="h-2" />
                           </div>
                         </div>
                       ))}
