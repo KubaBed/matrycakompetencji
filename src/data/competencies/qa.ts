@@ -46,7 +46,7 @@ export const qaCompetencies: Competency[] = [
     id: 'qa-ai',
     name: 'Wykorzystanie sztucznej inteligencji (AI) w codziennej pracy',
     description: 'Umiejętność efektywnego korzystania z narzędzi AI w procesie QA',
-    category: 'soft',
+    category: 'hard',
     levels: [
       { level: 1, name: 'Początkujący', description: 'Zna podstawowe narzędzia AI. Używa ich do prostych zadań testowych.' },
       { level: 2, name: 'Rozwijający się', description: 'Korzysta z AI do generowania test case\'ów i analizy logów.' },
@@ -133,12 +133,11 @@ export const qaCompetencies: Competency[] = [
       { level: 5, name: 'Ekspert', description: 'Change agent w obszarze jakości.' },
     ],
   },
-  // Kompetencje specjalistyczne
   {
     id: 'qa-domain',
     name: 'Znajomość domeny technicznej',
     description: 'Rozumienie architektury aplikacji i technologii',
-    category: 'specialized',
+    category: 'hard',
     levels: [
       { level: 1, name: 'Początkujący', description: 'Podstawowa wiedza o web/mobile. Rozumie client-server architecture.' },
       { level: 2, name: 'Rozwijający się', description: 'Czyta logi. Rozumie bazy danych. Podstawy API. Environment setup.' },
@@ -151,7 +150,7 @@ export const qaCompetencies: Competency[] = [
     id: 'qa-security',
     name: 'Security testing',
     description: 'Testowanie bezpieczeństwa aplikacji',
-    category: 'specialized',
+    category: 'hard',
     levels: [
       { level: 1, name: 'Początkujący', description: 'Świadomość OWASP Top 10. Podstawowe testy autoryzacji.' },
       { level: 2, name: 'Rozwijający się', description: 'Testy injection. XSS detection. Session management testing.' },

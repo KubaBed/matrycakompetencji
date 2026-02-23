@@ -203,7 +203,7 @@ const Assessment = () => {
 
           {/* Category Tabs */}
           <Tabs value={activeCategory} onValueChange={setActiveCategory}>
-            <TabsList className="grid w-full grid-cols-3 mb-8">
+            <TabsList className="grid w-full grid-cols-2 mb-8">
               {Object.entries(categoryConfig).map(([key, config]) => {
                 const categoryCompetencies = competenciesByCategory[key] || [];
                 const assessed = categoryCompetencies.filter(c => assessments[c.id]).length;
