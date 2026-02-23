@@ -1,111 +1,56 @@
 
 
-# Plan: 6 etapow poprawek z audytu kodu
+# Plan: Aktualizacja kategorii kompetencji, usunięcie Sales i Python Developer, naprawa PDF
 
-Prace podzielone na 6 niezaleznych etapow, kazdy odpowiadajacy jednemu promptowi.
+## 1. Zmiana kategorii "AI" na twarda + przeniesienie specjalistycznych do twardych
 
----
+We wszystkich plikach kompetencji (web, mobile, qa, pm):
+- Kompetencja "Wykorzystanie sztucznej inteligencji (AI)..." zmiana `category: 'soft'` na `category: 'hard'`
+- Kompetencje z `category: 'specialized'` zmiana na `category: 'hard'`:
+  - WEB: `web-cloud`, `web-security`
+  - MOBILE: `platform-ios`, `platform-android`
+  - QA: `qa-domain`, `qa-security`
+  - PM: brak specjalistycznych - bez zmian
 
-## Etap 1: Krytyczne bugi - walidacja i odpornosc na bledy
+## 2. Usunięcie kategorii 'specialized' z systemu
 
-### 1a. Auto-save do sessionStorage (Assessment.tsx)
-- W `handleRating` zapisuj `assessments` do sessionStorage z kluczem `assessment-draft-{departmentId}-{positionId}-{level}`
-- Przy montowaniu komponentu (`useEffect`) odczytuj draft z sessionStorage i ustaw jako stan poczatkowy
-- W `handleSubmit` usun draft z sessionStorage po zapisie finalnych danych
+- `src/types/competency.ts`: Zmiana `CompetencyCategory = 'hard' | 'soft' | 'specialized'` na `'hard' | 'soft'`
+- Usunięcie wpisu `specialized` z `categoryConfig`
+- `src/pages/Assessment.tsx`: Zmiana `grid-cols-3` na `grid-cols-2` w TabsList (bo teraz sa tylko 2 kategorie)
 
-### 1b. Walidacja parametrow URL (Assessment.tsx)
-- Sprawdzenie czy `level` jest jednym z `junior | mid | senior | lead | expert`
-- Jesli `department` jest null lub `position` nie istnieje - zamiast `return null` (linia 97-99) przekieruj na `/` z toast "Nieprawidlowy link. Sprobuj ponownie."
-- Import `toast` z sonner
+## 3. Usunięcie dzialu Sales
 
-### 1c. Bezpieczny JSON.parse (Results.tsx)
-- Owinienie `JSON.parse(stored)` (linia 38) w try/catch
-- W catch: `sessionStorage.removeItem('assessment')`, toast z bledem, `navigate('/')`
+- `src/data/departments.ts`: Usunięcie wpisu Sales z tablicy `departments`, usunięcie importu `salesIcon`
+- `src/types/competency.ts`: Zmiana `DepartmentId = 'sales' | 'pm' | 'mobile' | 'web' | 'qa'` na `'pm' | 'mobile' | 'web' | 'qa'`
+- `src/data/competencies/index.ts`: Usunięcie importow i wpisow `sales` z `competenciesByDepartment` i `requirementsByDepartment`, usunięcie re-exportu
+- Plik `src/data/competencies/sales.ts` moze zostac, ale nie bedzie nigdzie uzywany
 
-### 1d. Jawna sciezka powrotu (Assessment.tsx)
-- Zmiana `navigate(-1)` (linia 111) na `navigate(`/assessment/${departmentId}`)`
+## 4. Usunięcie Python Developer z dzialu Web
 
----
+- `src/data/departments.ts`: Usunięcie wpisu `python-developer` z listy positions dla 'web'
+- `src/data/competencies/web.ts`: Usunięcie requirements dla `python-developer` (linie 219-223), usunięcie 'lead' z typowania `genReqs` (bo zostaja tylko j/m/s)
 
-## Etap 2: Strona 404 i spojnosc jezykowa
+## 5. Naprawa PDF - polskie znaki
 
-### Zmiany w NotFound.tsx:
-- Polskie teksty: "Ups! Strona nie zostala znaleziona" i "Wroc do strony glownej"
-- Uzycie `Button` z `lucide-react Home` zamiast zwyklego `<a>`
-- Usunecie `console.error` z `useEffect` (mozna usunac caly useEffect)
+Problem widoczny na screenach: jsPDF uzywa czcionki `helvetica` ktora nie wspiera polskich znakow (ogonki: ą, ę, ś, ć, ź, ż, ó, ł, ń). Tekst renderuje sie jako `&a&d&a...` zamiast poprawnych liter.
 
----
+Rozwiazanie: Zamiana polskich znakow diakrytycznych na ich ASCII odpowiedniki w tekscie PDF. To podejscie jest prostsze niz osadzanie czcionki i juz czesciowo stosowane (np. `Podsumowanie wynikow` zamiast `wyników`).
 
-## Etap 3: Kolory i czyszczenie CSS
+Zmiany w `src/utils/pdfGenerator.ts`:
+- Dodanie funkcji `removeDiacritics(text: string)` ktora zamienia polskie znaki na ASCII (ą->a, ę->e, ś->s, ć->c, ź->z, ż->z, ó->o, ł->l, ń->n)
+- Uzycie tej funkcji we wszystkich miejscach gdzie tekst trafia do PDF: nazwy kompetencji, kategorie, opisy, nazwy w tabeli
 
-### 3a. Usuniecie nieuzywanych klas CSS (index.css)
-- Usuniecie `.competency-level-1` do `.competency-level-5` (linie 126-144)
+## Pliki do edycji
 
-### 3b. Aktualizacja kolorow w competencyLevelConfig (types/competency.ts)
-- Level 1: `bg-gray-500` (bez zmian)
-- Level 2: `bg-slate-600` -> `bg-amber-500`
-- Level 3: `bg-blue-500` -> `bg-emerald-500`
-- Level 4: `bg-indigo-500` (bez zmian)
-- Level 5: `bg-violet-500` (bez zmian)
-
----
-
-## Etap 4: Spojnosc brandingu (PL vs EN)
-
-### 4a. branding.ts
-- `appName: 'Competency Matrix'` -> `appName: 'Matryca Kompetencji'`
-
-### 4b. index.html
-- `<title>Matryca Kompetencji</title>`
-- og:title i twitter:title -> "Matryca Kompetencji"
-- Usuniecie/wyczyszczenie OG image URL z lovable.dev (usuniecie meta tagow og:image i twitter:image)
-
-### 4c. Index.tsx
-- Usuniecie komentarza `{/* Logowanie tymczasowo wylaczone */}` (linia 51)
-
----
-
-## Etap 5: UX - potwierdzenie i nawigacja
-
-### 5a. AlertDialog przed wyslaniem (Assessment.tsx)
-- Import AlertDialog z shadcn/ui
-- Stan `showConfirmDialog`
-- Przycisk "Zobacz wyniki" otwiera dialog zamiast od razu `handleSubmit`
-- Dialog: tytul "Potwierdzenie samooceny", tresc z liczba ocenionych kompetencji, przyciski "Wroc do edycji" / "Zobacz wyniki"
-
-### 5b. Przycisk "Popraw ocene" (Results.tsx)
-- Obok przycisku "Start" dodac "Popraw ocene" z ikona ArrowLeft
-- Nawigacja do `/assessment/${assessment.departmentId}/${assessment.positionId}/${assessment.seniorityLevel}`
-
-### 5c. Responsywny tekst (PositionSelect.tsx)
-- Linia 170: zamiana "z listy po lewej" na dwa span-y:
-  - `<span className="hidden lg:inline">z listy po lewej</span>`
-  - `<span className="lg:hidden">z listy powyzej</span>`
-
----
-
-## Etap 6: Bezpieczenstwo i dane mock
-
-### 6a. Fikcyjne emaile (DashboardMockup.tsx)
-- Zamiana wszystkich `@appchance.com` na `@example.com` (linie 36-43 + linia 151)
-
-### 6b. URL Google Drive do branding.ts
-- Dodanie pola `competencyMatrixUrl` do `branding.ts`
-- W Assessment.tsx: import z branding, warunkowe renderowanie Alert (jesli URL pusty - nie wyswietlaj)
-
-### 6c. Stale wartosci mock (DashboardMockup.tsx)
-- Zamiana `Math.floor(Math.random() * 20 + 70)` i `Math.floor(Math.random() * 30 + 65)` (linie 236-239) na stale wartosci per dzial (np. 82%, 88%, 75%, 91%, 79%)
-
----
-
-## Pliki do edycji (podsumowanie)
-
-| Etap | Pliki |
-|------|-------|
-| 1 | `src/pages/Assessment.tsx`, `src/pages/Results.tsx` |
-| 2 | `src/pages/NotFound.tsx` |
-| 3 | `src/index.css`, `src/types/competency.ts` |
-| 4 | `src/config/branding.ts`, `index.html`, `src/pages/Index.tsx` |
-| 5 | `src/pages/Assessment.tsx`, `src/pages/Results.tsx`, `src/pages/PositionSelect.tsx` |
-| 6 | `src/pages/DashboardMockup.tsx`, `src/config/branding.ts`, `src/pages/Assessment.tsx` |
+| Plik | Zmiana |
+|------|--------|
+| `src/types/competency.ts` | Usunięcie 'sales' z DepartmentId, 'specialized' z CompetencyCategory i categoryConfig |
+| `src/data/departments.ts` | Usunięcie Sales, usunięcie Python Developer |
+| `src/data/competencies/index.ts` | Usunięcie importow i wpisow sales |
+| `src/data/competencies/web.ts` | AI -> hard, specialized -> hard, usunięcie python-developer requirements |
+| `src/data/competencies/mobile.ts` | AI -> hard, specialized -> hard |
+| `src/data/competencies/qa.ts` | AI -> hard, specialized -> hard |
+| `src/data/competencies/pm.ts` | AI -> hard |
+| `src/pages/Assessment.tsx` | grid-cols-3 -> grid-cols-2 |
+| `src/utils/pdfGenerator.ts` | Funkcja removeDiacritics + zastosowanie |
 
