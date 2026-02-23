@@ -59,7 +59,7 @@ export const pmCompetencies: Competency[] = [
     id: 'pm-ai',
     name: 'Wykorzystanie sztucznej inteligencji (AI) w codziennej pracy',
     description: 'Umiejętność efektywnego korzystania z narzędzi AI w zarządzaniu projektami',
-    category: 'soft',
+    category: 'hard',
     levels: [
       { level: 1, name: 'Początkujący', description: 'Zna podstawowe narzędzia AI. Używa ich do prostych zadań PM.' },
       { level: 2, name: 'Rozwijający się', description: 'Korzysta z AI do raportowania, notatek i analizy danych.' },

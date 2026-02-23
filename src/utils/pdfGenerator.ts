@@ -9,6 +9,19 @@ import {
 } from '@/types/competency';
 import { branding } from '@/config/branding';
 
+// Remove Polish diacritics for PDF compatibility (helvetica doesn't support them)
+const removeDiacritics = (text: string): string => {
+  const map: Record<string, string> = {
+    'ą': 'a', 'Ą': 'A', 'ć': 'c', 'Ć': 'C', 'ę': 'e', 'Ę': 'E',
+    'ł': 'l', 'Ł': 'L', 'ń': 'n', 'Ń': 'N', 'ó': 'o', 'Ó': 'O',
+    'ś': 's', 'Ś': 'S', 'ź': 'z', 'Ź': 'Z', 'ż': 'z', 'Ż': 'Z',
+  };
+  return text.replace(/[ąĄćĆęĘłŁńŃóÓśŚźŹżŻ]/g, ch => map[ch] || ch);
+};
+
+// Wrapper: sanitize all text going to PDF
+const t = (text: string): string => removeDiacritics(text);
+
 // Base64 encoded Appchance logo (SVG converted for jsPDF)
 const APPCHANCE_LOGO_BASE64 = 'data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHZpZXdCb3g9IjAgMCAzMiAzMiI+PHBhdGggZmlsbD0iI0U0MTg0NCIgZD0iTTMxLjIsMTguM2MtMC41LTAuNi0wLjgtMS40LTAuOC0yLjFzMC4yLTEuNiwwLjctMi4xYzAuMi0wLjIsMC4zLTAuNSwwLjQtMC44YzAuMS0wLjMsMC4xLTAuNiwwLTAuOWMtMC4yLTAuOS0wLjUtMS43LTAuOC0yLjZDMzAuMyw5LDMwLDguMiwyOS42LDcuNWMtMC4yLTAuMi0wLjQtMC41LTAuNy0wLjdjLTAuMi0wLjItMC42LTAuMi0wLjgtMC4yYy0wLjctMC4xLTEuNS0wLjQtMi0wLjljLTAuNi0wLjYtMC44LTEuMy0wLjktMi4xYzAtMC4zLTAuMS0wLjYtMC4yLTAuOWMtMC4yLTAuMi0wLjMtMC41LTAuNy0wLjdjLTAuNy0wLjQtMS40LTAuOC0yLjEtMS4yYy0wLjgtMC4zLTEuNi0wLjctMi41LTAuOGMtMC4zLTAuMS0wLjYtMC4xLTAuOSwwYy0wLjMsMC4xLTAuNiwwLjItMC44LDAuNGMtMC42LDAuNS0xLjMsMC44LTIuMSwwLjhjLTAuNywwLTEuNS0wLjItMi4xLTAuOGMtMC4yLTAuMi0wLjUtMC4zLTAuOC0wLjRjLTAuMy0wLjEtMC42LTAuMS0wLjksMGMtMC44LDAuMi0xLjcsMC41LTIuNSwwLjhDOC45LDEuMyw4LjMsMS42LDcuNiwyLjFDNy4zLDIuMyw3LjEsMi41LDYuOSwyLjdDNi44LDMsNi43LDMuMyw2LjcsMy42QzYuNiw0LjQsNi4zLDUuMSw1LjgsNS43Yy0wLjYsMC42LTEuMywwLjktMi4xLDFjLTAuMiwwLTAuNiwwLjEtMC44LDAuMkMyLjcsNywyLjQsNy4yLDIuMyw3LjVDMS45LDguMiwxLjUsOSwxLjIsOS43Yy0wLjMsMC44LTAuNywxLjctMC44LDIuNmMtMC4xLDAuMi0wLjEsMC42LDAsMC44czAuMiwwLjYsMC40LDAuN2MwLjUsMC42LDAuOCwxLjQsMC44LDIuMWMwLDAuOC0wLjMsMS42LTAuOCwyLjFjLTAuMiwwLjItMC4zLDAuNS0wLjQsMC43Yy0wLjEsMC4yLTAuMSwwLjYsMCwwLjhjMC4yLDAuOSwwLjUsMS44LDAuOCwyLjZzMC43LDEuNiwxLjIsMi4yYzAuMiwwLjIsMC4zLDAuNCwwLjYsMC42YzAuMiwwLjIsMC41LDAuMiwwLjgsMC4yYzAuNywwLDEuNSwwLjQsMi4xLDAuOWMwLjYsMC42LDAuOCwxLjMsMC45LDIuMWMwLDAuMywwLjEsMC42LDAuMiwwLjljMC4yLDAuMiwwLjMsMC41LDAuNywwLjdjMC43LDAuNCwxLjQsMC44LDIuMSwxLjJjMC44LDAuMywxLjYsMC43LDIuNSwwLjhjMC4zLDAuMSwwLjYsMC4xLDAuOSwwczAuNi0wLjIsMC44LTAuNGMwLjYtMC41LDEuMy0wLjgsMi4xLTAuOGMwLjcsMCwxLjUsMC4yLDIuMSwwLjhjMC4yLDAuMiwwLjUsMC4zLDAuOCwwLjRzMC42LDAuMSwwLjksMGMwLjgtMC4yLDEuNy0wLjUsMi41LTAuOGMwLjctMC4zLDEuNS0wLjcsMi4xLTEuMmMwLjItMC4yLDAuNS0wLjQsMC43LTAuN2MwLjItMC4yLDAuMi0wLjYsMC4yLTAuOWMwLjEtMC43LDAuNC0xLjUsMC45LTIuMWMwLjYtMC42LDEuMy0wLjksMi4xLTAuOWMwLjIsMCwwLjYtMC4xLDAuOC0wLjJjMC4yLTAuMiwwLjQtMC4zLDAuNi0wLjZjMC40LTAuNywwLjgtMS41LDEuMi0yLjJjMC4zLTAuOCwwLjctMS43LDAuOC0yLjZjMC4xLTAuMiwwLjEtMC42LDAtMC44QzMxLjUsMTguOCwzMS40LDE4LjUsMzEuMiwxOC4zeiBNMjQuNywyNS4yYy0xLjIsMS4yLTIuNiwyLjEtNCwyLjhjLTEuNSwwLjYtMy4xLDAuOS00LjgsMC45cy0zLjMtMC4zLTQuOC0xYy0xLjUtMC43LTIuOS0xLjYtNC0yLjhDNiwyMy45LDUsMjIuNSw0LjQsMjFjLTAuNi0xLjUtMC45LTMuMi0wLjktNC45czAuMy0zLjQsMC45LTQuOUM1LDkuNyw2LDguMyw3LjEsNy4xczIuNi0yLjEsNC0yLjhjMS42LTAuNywzLjEtMSw0LjgtMXMzLjMsMC4zLDQuOCwxYzEuNSwwLjcsMi45LDEuNiw0LDIuOGMxLjIsMS4yLDIuMSwyLjYsMi43LDQuMXMxLDMuMiwwLjksNC45YzAsMS42LTAuMywzLjQtMC45LDQuOUMyNi45LDIyLjUsMjYsMjMuOSwyNC43LDI1LjJ6IE0xNS45LDguNGMtMSwwLTIsMC4yLTIuOSwwLjZjLTAuOSwwLjQtMS43LDEtMi41LDEuNmMtMC43LDAuNy0xLjIsMS42LTEuNiwyLjZjLTAuNCwwLjktMC42LDItMC42LDNjMCwyLjEsMC44LDQsMi4zLDUuNEMxMiwyMywxNCwyMy44LDE2LDIzLjhoMS4yYzAuMSwwLDAuMi0wLjEsMC4yLTAuMWMwLjEtMC4xLDAuMS0wLjIsMC4xLTAuMnYtMi43YzAtMC4xLDAtMC4yLTAuMS0wLjJjLTAuMS0wLjEtMC4yLTAuMS0wLjItMC4xSDE2Yy0xLjEsMC0yLjEtMC40LTIuOS0xLjJjLTAuNy0wLjctMS4yLTEuNy0xLjMtMi44YzAtMC42LDAuMS0xLjIsMC4yLTEuN2MwLjItMC42LDAuNS0xLjEsMC45LTEuNXMwLjktMC43LDEuNC0xYzAuNS0wLjIsMS4xLTAuMywxLjYtMC4zYzEuMSwwLjEsMi4xLDAuNSwyLjksMS4zYzAuNywwLjgsMS4yLDEuOSwxLjIsM3Y3LjJjMCwwLjEsMCwwLjEsMCwwLjJzMC4xLDAuMSwwLjEsMC4yYzAsMCwwLjEsMC4xLDAuMiwwLjFzMC4xLDAsMC4yLDBoMi42YzAuMSwwLDAuMi0wLjEsMC4yLTAuMWMwLjEtMC4xLDAuMS0wLjIsMC4xLTAuMnYtNy4yYzAtMi4xLTAuNy00LTIuMS01LjVDMTkuOSw5LjMsMTgsOC41LDE1LjksOC40TDE1LjksOC40eiIvPjwvc3ZnPg==';
 
@@ -84,7 +97,7 @@ export const generatePDFReport = async (data: PDFReportData): Promise<void> => {
     doc.setTextColor(255, 255, 255);
     doc.setFontSize(10);
     doc.setFont('helvetica', 'normal');
-    doc.text(title, margin + 18, 13);
+    doc.text(t(title), margin + 18, 13);
   };
 
   // ============ PAGE 1: Title Page ============
@@ -109,7 +122,7 @@ export const generatePDFReport = async (data: PDFReportData): Promise<void> => {
   
   doc.setFontSize(11);
   doc.setFont('helvetica', 'normal');
-  doc.text(branding.appName, pageWidth / 2, 64, { align: 'center' });
+  doc.text(t(branding.appName), pageWidth / 2, 64, { align: 'center' });
 
   // Main title
   yPosition = 95;
@@ -123,16 +136,16 @@ export const generatePDFReport = async (data: PDFReportData): Promise<void> => {
   doc.setFontSize(16);
   doc.setFont('helvetica', 'normal');
   if (data.employeeName) {
-    doc.text(data.employeeName, pageWidth / 2, yPosition, { align: 'center' });
+    doc.text(t(data.employeeName), pageWidth / 2, yPosition, { align: 'center' });
     yPosition += 14;
   }
   
   doc.setFontSize(14);
-  doc.text(data.positionName, pageWidth / 2, yPosition, { align: 'center' });
+  doc.text(t(data.positionName), pageWidth / 2, yPosition, { align: 'center' });
   yPosition += 12;
   doc.setFontSize(12);
   doc.setTextColor(100, 100, 100);
-  doc.text(`${seniorityLevelConfig[data.seniorityLevel].name} | ${data.departmentName}`, pageWidth / 2, yPosition, { align: 'center' });
+  doc.text(t(`${seniorityLevelConfig[data.seniorityLevel].name} | ${data.departmentName}`), pageWidth / 2, yPosition, { align: 'center' });
 
   // Score box
   yPosition = 170;
@@ -146,7 +159,7 @@ export const generatePDFReport = async (data: PDFReportData): Promise<void> => {
   
   doc.setFontSize(12);
   doc.setFont('helvetica', 'normal');
-  doc.text('Dopasowanie do stanowiska', pageWidth / 2, yPosition + 48, { align: 'center' });
+  doc.text(t('Dopasowanie do stanowiska'), pageWidth / 2, yPosition + 48, { align: 'center' });
 
   // Date
   yPosition = 245;
@@ -221,7 +234,7 @@ export const generatePDFReport = async (data: PDFReportData): Promise<void> => {
   
   if (data.strengths.length > 0) {
     data.strengths.forEach((s) => {
-      doc.text(`• ${s.competencyName} (+${s.gap} powyzej wymagan)`, margin + 5, yPosition);
+      doc.text(t(`• ${s.competencyName} (+${s.gap} powyzej wymagan)`), margin + 5, yPosition);
       yPosition += 9;
     });
   } else {
@@ -245,11 +258,11 @@ export const generatePDFReport = async (data: PDFReportData): Promise<void> => {
     data.developmentAreas.forEach((d) => {
       const devComp = data.competencies.find(c => c.id === d.competencyId);
       const nextLevelDesc = devComp?.levels.find(l => l.level === d.requiredLevel)?.description || '';
-      doc.text(`• ${d.competencyName} (${d.gap} ponizej wymagan)`, margin + 5, yPosition);
+      doc.text(t(`• ${d.competencyName} (${d.gap} ponizej wymagan)`), margin + 5, yPosition);
       yPosition += 7;
       doc.setFontSize(9);
       doc.setTextColor(100, 100, 100);
-      const descLines = doc.splitTextToSize(`  Cel: ${nextLevelDesc}`, pageWidth - 2 * margin - 15);
+      const descLines = doc.splitTextToSize(t(`  Cel: ${nextLevelDesc}`), pageWidth - 2 * margin - 15);
       descLines.forEach((line: string) => {
         doc.text(line, margin + 10, yPosition);
         yPosition += 6;
@@ -277,8 +290,8 @@ export const generatePDFReport = async (data: PDFReportData): Promise<void> => {
 
   // Results table
   const tableData = data.results.map(r => [
-    r.competencyName,
-    categoryConfig[r.category].name,
+    t(r.competencyName),
+    t(categoryConfig[r.category].name),
     String(r.selfRating),
     String(r.requiredLevel),
     r.gap > 0 ? `+${r.gap}` : String(r.gap)
@@ -350,7 +363,7 @@ export const generatePDFReport = async (data: PDFReportData): Promise<void> => {
       doc.setFontSize(12);
       doc.setFont('helvetica', 'bold');
       doc.setTextColor(227, 30, 74);
-      doc.text(`${index + 1}. ${area.competencyName}`, margin, yPosition);
+      doc.text(t(`${index + 1}. ${area.competencyName}`), margin, yPosition);
       yPosition += 10;
       
       doc.setFontSize(10);
@@ -361,7 +374,7 @@ export const generatePDFReport = async (data: PDFReportData): Promise<void> => {
       
       if (targetLevel) {
         doc.setFontSize(9);
-        const goalLines = doc.splitTextToSize(`Oczekiwania: ${targetLevel.description}`, pageWidth - 2 * margin - 15);
+        const goalLines = doc.splitTextToSize(t(`Oczekiwania: ${targetLevel.description}`), pageWidth - 2 * margin - 15);
         goalLines.forEach((line: string) => {
           doc.text(line, margin + 5, yPosition);
           yPosition += 6;

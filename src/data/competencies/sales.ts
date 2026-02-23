@@ -177,7 +177,7 @@ export const salesCompetencies: Competency[] = [
     id: 'sales-industry',
     name: 'Znajomość branży IT',
     description: 'Rozumienie rynku IT, trendów technologicznych i potrzeb klientów',
-    category: 'specialized',
+    category: 'hard',
     levels: [
       { level: 1, name: 'Początkujący', description: 'Podstawowa znajomość oferty firmy. Rozumie główne usługi.' },
       { level: 2, name: 'Rozwijający się', description: 'Zna konkurencję. Rozumie podstawowe technologie. Śledzi trendy.' },

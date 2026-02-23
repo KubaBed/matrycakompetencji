@@ -1,10 +1,10 @@
 // Competency Matrix Types for Appchance
 
-export type DepartmentId = 'sales' | 'pm' | 'mobile' | 'web' | 'qa';
+export type DepartmentId = 'pm' | 'mobile' | 'web' | 'qa';
 
 export type SeniorityLevel = 'junior' | 'mid' | 'senior' | 'lead' | 'expert';
 
-export type CompetencyCategory = 'hard' | 'soft' | 'specialized';
+export type CompetencyCategory = 'hard' | 'soft';
 
 export interface Department {
   id: DepartmentId;
@@ -120,5 +120,4 @@ export const competencyLevelConfig: Record<number, { name: string; color: string
 export const categoryConfig: Record<CompetencyCategory, { name: string; description: string }> = {
   hard: { name: 'Kompetencje Twarde', description: 'Umiejętności techniczne i specjalistyczne' },
   soft: { name: 'Kompetencje Miękkie', description: 'Umiejętności interpersonalne i komunikacyjne' },
-  specialized: { name: 'Kompetencje Specjalistyczne', description: 'Wiedza domenowa i branżowa' },
 };

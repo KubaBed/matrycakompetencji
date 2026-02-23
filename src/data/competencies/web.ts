@@ -72,7 +72,7 @@ export const webCompetencies: Competency[] = [
     id: 'web-ai',
     name: 'Wykorzystanie sztucznej inteligencji (AI) w codziennej pracy',
     description: 'Umiejętność efektywnego korzystania z narzędzi AI w procesie developmentu',
-    category: 'soft',
+    category: 'hard',
     levels: [
       { level: 1, name: 'Początkujący', description: 'Zna podstawowe narzędzia AI (ChatGPT, Copilot). Używa ich do prostych zadań.' },
       { level: 2, name: 'Rozwijający się', description: 'Regularnie korzysta z AI do code review, generowania kodu i dokumentacji.' },
@@ -159,12 +159,11 @@ export const webCompetencies: Competency[] = [
       { level: 5, name: 'Ekspert', description: 'Change agent. Napędza innowacje. Buduje kulturę ciągłego doskonalenia.' },
     ],
   },
-  // Kompetencje specjalistyczne
   {
     id: 'web-cloud',
     name: 'Cloud i DevOps',
     description: 'AWS, GCP, Azure, Docker, Kubernetes, CI/CD',
-    category: 'specialized',
+    category: 'hard',
     levels: [
       { level: 1, name: 'Początkujący', description: 'Podstawy cloud (S3, EC2). Docker basics. Rozumie CI/CD pipeline.' },
       { level: 2, name: 'Rozwijający się', description: 'Deploy aplikacji. Konfiguracja prostych pipeline. Monitoring basics.' },
@@ -177,7 +176,7 @@ export const webCompetencies: Competency[] = [
     id: 'web-security',
     name: 'Bezpieczeństwo aplikacji',
     description: 'OWASP, secure coding, autentykacja i autoryzacja',
-    category: 'specialized',
+    category: 'hard',
     levels: [
       { level: 1, name: 'Początkujący', description: 'Rozumie podstawowe zagrożenia (XSS, SQL injection). Bezpieczne hasła.' },
       { level: 2, name: 'Rozwijający się', description: 'Implementuje autentykację. Input validation. HTTPS.' },
@@ -191,7 +190,7 @@ export const webCompetencies: Competency[] = [
 const webCompetencyIds = webCompetencies.map(c => c.id);
 
 // Helper to generate requirements for a position across all competencies
-function genReqs(positionId: string, seniorityLevel: 'junior' | 'mid' | 'senior' | 'lead', level: number): PositionRequirement[] {
+function genReqs(positionId: string, seniorityLevel: 'junior' | 'mid' | 'senior', level: number): PositionRequirement[] {
   return webCompetencyIds.map(competencyId => ({
     positionId,
     seniorityLevel,
@@ -216,9 +215,4 @@ export const webRequirements: PositionRequirement[] = [
   ...genReqs('fullstack-developer', 'mid', 2),
   ...genReqs('fullstack-developer', 'senior', 3),
 
-  // Python Developer
-  ...genReqs('python-developer', 'junior', 1),
-  ...genReqs('python-developer', 'mid', 2),
-  ...genReqs('python-developer', 'senior', 3),
-  ...genReqs('python-developer', 'lead', 4),
 ];

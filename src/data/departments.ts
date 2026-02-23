@@ -1,23 +1,11 @@
 import { Department } from '@/types/competency';
 
-import salesIcon from '@/assets/departments/sales.png';
 import pmIcon from '@/assets/departments/pm.png';
 import mobileIcon from '@/assets/departments/mobile.png';
 import webIcon from '@/assets/departments/web.png';
 import qaIcon from '@/assets/departments/qa.png';
 
 export const departments: Department[] = [
-  {
-    id: 'sales',
-    name: 'Sales',
-    description: 'Zespół sprzedaży odpowiedzialny za pozyskiwanie klientów i budowanie relacji biznesowych',
-    icon: salesIcon,
-    positions: [
-      { id: 'sales-rep', name: 'Sales Representative', departmentId: 'sales', levels: ['junior', 'mid', 'senior'] },
-      { id: 'account-manager', name: 'Account Manager', departmentId: 'sales', levels: ['mid', 'senior', 'lead'] },
-      { id: 'sales-director', name: 'Sales Director', departmentId: 'sales', levels: ['senior', 'lead', 'expert'] },
-    ],
-  },
   {
     id: 'pm',
     name: 'Project Management',
@@ -45,7 +33,6 @@ export const departments: Department[] = [
       { id: 'frontend-developer', name: 'Front-End Developer', departmentId: 'web', levels: ['junior', 'mid', 'senior'] },
       { id: 'backend-developer', name: 'Backend Developer', departmentId: 'web', levels: ['junior', 'mid', 'senior'] },
       { id: 'fullstack-developer', name: 'Fullstack Developer', departmentId: 'web', levels: ['junior', 'mid', 'senior'] },
-      { id: 'python-developer', name: 'Python Developer', departmentId: 'web', levels: ['junior', 'mid', 'senior', 'lead'] },
     ],
   },
   {

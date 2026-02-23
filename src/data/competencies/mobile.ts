@@ -59,7 +59,7 @@ export const mobileCompetencies: Competency[] = [
     id: 'mobile-ai',
     name: 'Wykorzystanie sztucznej inteligencji (AI) w codziennej pracy',
     description: 'Umiejętność efektywnego korzystania z narzędzi AI w developmencie mobilnym',
-    category: 'soft',
+    category: 'hard',
     levels: [
       { level: 1, name: 'Początkujący', description: 'Zna podstawowe narzędzia AI. Używa ich do prostych zadań.' },
       { level: 2, name: 'Rozwijający się', description: 'Regularnie korzysta z AI do code review i generowania kodu.' },
@@ -146,12 +146,11 @@ export const mobileCompetencies: Competency[] = [
       { level: 5, name: 'Ekspert', description: 'Change agent. Napędza innowacje.' },
     ],
   },
-  // Specialized Skills
   {
     id: 'platform-ios',
     name: 'iOS Platform',
     description: 'Znajomość specyfiki platformy iOS i ekosystemu Apple',
-    category: 'specialized',
+    category: 'hard',
     levels: [
       { level: 1, name: 'Początkujący', description: 'Podstawy Swift/SwiftUI' },
       { level: 2, name: 'Rozwijający się', description: 'UIKit, Core Data podstawy' },
@@ -164,7 +163,7 @@ export const mobileCompetencies: Competency[] = [
     id: 'platform-android',
     name: 'Android Platform',
     description: 'Znajomość specyfiki platformy Android i ekosystemu Google',
-    category: 'specialized',
+    category: 'hard',
     levels: [
       { level: 1, name: 'Początkujący', description: 'Podstawy Kotlin, Compose' },
       { level: 2, name: 'Rozwijający się', description: 'Android SDK, Room DB' },
