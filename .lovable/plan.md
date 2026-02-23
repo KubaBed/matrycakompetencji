@@ -1,99 +1,111 @@
 
-# Plan: Aktualizacja danych Matrycy Kompetencji (ewaluacja 2026)
 
-## Podsumowanie
+# Plan: 6 etapow poprawek z audytu kodu
 
-Aktualizacja TYLKO plików z danymi - bez zmian w UI. Zmiany obejmuja nowe stanowiska, usunięcie starych kompetencji, dodanie 7 nowych kompetencji miękkich i powiązanie ich z odpowiednimi stanowiskami.
-
----
-
-## 1. Aktualizacja stanowisk (`src/data/departments.ts`)
-
-### WEB - zmiana listy pozycji
-| Stare | Nowe |
-|-------|------|
-| Frontend Developer (j/m/s/lead) | Front-End Developer (j/m/s) |
-| Backend Developer (j/m/s/lead) | Backend Developer (j/m/s) |
-| Fullstack Developer (m/s/lead) | Fullstack Developer (j/m/s) |
-| Web Architect (s/lead/expert) | Python Developer (j/m/s/lead) -- NOWE |
-
-### MOBILE - redukcja do jednego stanowiska
-| Stare | Nowe |
-|-------|------|
-| iOS Developer, Android Developer, Flutter Developer, Mobile Architect | Flutter Developer (j/m/s) |
-
-### QA - redukcja do jednego stanowiska
-| Stare | Nowe |
-|-------|------|
-| QA Engineer, QA Automation Engineer, QA Lead | Quality Assurance Specialist (j/m/s) |
-
-### PM - redukcja do jednego stanowiska
-| Stare | Nowe |
-|-------|------|
-| Project Coordinator, Project Manager, Program Manager | Project Manager (j/m/s/lead) |
-
-### SALES - bez zmian w stanowiskach
+Prace podzielone na 6 niezaleznych etapow, kazdy odpowiadajacy jednemu promptowi.
 
 ---
 
-## 2. Usunięcie kompetencji
+## Etap 1: Krytyczne bugi - walidacja i odpornosc na bledy
 
-| Dział | Kompetencja do usunięcia | ID |
-|-------|--------------------------|-----|
-| WEB | Komunikacja techniczna | `web-communication` |
-| QA | Narzędzia QA | `qa-tools` |
-| QA | Komunikacja i współpraca | `qa-communication` |
-| QA | Myślenie analityczne | `qa-analytical` |
-| PM | Komunikacja i raportowanie | `pm-communication` |
-| PM | Przywództwo zespołu | `pm-leadership` |
-| PM | Znajomość IT i software development | `pm-it-domain` |
+### 1a. Auto-save do sessionStorage (Assessment.tsx)
+- W `handleRating` zapisuj `assessments` do sessionStorage z kluczem `assessment-draft-{departmentId}-{positionId}-{level}`
+- Przy montowaniu komponentu (`useEffect`) odczytuj draft z sessionStorage i ustaw jako stan poczatkowy
+- W `handleSubmit` usun draft z sessionStorage po zapisie finalnych danych
 
-Usunięte zostaną rowniez wszystkie `PositionRequirement` odwołujące się do tych ID.
+### 1b. Walidacja parametrow URL (Assessment.tsx)
+- Sprawdzenie czy `level` jest jednym z `junior | mid | senior | lead | expert`
+- Jesli `department` jest null lub `position` nie istnieje - zamiast `return null` (linia 97-99) przekieruj na `/` z toast "Nieprawidlowy link. Sprobuj ponownie."
+- Import `toast` z sonner
 
----
+### 1c. Bezpieczny JSON.parse (Results.tsx)
+- Owinienie `JSON.parse(stored)` (linia 38) w try/catch
+- W catch: `sessionStorage.removeItem('assessment')`, toast z bledem, `navigate('/')`
 
-## 3. Dodanie 7 nowych kompetencji (soft) do WSZYSTKICH działów
-
-Każda kompetencja zostanie dodana do każdego z 5 działów z prefixem działu (np. `web-ai`, `qa-ai`, `pm-ai`, `mobile-ai`, `sales-ai`):
-
-| Kompetencja | Kategoria |
-|-------------|-----------|
-| Wykorzystanie sztucznej inteligencji (AI) w codziennej pracy | soft |
-| Komunikacja z innymi | soft |
-| Praca zespołowa | soft |
-| Samodzielność | soft |
-| Organizacja pracy własnej | soft |
-| Doświadczenie / dojrzałość | soft |
-| Elastyczność / adaptacyjność | soft |
-
-Każda kompetencja będzie miała 5 poziomów z opisami dopasowanymi do kontekstu danego działu.
+### 1d. Jawna sciezka powrotu (Assessment.tsx)
+- Zmiana `navigate(-1)` (linia 111) na `navigate(`/assessment/${departmentId}`)`
 
 ---
 
-## 4. Nowe wymagania (`PositionRequirement`)
+## Etap 2: Strona 404 i spojnosc jezykowa
 
-Domyślne mapowanie `requiredLevel` dla nowych kompetencji:
-
-| Seniority | requiredLevel |
-|-----------|---------------|
-| junior | 1 |
-| mid | 2 |
-| senior | 3 |
-| lead | 4 |
-
-Każde nowe stanowisko dostanie powiązania ze wszystkimi kompetencjami swojego działu (zarówno istniejące twarde/specjalistyczne, jak i nowe miękkie).
+### Zmiany w NotFound.tsx:
+- Polskie teksty: "Ups! Strona nie zostala znaleziona" i "Wroc do strony glownej"
+- Uzycie `Button` z `lucide-react Home` zamiast zwyklego `<a>`
+- Usunecie `console.error` z `useEffect` (mozna usunac caly useEffect)
 
 ---
 
-## 5. Pliki do edycji
+## Etap 3: Kolory i czyszczenie CSS
 
-| Plik | Zakres zmian |
-|------|-------------|
-| `src/data/departments.ts` | Aktualizacja listy `positions` dla web, mobile, qa, pm |
-| `src/data/competencies/web.ts` | Usunięcie `web-communication`, dodanie 7 nowych soft, nowe requirements dla python-developer i zaktualizowane dla reszty |
-| `src/data/competencies/mobile.ts` | Usunięcie starych pozycji z requirements, dodanie 7 nowych soft, requirements tylko dla flutter-developer j/m/s |
-| `src/data/competencies/qa.ts` | Usunięcie `qa-tools`, `qa-communication`, `qa-analytical`, dodanie 7 nowych soft, requirements tylko dla qa-specialist j/m/s |
-| `src/data/competencies/pm.ts` | Usunięcie `pm-communication`, `pm-leadership`, `pm-it-domain`, dodanie 7 nowych soft, requirements tylko dla project-manager j/m/s/lead |
-| `src/data/competencies/sales.ts` | Dodanie 7 nowych soft, requirements zaktualizowane o nowe kompetencje |
+### 3a. Usuniecie nieuzywanych klas CSS (index.css)
+- Usuniecie `.competency-level-1` do `.competency-level-5` (linie 126-144)
 
-Typ `SeniorityLevel` w `src/types/competency.ts` nie wymaga zmian - `lead` jest już zdefiniowany.
+### 3b. Aktualizacja kolorow w competencyLevelConfig (types/competency.ts)
+- Level 1: `bg-gray-500` (bez zmian)
+- Level 2: `bg-slate-600` -> `bg-amber-500`
+- Level 3: `bg-blue-500` -> `bg-emerald-500`
+- Level 4: `bg-indigo-500` (bez zmian)
+- Level 5: `bg-violet-500` (bez zmian)
+
+---
+
+## Etap 4: Spojnosc brandingu (PL vs EN)
+
+### 4a. branding.ts
+- `appName: 'Competency Matrix'` -> `appName: 'Matryca Kompetencji'`
+
+### 4b. index.html
+- `<title>Matryca Kompetencji</title>`
+- og:title i twitter:title -> "Matryca Kompetencji"
+- Usuniecie/wyczyszczenie OG image URL z lovable.dev (usuniecie meta tagow og:image i twitter:image)
+
+### 4c. Index.tsx
+- Usuniecie komentarza `{/* Logowanie tymczasowo wylaczone */}` (linia 51)
+
+---
+
+## Etap 5: UX - potwierdzenie i nawigacja
+
+### 5a. AlertDialog przed wyslaniem (Assessment.tsx)
+- Import AlertDialog z shadcn/ui
+- Stan `showConfirmDialog`
+- Przycisk "Zobacz wyniki" otwiera dialog zamiast od razu `handleSubmit`
+- Dialog: tytul "Potwierdzenie samooceny", tresc z liczba ocenionych kompetencji, przyciski "Wroc do edycji" / "Zobacz wyniki"
+
+### 5b. Przycisk "Popraw ocene" (Results.tsx)
+- Obok przycisku "Start" dodac "Popraw ocene" z ikona ArrowLeft
+- Nawigacja do `/assessment/${assessment.departmentId}/${assessment.positionId}/${assessment.seniorityLevel}`
+
+### 5c. Responsywny tekst (PositionSelect.tsx)
+- Linia 170: zamiana "z listy po lewej" na dwa span-y:
+  - `<span className="hidden lg:inline">z listy po lewej</span>`
+  - `<span className="lg:hidden">z listy powyzej</span>`
+
+---
+
+## Etap 6: Bezpieczenstwo i dane mock
+
+### 6a. Fikcyjne emaile (DashboardMockup.tsx)
+- Zamiana wszystkich `@appchance.com` na `@example.com` (linie 36-43 + linia 151)
+
+### 6b. URL Google Drive do branding.ts
+- Dodanie pola `competencyMatrixUrl` do `branding.ts`
+- W Assessment.tsx: import z branding, warunkowe renderowanie Alert (jesli URL pusty - nie wyswietlaj)
+
+### 6c. Stale wartosci mock (DashboardMockup.tsx)
+- Zamiana `Math.floor(Math.random() * 20 + 70)` i `Math.floor(Math.random() * 30 + 65)` (linie 236-239) na stale wartosci per dzial (np. 82%, 88%, 75%, 91%, 79%)
+
+---
+
+## Pliki do edycji (podsumowanie)
+
+| Etap | Pliki |
+|------|-------|
+| 1 | `src/pages/Assessment.tsx`, `src/pages/Results.tsx` |
+| 2 | `src/pages/NotFound.tsx` |
+| 3 | `src/index.css`, `src/types/competency.ts` |
+| 4 | `src/config/branding.ts`, `index.html`, `src/pages/Index.tsx` |
+| 5 | `src/pages/Assessment.tsx`, `src/pages/Results.tsx`, `src/pages/PositionSelect.tsx` |
+| 6 | `src/pages/DashboardMockup.tsx`, `src/config/branding.ts`, `src/pages/Assessment.tsx` |
+
