@@ -167,7 +167,7 @@ const PositionSelect = () => {
             ) : (
               <Card className="border-dashed">
                 <CardContent className="p-8 text-center text-muted-foreground">
-                  <p>Najpierw wybierz stanowisko z listy po lewej</p>
+                  <p>Najpierw wybierz stanowisko <span className="hidden lg:inline">z listy po lewej</span><span className="lg:hidden">z listy powyżej</span></p>
                 </CardContent>
               </Card>
             )}

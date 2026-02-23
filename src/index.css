@@ -123,23 +123,4 @@
     @apply transition-all duration-300 hover:shadow-lg hover:-translate-y-1;
   }
 
-  .competency-level-1 {
-    @apply bg-orange-500 text-white;
-  }
-  
-  .competency-level-2 {
-    @apply bg-yellow-500 text-white;
-  }
-  
-  .competency-level-3 {
-    @apply bg-green-500 text-white;
-  }
-  
-  .competency-level-4 {
-    @apply bg-sky-500 text-white;
-  }
-  
-  .competency-level-5 {
-    @apply bg-violet-500 text-white;
-  }
 }

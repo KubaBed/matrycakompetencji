@@ -18,6 +18,7 @@ import { branding } from '@/config/branding';
 import { generatePDFReport } from '@/utils/pdfGenerator';
 import { ArrowLeft, Download, Home, TrendingUp, TrendingDown, Minus, Sparkles } from 'lucide-react';
 import { cn } from '@/lib/utils';
+import { toast } from 'sonner';
 import {
   RadarChart,
   PolarGrid,
@@ -35,7 +36,13 @@ const Results = () => {
   useEffect(() => {
     const stored = sessionStorage.getItem('assessment');
     if (stored) {
-      setAssessment(JSON.parse(stored));
+      try {
+        setAssessment(JSON.parse(stored));
+      } catch {
+        sessionStorage.removeItem('assessment');
+        toast.error('Nie udało się odczytać wyników. Spróbuj ponownie.');
+        navigate('/');
+      }
     } else {
       navigate('/');
     }
@@ -44,7 +51,6 @@ const Results = () => {
   const department = assessment?.departmentId ? getDepartmentById(assessment.departmentId) : null;
   const position = department?.positions.find(p => p.id === assessment?.positionId);
 
-  // Get competencies for the department
   const competencies = useMemo(() => {
     if (!assessment?.departmentId) return [];
     return getCompetenciesForDepartment(assessment.departmentId as DepartmentId);
@@ -59,7 +65,6 @@ const Results = () => {
     );
   }, [assessment]);
 
-  // Calculate next seniority level
   const nextLevel = useMemo((): SeniorityLevel | null => {
     if (!assessment?.seniorityLevel || !position) return null;
     const levelOrder: SeniorityLevel[] = ['junior', 'mid', 'senior', 'lead', 'expert'];
@@ -67,14 +72,12 @@ const Results = () => {
     if (currentIndex === -1 || currentIndex >= levelOrder.length - 1) return null;
     
     const potentialNext = levelOrder[currentIndex + 1];
-    // Check if the position supports this next level
     if (position.levels.includes(potentialNext)) {
       return potentialNext;
     }
     return null;
   }, [assessment?.seniorityLevel, position]);
 
-  // Get requirements for next level
   const nextLevelRequirements = useMemo(() => {
     if (!nextLevel || !assessment?.departmentId || !assessment?.positionId) return [];
     return getRequirementsForPosition(
@@ -102,13 +105,11 @@ const Results = () => {
       };
     });
 
-    // Calculate overall match percentage
     const resultsWithRequirements = assessmentResults.filter(r => r.requiredLevel > 0);
     const totalRequired = resultsWithRequirements.reduce((sum, r) => sum + r.requiredLevel, 0);
     const totalSelf = resultsWithRequirements.reduce((sum, r) => sum + Math.min(r.selfRating, r.requiredLevel), 0);
     const matchPercentage = totalRequired > 0 ? Math.round((totalSelf / totalRequired) * 100) : 0;
 
-    // Find strengths and development areas
     const strengths = assessmentResults
       .filter(r => r.gap > 0 && r.requiredLevel > 0)
       .sort((a, b) => b.gap - a.gap)
@@ -128,7 +129,6 @@ const Results = () => {
     };
   }, [assessment, competencies, requirements]);
 
-  // Prepare chart data for current level
   const chartData = useMemo(() => {
     if (!results) return [];
     return results.results.map(r => ({
@@ -141,7 +141,6 @@ const Results = () => {
     }));
   }, [results]);
 
-  // Prepare chart data for next level comparison
   const nextLevelChartData = useMemo(() => {
     if (!results || !nextLevelRequirements.length) return [];
     return results.results.map(r => {
@@ -192,6 +191,10 @@ const Results = () => {
           </div>
           
           <div className="flex gap-2">
+            <Button variant="outline" size="sm" onClick={() => navigate(`/assessment/${assessment.departmentId}/${assessment.positionId}/${assessment.seniorityLevel}`)}>
+              <ArrowLeft className="w-4 h-4 mr-2" />
+              Popraw ocenę
+            </Button>
             <Button variant="outline" size="sm" onClick={() => navigate('/')}>
               <Home className="w-4 h-4 mr-2" />
               Start
@@ -500,6 +503,10 @@ const Results = () => {
             <Button size="lg" onClick={handleDownloadPDF}>
               <Download className="w-4 h-4 mr-2" />
               Pobierz pełny raport PDF
+            </Button>
+            <Button size="lg" variant="outline" onClick={() => navigate(`/assessment/${assessment.departmentId}/${assessment.positionId}/${assessment.seniorityLevel}`)}>
+              <ArrowLeft className="w-4 h-4 mr-2" />
+              Popraw ocenę
             </Button>
             <Button size="lg" variant="outline" onClick={() => navigate('/')}>
               <Home className="w-4 h-4 mr-2" />
