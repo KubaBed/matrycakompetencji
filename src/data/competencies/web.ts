@@ -54,7 +54,6 @@ export const webCompetencies: Competency[] = [
       { level: 5, name: 'Ekspert', description: 'Quality engineering strategy. Testing infrastructure. Testing culture.' },
     ],
   },
-  // Kompetencje miękkie
   {
     id: 'web-problemsolving',
     name: 'Rozwiązywanie problemów',
@@ -66,6 +65,45 @@ export const webCompetencies: Competency[] = [
       { level: 3, name: 'Kompetentny', description: 'Root cause analysis. Profiling. Rozwiązuje złożone problemy samodzielnie.' },
       { level: 4, name: 'Zaawansowany', description: 'Performance debugging. Production troubleshooting. Incident response.' },
       { level: 5, name: 'Ekspert', description: 'System-wide debugging. Postmortems. Preventive measures design.' },
+    ],
+  },
+  {
+    id: 'web-cloud',
+    name: 'Cloud i DevOps',
+    description: 'AWS, GCP, Azure, Docker, Kubernetes, CI/CD',
+    category: 'hard',
+    levels: [
+      { level: 1, name: 'Początkujący', description: 'Podstawy cloud (S3, EC2). Docker basics. Rozumie CI/CD pipeline.' },
+      { level: 2, name: 'Rozwijający się', description: 'Deploy aplikacji. Konfiguracja prostych pipeline. Monitoring basics.' },
+      { level: 3, name: 'Kompetentny', description: 'Infrastructure as Code. Kubernetes basics. Multi-environment setup.' },
+      { level: 4, name: 'Zaawansowany', description: 'Cloud architecture. Cost optimization. Security hardening. SRE practices.' },
+      { level: 5, name: 'Ekspert', description: 'Multi-cloud strategies. Platform engineering. Cloud-native architecture.' },
+    ],
+  },
+  {
+    id: 'web-security',
+    name: 'Bezpieczeństwo aplikacji',
+    description: 'OWASP, secure coding, autentykacja i autoryzacja',
+    category: 'hard',
+    levels: [
+      { level: 1, name: 'Początkujący', description: 'Rozumie podstawowe zagrożenia (XSS, SQL injection). Bezpieczne hasła.' },
+      { level: 2, name: 'Rozwijający się', description: 'Implementuje autentykację. Input validation. HTTPS.' },
+      { level: 3, name: 'Kompetentny', description: 'OWASP Top 10. Security headers. JWT/OAuth. Secure by design.' },
+      { level: 4, name: 'Zaawansowany', description: 'Security audits. Penetration testing basics. Compliance (GDPR, SOC2).' },
+      { level: 5, name: 'Ekspert', description: 'Security architecture. Threat modeling. Security champion.' },
+    ],
+  },
+  {
+    id: 'web-uiux',
+    name: 'UI/UX',
+    description: 'Projektowanie i implementacja intuicyjnych interfejsów użytkownika',
+    category: 'hard',
+    levels: [
+      { level: 1, name: 'Początkujący', description: 'Podstawy UX. Odtwarzanie prostych designów z Figma.' },
+      { level: 2, name: 'Rozwijający się', description: 'Pixel-perfect implementation. Responsywność. Podstawy accessibility.' },
+      { level: 3, name: 'Kompetentny', description: 'Samodzielne decyzje UX. Design system. WCAG compliance.' },
+      { level: 4, name: 'Zaawansowany', description: 'Projektowanie złożonych interakcji. User research basics. A/B testing.' },
+      { level: 5, name: 'Ekspert', description: 'UX strategy. Design leadership. Definiowanie standardów UX.' },
     ],
   },
   {
@@ -81,6 +119,7 @@ export const webCompetencies: Competency[] = [
       { level: 5, name: 'Ekspert', description: 'Definiuje strategię AI dla zespołu. Ewaluuje nowe narzędzia. Thought leadership w obszarze AI.' },
     ],
   },
+  // Kompetencje miękkie
   {
     id: 'web-communication-soft',
     name: 'Komunikacja z innymi',
@@ -159,60 +198,106 @@ export const webCompetencies: Competency[] = [
       { level: 5, name: 'Ekspert', description: 'Change agent. Napędza innowacje. Buduje kulturę ciągłego doskonalenia.' },
     ],
   },
-  {
-    id: 'web-cloud',
-    name: 'Cloud i DevOps',
-    description: 'AWS, GCP, Azure, Docker, Kubernetes, CI/CD',
-    category: 'hard',
-    levels: [
-      { level: 1, name: 'Początkujący', description: 'Podstawy cloud (S3, EC2). Docker basics. Rozumie CI/CD pipeline.' },
-      { level: 2, name: 'Rozwijający się', description: 'Deploy aplikacji. Konfiguracja prostych pipeline. Monitoring basics.' },
-      { level: 3, name: 'Kompetentny', description: 'Infrastructure as Code. Kubernetes basics. Multi-environment setup.' },
-      { level: 4, name: 'Zaawansowany', description: 'Cloud architecture. Cost optimization. Security hardening. SRE practices.' },
-      { level: 5, name: 'Ekspert', description: 'Multi-cloud strategies. Platform engineering. Cloud-native architecture.' },
-    ],
-  },
-  {
-    id: 'web-security',
-    name: 'Bezpieczeństwo aplikacji',
-    description: 'OWASP, secure coding, autentykacja i autoryzacja',
-    category: 'hard',
-    levels: [
-      { level: 1, name: 'Początkujący', description: 'Rozumie podstawowe zagrożenia (XSS, SQL injection). Bezpieczne hasła.' },
-      { level: 2, name: 'Rozwijający się', description: 'Implementuje autentykację. Input validation. HTTPS.' },
-      { level: 3, name: 'Kompetentny', description: 'OWASP Top 10. Security headers. JWT/OAuth. Secure by design.' },
-      { level: 4, name: 'Zaawansowany', description: 'Security audits. Penetration testing basics. Compliance (GDPR, SOC2).' },
-      { level: 5, name: 'Ekspert', description: 'Security architecture. Threat modeling. Security champion.' },
-    ],
-  },
 ];
 
-const webCompetencyIds = webCompetencies.map(c => c.id);
+// Soft skill IDs — universal level 3 for Jun/Mid/Sen
+const webSoftSkillIds = [
+  'web-communication-soft', 'web-teamwork', 'web-independence',
+  'web-work-organization', 'web-experience', 'web-flexibility',
+];
 
-// Helper to generate requirements for a position across all competencies
-function genReqs(positionId: string, seniorityLevel: 'junior' | 'mid' | 'senior', level: number): PositionRequirement[] {
-  return webCompetencyIds.map(competencyId => ({
-    positionId,
-    seniorityLevel,
-    competencyId,
-    requiredLevel: level,
-  }));
+function softReqs(positionId: string): PositionRequirement[] {
+  const levels: Array<'junior' | 'mid' | 'senior'> = ['junior', 'mid', 'senior'];
+  return levels.flatMap(seniority =>
+    webSoftSkillIds.map(competencyId => ({
+      positionId,
+      seniorityLevel: seniority,
+      competencyId,
+      requiredLevel: 3,
+    }))
+  );
+}
+
+function req(positionId: string, seniorityLevel: 'junior' | 'mid' | 'senior', competencyId: string, requiredLevel: number): PositionRequirement {
+  return { positionId, seniorityLevel, competencyId, requiredLevel };
 }
 
 export const webRequirements: PositionRequirement[] = [
-  // Front-End Developer
-  ...genReqs('frontend-developer', 'junior', 1),
-  ...genReqs('frontend-developer', 'mid', 2),
-  ...genReqs('frontend-developer', 'senior', 3),
+  // ── Backend Developer ──
+  req('backend-developer', 'junior', 'web-backend', 2),
+  req('backend-developer', 'mid',    'web-backend', 3),
+  req('backend-developer', 'senior', 'web-backend', 4),
+  req('backend-developer', 'junior', 'web-databases', 1),
+  req('backend-developer', 'mid',    'web-databases', 3),
+  req('backend-developer', 'senior', 'web-databases', 4),
+  req('backend-developer', 'junior', 'web-testing', 1),
+  req('backend-developer', 'mid',    'web-testing', 3),
+  req('backend-developer', 'senior', 'web-testing', 4),
+  req('backend-developer', 'junior', 'web-problemsolving', 2),
+  req('backend-developer', 'mid',    'web-problemsolving', 3),
+  req('backend-developer', 'senior', 'web-problemsolving', 4),
+  req('backend-developer', 'junior', 'web-cloud', 1),
+  req('backend-developer', 'mid',    'web-cloud', 2),
+  req('backend-developer', 'senior', 'web-cloud', 3),
+  req('backend-developer', 'junior', 'web-security', 1),
+  req('backend-developer', 'mid',    'web-security', 3),
+  req('backend-developer', 'senior', 'web-security', 4),
+  req('backend-developer', 'junior', 'web-ai', 1),
+  req('backend-developer', 'mid',    'web-ai', 3),
+  req('backend-developer', 'senior', 'web-ai', 4),
+  ...softReqs('backend-developer'),
 
-  // Backend Developer
-  ...genReqs('backend-developer', 'junior', 1),
-  ...genReqs('backend-developer', 'mid', 2),
-  ...genReqs('backend-developer', 'senior', 3),
+  // ── Fullstack Developer ──
+  req('fullstack-developer', 'junior', 'web-frontend', 1),
+  req('fullstack-developer', 'mid',    'web-frontend', 3),
+  req('fullstack-developer', 'senior', 'web-frontend', 4),
+  req('fullstack-developer', 'junior', 'web-backend', 2),
+  req('fullstack-developer', 'mid',    'web-backend', 3),
+  req('fullstack-developer', 'senior', 'web-backend', 4),
+  req('fullstack-developer', 'junior', 'web-databases', 1),
+  req('fullstack-developer', 'mid',    'web-databases', 2),
+  req('fullstack-developer', 'senior', 'web-databases', 3),
+  req('fullstack-developer', 'junior', 'web-testing', 1),
+  req('fullstack-developer', 'mid',    'web-testing', 3),
+  req('fullstack-developer', 'senior', 'web-testing', 4),
+  req('fullstack-developer', 'junior', 'web-problemsolving', 2),
+  req('fullstack-developer', 'mid',    'web-problemsolving', 3),
+  req('fullstack-developer', 'senior', 'web-problemsolving', 4),
+  req('fullstack-developer', 'junior', 'web-cloud', 1),
+  req('fullstack-developer', 'mid',    'web-cloud', 2),
+  req('fullstack-developer', 'senior', 'web-cloud', 3),
+  req('fullstack-developer', 'junior', 'web-security', 1),
+  req('fullstack-developer', 'mid',    'web-security', 3),
+  req('fullstack-developer', 'senior', 'web-security', 4),
+  req('fullstack-developer', 'junior', 'web-uiux', 1),
+  req('fullstack-developer', 'mid',    'web-uiux', 3),
+  req('fullstack-developer', 'senior', 'web-uiux', 4),
+  req('fullstack-developer', 'junior', 'web-ai', 1),
+  req('fullstack-developer', 'mid',    'web-ai', 3),
+  req('fullstack-developer', 'senior', 'web-ai', 4),
+  ...softReqs('fullstack-developer'),
 
-  // Fullstack Developer
-  ...genReqs('fullstack-developer', 'junior', 1),
-  ...genReqs('fullstack-developer', 'mid', 2),
-  ...genReqs('fullstack-developer', 'senior', 3),
-
+  // ── Front-End Developer ──
+  req('frontend-developer', 'junior', 'web-frontend', 2),
+  req('frontend-developer', 'mid',    'web-frontend', 3),
+  req('frontend-developer', 'senior', 'web-frontend', 4),
+  req('frontend-developer', 'junior', 'web-testing', 1),
+  req('frontend-developer', 'mid',    'web-testing', 3),
+  req('frontend-developer', 'senior', 'web-testing', 4),
+  req('frontend-developer', 'junior', 'web-problemsolving', 2),
+  req('frontend-developer', 'mid',    'web-problemsolving', 3),
+  req('frontend-developer', 'senior', 'web-problemsolving', 4),
+  req('frontend-developer', 'junior', 'web-cloud', 1),
+  req('frontend-developer', 'mid',    'web-cloud', 2),
+  req('frontend-developer', 'senior', 'web-cloud', 3),
+  req('frontend-developer', 'junior', 'web-security', 1),
+  req('frontend-developer', 'mid',    'web-security', 3),
+  req('frontend-developer', 'senior', 'web-security', 4),
+  req('frontend-developer', 'junior', 'web-uiux', 1),
+  req('frontend-developer', 'mid',    'web-uiux', 3),
+  req('frontend-developer', 'senior', 'web-uiux', 4),
+  req('frontend-developer', 'junior', 'web-ai', 1),
+  req('frontend-developer', 'mid',    'web-ai', 3),
+  req('frontend-developer', 'senior', 'web-ai', 4),
+  ...softReqs('frontend-developer'),
 ];
