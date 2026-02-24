@@ -54,7 +54,71 @@ export const mobileCompetencies: Competency[] = [
       { level: 5, name: 'Ekspert', description: 'Automatyzacja CI/CD, test infrastructure' },
     ],
   },
-  // Soft Skills
+  {
+    id: 'platform-ios',
+    name: 'iOS Platform',
+    description: 'Znajomość specyfiki platformy iOS i ekosystemu Apple',
+    category: 'hard',
+    levels: [
+      { level: 1, name: 'Początkujący', description: 'Podstawy Swift/SwiftUI' },
+      { level: 2, name: 'Rozwijający się', description: 'UIKit, Core Data podstawy' },
+      { level: 3, name: 'Kompetentny', description: 'Pełne API iOS, App Store submission' },
+      { level: 4, name: 'Zaawansowany', description: 'Widgets, Extensions, WatchOS' },
+      { level: 5, name: 'Ekspert', description: 'Low-level APIs, performance tuning' },
+    ],
+  },
+  {
+    id: 'platform-android',
+    name: 'Android Platform',
+    description: 'Znajomość specyfiki platformy Android i ekosystemu Google',
+    category: 'hard',
+    levels: [
+      { level: 1, name: 'Początkujący', description: 'Podstawy Kotlin, Compose' },
+      { level: 2, name: 'Rozwijający się', description: 'Android SDK, Room DB' },
+      { level: 3, name: 'Kompetentny', description: 'Pełne API Android, Play Store' },
+      { level: 4, name: 'Zaawansowany', description: 'Widgets, Work Manager, Wear OS' },
+      { level: 5, name: 'Ekspert', description: 'NDK, performance optimization' },
+    ],
+  },
+  {
+    id: 'mobile-automation',
+    name: 'Automatyzacja pracy',
+    description: 'Automatyzacja procesów budowania, testowania i wdrażania aplikacji',
+    category: 'hard',
+    levels: [
+      { level: 1, name: 'Początkujący', description: 'Podstawowa obsługa CI/CD. Rozumie pipeline.' },
+      { level: 2, name: 'Rozwijający się', description: 'Konfiguracja prostych pipeline. Automatyczne buildy.' },
+      { level: 3, name: 'Kompetentny', description: 'Zaawansowane pipeline CI/CD. Fastlane. Automatyczne testy.' },
+      { level: 4, name: 'Zaawansowany', description: 'Projektowanie infrastruktury CI/CD. Code signing automation.' },
+      { level: 5, name: 'Ekspert', description: 'DevOps strategy dla mobile. Platform engineering.' },
+    ],
+  },
+  {
+    id: 'mobile-dart',
+    name: 'Programowanie w języku Dart',
+    description: 'Znajomość języka Dart i jego ekosystemu',
+    category: 'hard',
+    levels: [
+      { level: 1, name: 'Początkujący', description: 'Podstawy składni Dart. Typy danych, funkcje.' },
+      { level: 2, name: 'Rozwijający się', description: 'Async/await, Streams. OOP w Dart. Null safety.' },
+      { level: 3, name: 'Kompetentny', description: 'Generics, Extensions, Mixins. Zaawansowane wzorce.' },
+      { level: 4, name: 'Zaawansowany', description: 'Isolates, FFI. Performance optimization. Code generation.' },
+      { level: 5, name: 'Ekspert', description: 'Deep Dart internals. Własne pakiety. Compiler-level understanding.' },
+    ],
+  },
+  {
+    id: 'mobile-flutter-env',
+    name: 'Znajomość środowiska Flutter',
+    description: 'Znajomość frameworka Flutter, jego narzędzi i ekosystemu',
+    category: 'hard',
+    levels: [
+      { level: 1, name: 'Początkujący', description: 'Podstawowe widgety. Hot reload. Flutter CLI basics.' },
+      { level: 2, name: 'Rozwijający się', description: 'State management (Provider/Riverpod). Nawigacja. Pakiety.' },
+      { level: 3, name: 'Kompetentny', description: 'Custom widgets. Platform channels. Flutter DevTools.' },
+      { level: 4, name: 'Zaawansowany', description: 'Flutter internals. Rendering pipeline. Performance profiling.' },
+      { level: 5, name: 'Ekspert', description: 'Flutter engine. Custom renderers. Framework contributions.' },
+    ],
+  },
   {
     id: 'mobile-ai',
     name: 'Wykorzystanie sztucznej inteligencji (AI) w codziennej pracy',
@@ -68,6 +132,7 @@ export const mobileCompetencies: Competency[] = [
       { level: 5, name: 'Ekspert', description: 'Definiuje strategię AI dla zespołu. Thought leadership.' },
     ],
   },
+  // Soft Skills
   {
     id: 'mobile-communication-soft',
     name: 'Komunikacja z innymi',
@@ -146,47 +211,60 @@ export const mobileCompetencies: Competency[] = [
       { level: 5, name: 'Ekspert', description: 'Change agent. Napędza innowacje.' },
     ],
   },
-  {
-    id: 'platform-ios',
-    name: 'iOS Platform',
-    description: 'Znajomość specyfiki platformy iOS i ekosystemu Apple',
-    category: 'hard',
-    levels: [
-      { level: 1, name: 'Początkujący', description: 'Podstawy Swift/SwiftUI' },
-      { level: 2, name: 'Rozwijający się', description: 'UIKit, Core Data podstawy' },
-      { level: 3, name: 'Kompetentny', description: 'Pełne API iOS, App Store submission' },
-      { level: 4, name: 'Zaawansowany', description: 'Widgets, Extensions, WatchOS' },
-      { level: 5, name: 'Ekspert', description: 'Low-level APIs, performance tuning' },
-    ],
-  },
-  {
-    id: 'platform-android',
-    name: 'Android Platform',
-    description: 'Znajomość specyfiki platformy Android i ekosystemu Google',
-    category: 'hard',
-    levels: [
-      { level: 1, name: 'Początkujący', description: 'Podstawy Kotlin, Compose' },
-      { level: 2, name: 'Rozwijający się', description: 'Android SDK, Room DB' },
-      { level: 3, name: 'Kompetentny', description: 'Pełne API Android, Play Store' },
-      { level: 4, name: 'Zaawansowany', description: 'Widgets, Work Manager, Wear OS' },
-      { level: 5, name: 'Ekspert', description: 'NDK, performance optimization' },
-    ],
-  },
 ];
 
-const mobileCompetencyIds = mobileCompetencies.map(c => c.id);
+// Soft skill IDs — universal level 3 for Jun/Mid/Sen
+const mobileSoftSkillIds = [
+  'mobile-communication-soft', 'mobile-teamwork', 'mobile-independence',
+  'mobile-work-organization', 'mobile-experience', 'mobile-flexibility',
+];
 
-function genReqs(positionId: string, seniorityLevel: 'junior' | 'mid' | 'senior', level: number): PositionRequirement[] {
-  return mobileCompetencyIds.map(competencyId => ({
-    positionId,
-    seniorityLevel,
-    competencyId,
-    requiredLevel: level,
-  }));
+function softReqs(positionId: string): PositionRequirement[] {
+  const levels: Array<'junior' | 'mid' | 'senior'> = ['junior', 'mid', 'senior'];
+  return levels.flatMap(seniority =>
+    mobileSoftSkillIds.map(competencyId => ({
+      positionId,
+      seniorityLevel: seniority,
+      competencyId,
+      requiredLevel: 3,
+    }))
+  );
+}
+
+function req(positionId: string, seniorityLevel: 'junior' | 'mid' | 'senior', competencyId: string, requiredLevel: number): PositionRequirement {
+  return { positionId, seniorityLevel, competencyId, requiredLevel };
 }
 
 export const mobileRequirements: PositionRequirement[] = [
-  ...genReqs('flutter-developer', 'junior', 1),
-  ...genReqs('flutter-developer', 'mid', 2),
-  ...genReqs('flutter-developer', 'senior', 3),
+  req('flutter-developer', 'junior', 'mobile-programming', 2),
+  req('flutter-developer', 'mid',    'mobile-programming', 3),
+  req('flutter-developer', 'senior', 'mobile-programming', 4),
+  req('flutter-developer', 'junior', 'mobile-architecture', 2),
+  req('flutter-developer', 'mid',    'mobile-architecture', 3),
+  req('flutter-developer', 'senior', 'mobile-architecture', 4),
+  req('flutter-developer', 'junior', 'mobile-ui', 2),
+  req('flutter-developer', 'mid',    'mobile-ui', 3),
+  req('flutter-developer', 'senior', 'mobile-ui', 4),
+  req('flutter-developer', 'junior', 'mobile-testing', 2),
+  req('flutter-developer', 'mid',    'mobile-testing', 3),
+  req('flutter-developer', 'senior', 'mobile-testing', 4),
+  req('flutter-developer', 'junior', 'platform-ios', 1),
+  req('flutter-developer', 'mid',    'platform-ios', 2),
+  req('flutter-developer', 'senior', 'platform-ios', 3),
+  req('flutter-developer', 'junior', 'platform-android', 1),
+  req('flutter-developer', 'mid',    'platform-android', 2),
+  req('flutter-developer', 'senior', 'platform-android', 3),
+  req('flutter-developer', 'junior', 'mobile-automation', 2),
+  req('flutter-developer', 'mid',    'mobile-automation', 3),
+  req('flutter-developer', 'senior', 'mobile-automation', 4),
+  req('flutter-developer', 'junior', 'mobile-dart', 2),
+  req('flutter-developer', 'mid',    'mobile-dart', 3),
+  req('flutter-developer', 'senior', 'mobile-dart', 5),
+  req('flutter-developer', 'junior', 'mobile-flutter-env', 2),
+  req('flutter-developer', 'mid',    'mobile-flutter-env', 3),
+  req('flutter-developer', 'senior', 'mobile-flutter-env', 5),
+  req('flutter-developer', 'junior', 'mobile-ai', 2),
+  req('flutter-developer', 'mid',    'mobile-ai', 3),
+  req('flutter-developer', 'senior', 'mobile-ai', 4),
+  ...softReqs('flutter-developer'),
 ];

@@ -1,4 +1,4 @@
-import { Competency, PositionRequirement } from '@/types/competency';
+import { Competency, PositionRequirement, SeniorityLevel } from '@/types/competency';
 
 export const pmCompetencies: Competency[] = [
   // Kompetencje twarde
@@ -17,8 +17,8 @@ export const pmCompetencies: Competency[] = [
   },
   {
     id: 'pm-planning',
-    name: 'Planowanie i estymacja',
-    description: 'Tworzenie planów projektowych, estymacja czasu i zasobów',
+    name: 'Planowanie, estymacja i analiza ryzyka',
+    description: 'Tworzenie planów projektowych, estymacja czasu, zasobów i analiza ryzyka',
     category: 'hard',
     levels: [
       { level: 1, name: 'Początkujący', description: 'Asystuje przy tworzeniu planów. Rozumie podstawy estymacji.' },
@@ -54,7 +54,32 @@ export const pmCompetencies: Competency[] = [
       { level: 5, name: 'Ekspert', description: 'Strategia finansowa projektów. P&L odpowiedzialność. Business case.' },
     ],
   },
-  // Kompetencje miękkie
+  {
+    id: 'pm-evaluation',
+    name: 'Ocena wyników projektu',
+    description: 'Analiza wyników projektu, KPI i raportowanie postępów',
+    category: 'hard',
+    levels: [
+      { level: 1, name: 'Początkujący', description: 'Zbiera podstawowe metryki projektu. Raportuje postępy.' },
+      { level: 2, name: 'Rozwijający się', description: 'Tworzy raporty statusowe. Śledzi KPI projektu.' },
+      { level: 3, name: 'Kompetentny', description: 'Definiuje KPI. Analiza trendów. Retrospektywy z action items.' },
+      { level: 4, name: 'Zaawansowany', description: 'Zaawansowane dashboardy. ROI analysis. Lessons learned.' },
+      { level: 5, name: 'Ekspert', description: 'Strategiczna ocena portfela projektów. OKR framework.' },
+    ],
+  },
+  {
+    id: 'pm-resources',
+    name: 'Zarządzanie zasobami projektu',
+    description: 'Planowanie i alokacja zasobów ludzkich i technicznych w projekcie',
+    category: 'hard',
+    levels: [
+      { level: 1, name: 'Początkujący', description: 'Rozumie strukturę zespołu. Zgłasza potrzeby zasobowe.' },
+      { level: 2, name: 'Rozwijający się', description: 'Planuje alokację członków zespołu. Identyfikuje braki.' },
+      { level: 3, name: 'Kompetentny', description: 'Zarządza zespołem cross-funkcyjnym. Capacity planning.' },
+      { level: 4, name: 'Zaawansowany', description: 'Resource management wieloprojektowy. Rozwój kompetencji zespołu.' },
+      { level: 5, name: 'Ekspert', description: 'Strategia zasobowa organizacji. Talent management.' },
+    ],
+  },
   {
     id: 'pm-ai',
     name: 'Wykorzystanie sztucznej inteligencji (AI) w codziennej pracy',
@@ -68,6 +93,7 @@ export const pmCompetencies: Competency[] = [
       { level: 5, name: 'Ekspert', description: 'Definiuje strategię AI w zarządzaniu projektami.' },
     ],
   },
+  // Kompetencje miękkie
   {
     id: 'pm-communication-soft',
     name: 'Komunikacja z innymi',
@@ -148,20 +174,72 @@ export const pmCompetencies: Competency[] = [
   },
 ];
 
-const pmCompetencyIds = pmCompetencies.map(c => c.id);
+// Soft skill IDs — level 3 for Jun/Mid/Sen, level 4 for TL (lead)
+const pmSoftSkillIds = [
+  'pm-communication-soft', 'pm-teamwork', 'pm-independence',
+  'pm-work-organization', 'pm-experience', 'pm-flexibility',
+];
 
-function genReqs(positionId: string, seniorityLevel: 'junior' | 'mid' | 'senior' | 'lead', level: number): PositionRequirement[] {
-  return pmCompetencyIds.map(competencyId => ({
-    positionId,
-    seniorityLevel,
-    competencyId,
-    requiredLevel: level,
-  }));
+function softReqs(): PositionRequirement[] {
+  const standardLevels: Array<'junior' | 'mid' | 'senior'> = ['junior', 'mid', 'senior'];
+  return [
+    ...standardLevels.flatMap(seniority =>
+      pmSoftSkillIds.map(competencyId => ({
+        positionId: 'project-manager',
+        seniorityLevel: seniority as SeniorityLevel,
+        competencyId,
+        requiredLevel: 3,
+      }))
+    ),
+    ...pmSoftSkillIds.map(competencyId => ({
+      positionId: 'project-manager',
+      seniorityLevel: 'lead' as SeniorityLevel,
+      competencyId,
+      requiredLevel: 4,
+    })),
+  ];
+}
+
+function req(seniorityLevel: SeniorityLevel, competencyId: string, requiredLevel: number): PositionRequirement {
+  return { positionId: 'project-manager', seniorityLevel, competencyId, requiredLevel };
 }
 
 export const pmRequirements: PositionRequirement[] = [
-  ...genReqs('project-manager', 'junior', 1),
-  ...genReqs('project-manager', 'mid', 2),
-  ...genReqs('project-manager', 'senior', 3),
-  ...genReqs('project-manager', 'lead', 4),
+  // Metodyki zarządzania projektami
+  req('junior', 'pm-methodology', 2),
+  req('mid',    'pm-methodology', 2),
+  req('senior', 'pm-methodology', 3),
+  req('lead',   'pm-methodology', 5),
+  // Planowanie, estymacja i analiza ryzyka
+  req('junior', 'pm-planning', 3),
+  req('mid',    'pm-planning', 4),
+  req('senior', 'pm-planning', 4),
+  req('lead',   'pm-planning', 5),
+  // Narzędzia PM
+  req('junior', 'pm-tools', 2),
+  req('mid',    'pm-tools', 3),
+  req('senior', 'pm-tools', 4),
+  req('lead',   'pm-tools', 4),
+  // Zarządzanie budżetem
+  req('junior', 'pm-budget', 2),
+  req('mid',    'pm-budget', 3),
+  req('senior', 'pm-budget', 4),
+  req('lead',   'pm-budget', 5),
+  // Ocena wyników projektu
+  req('junior', 'pm-evaluation', 3),
+  req('mid',    'pm-evaluation', 4),
+  req('senior', 'pm-evaluation', 4),
+  req('lead',   'pm-evaluation', 5),
+  // Zarządzanie zasobami projektu
+  req('junior', 'pm-resources', 2),
+  req('mid',    'pm-resources', 3),
+  req('senior', 'pm-resources', 4),
+  req('lead',   'pm-resources', 5),
+  // AI w codziennej pracy
+  req('junior', 'pm-ai', 3),
+  req('mid',    'pm-ai', 4),
+  req('senior', 'pm-ai', 4),
+  req('lead',   'pm-ai', 4),
+  // Soft skills
+  ...softReqs(),
 ];
