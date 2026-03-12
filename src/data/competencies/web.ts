@@ -242,9 +242,6 @@ export const webRequirements: PositionRequirement[] = [
   req('backend-developer', 'junior', 'web-security', 1),
   req('backend-developer', 'mid',    'web-security', 3),
   req('backend-developer', 'senior', 'web-security', 4),
-  req('backend-developer', 'junior', 'web-ai', 1),
-  req('backend-developer', 'mid',    'web-ai', 3),
-  req('backend-developer', 'senior', 'web-ai', 4),
   ...softReqs('backend-developer'),
 
   // ── Fullstack Developer ──
