@@ -77,11 +77,14 @@ const Assessment = () => {
     }
   }, [assessments, draftKey]);
 
-  // Get competencies based on department
+  // Get competencies based on department, filtered to only those with requirements for this position
   const competencies = useMemo(() => {
-    if (!departmentId) return [];
-    return getCompetenciesForDepartment(departmentId as DepartmentId);
-  }, [departmentId]);
+    if (!departmentId || !positionId || !level) return [];
+    const allCompetencies = getCompetenciesForDepartment(departmentId as DepartmentId);
+    const positionRequirements = getRequirementsForPosition(departmentId as DepartmentId, positionId, level);
+    const requiredCompetencyIds = new Set(positionRequirements.map(r => r.competencyId));
+    return allCompetencies.filter(c => requiredCompetencyIds.has(c.id));
+  }, [departmentId, positionId, level]);
 
   const requirements = useMemo(() => {
     if (!departmentId || !positionId || !level) return [];
